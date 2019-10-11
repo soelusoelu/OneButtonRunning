@@ -8,7 +8,7 @@
 #include "../Utility/Collision.h"
 #include <algorithm>
 
-bool Physics::rayCast(Ray* ray, CollisionInfo* outColl) {
+bool Physics::rayCastField(Ray* ray, CollisionInfo* outColl) {
     bool collided = false;
     float minLength = Math::infinity;
     Vector3 normal;
@@ -30,7 +30,7 @@ bool Physics::rayCast(Ray* ray, CollisionInfo* outColl) {
                 D3DXPLANE plane;
                 calcPlane(&plane, &v1, &v2, &v3);
                 //平面とレイの交差を検出
-                if (Intersect(plane, ray, v1, v2, v3, outColl)) {
+                if (intersectPlane(plane, ray, v1, v2, v3, outColl)) {
                     collided = true;
                     if (minLength > outColl->mLength) {
                         normal.x = plane.a;//平面方程式の係数は面法線
@@ -46,6 +46,11 @@ bool Physics::rayCast(Ray* ray, CollisionInfo* outColl) {
     outColl->mNormal = normal;
     outColl->mLength = minLength;
     return collided;
+}
+
+Vector3 Physics::slip(Ray* ray, Vector3 normal) {
+    Vector3 l = ray->mEnd - ray->mStart;
+    return (l - ((Vector3::dot(normal, l)) / normal.lengthSq()) * normal);
 }
 
 void Physics::calcPlane(D3DXPLANE* plane, D3DXVECTOR3* a, D3DXVECTOR3* b, D3DXVECTOR3* c) {
@@ -64,7 +69,7 @@ void Physics::calcPlane(D3DXPLANE* plane, D3DXVECTOR3* a, D3DXVECTOR3* b, D3DXVE
     plane->d = -(plane->a * a->x + plane->b * a->y + plane->c * a->z);
 }
 
-bool Physics::Intersect(D3DXPLANE plane, Ray* ray, D3DXVECTOR3 v1, D3DXVECTOR3 v2, D3DXVECTOR3 v3, CollisionInfo* outColl) {
+bool Physics::intersectPlane(D3DXPLANE plane, Ray* ray, D3DXVECTOR3 v1, D3DXVECTOR3 v2, D3DXVECTOR3 v3, CollisionInfo* outColl) {
     //パラメトリック方程式の媒介変数” t "を解く。
     float t = -((plane.a * ray->mEnd.x) + (plane.b * ray->mEnd.y) + (plane.c * ray->mEnd.z) + plane.d) /
         (((plane.a * ray->mStart.x) + (plane.b * ray->mStart.y) + (plane.c * ray->mStart.z)) - ((plane.a * ray->mEnd.x) + (plane.b * ray->mEnd.y) + (plane.c * ray->mEnd.z)));

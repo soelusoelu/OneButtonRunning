@@ -24,7 +24,8 @@ public:
         float mLength;
     };
 
-    bool rayCast(Ray* ray, CollisionInfo* outColl);
+    bool rayCastField(Ray* ray, CollisionInfo* outColl);
+    Vector3 slip(Ray* ray, Vector3 normal);
     //総当たり判定
     void sweepAndPrune(std::function<void(Actor*, Actor*)> f);
 
@@ -32,11 +33,12 @@ public:
     void addSphere(SphereCollisionComponent* sphere);
     void removeSphere(SphereCollisionComponent* sphere);
 
+    //仮
     void hit();
 
 private:
     void calcPlane(D3DXPLANE* plane, D3DXVECTOR3* a, D3DXVECTOR3* b, D3DXVECTOR3* c);
-    bool Intersect(D3DXPLANE plane, Ray* ray, D3DXVECTOR3 v1, D3DXVECTOR3 v2, D3DXVECTOR3 v3, CollisionInfo* outColl);
+    bool intersectPlane(D3DXPLANE plane, Ray* ray, D3DXVECTOR3 v1, D3DXVECTOR3 v2, D3DXVECTOR3 v3, CollisionInfo* outColl);
     bool isInside(D3DXVECTOR3* intersect, D3DXVECTOR3* a, D3DXVECTOR3* b, D3DXVECTOR3* c);
 
     std::vector<SphereCollisionComponent*> mSpheres;

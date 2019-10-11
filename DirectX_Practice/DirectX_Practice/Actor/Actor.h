@@ -47,6 +47,9 @@ public:
     State getState() const;
     const char* getTag() const;
 
+public:
+    static const float SCROLL_SPEED;
+
 private:
     std::shared_ptr<ComponentManagementOfActor> mComponentManager;
     State mState;

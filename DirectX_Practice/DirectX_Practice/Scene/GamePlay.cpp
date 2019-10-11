@@ -15,9 +15,9 @@
 GamePlay::GamePlay() :
     SceneBase(),
     mState(GameState::Play) {
-    Actor::instantiate<PlayerActor>(Vector3(0.f, 10.f, 0.f), Quaternion::identity);
+    Actor::instantiate<PlayerActor>(Vector3(0.f, 1.f, 0.f), Quaternion::identity);
     Actor::instantiate<FieldActor>();
-    Actor::instantiate<EnemyActor>(Vector3(0.f, -0.5f, 2.f), Quaternion::identity);
+    Actor::instantiate<EnemyActor>(Vector3(0.f, -0.5f, 5.f), Quaternion::identity);
 }
 
 GamePlay::~GamePlay() {

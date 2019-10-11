@@ -15,9 +15,10 @@ public:
 
     //アクター追加
     void addActor(Actor* actor);
-
     //所有アクターをすべて削除
     void clear();
+    //プレイヤー以外スクロール
+    void scrollExceptPlayer(std::shared_ptr<Actor> scrollTarget);
 
     //全アクターの取得
     std::unordered_set<std::shared_ptr<Actor>> getActors() const;

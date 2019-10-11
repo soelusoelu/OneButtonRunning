@@ -14,8 +14,14 @@ void ActorManager::update() {
     mUpdatingActors = true;
     for (auto&& actor : mActors) {
         actor->update();
+        scrollExceptPlayer(actor);
     }
     mUpdatingActors = false;
+
+    for (auto&& field : mFieldActors) {
+        field->update();
+        scrollExceptPlayer(field);
+    }
 
     for (auto&& pending : mPendingActors) {
         divideActor(pending);
@@ -49,6 +55,13 @@ void ActorManager::clear() {
     mPendingActors.clear();
     mActors.clear();
     mFieldActors.clear();
+}
+
+void ActorManager::scrollExceptPlayer(std::shared_ptr<Actor> scrollTarget) {
+    if (scrollTarget->getTag() == "Player") {
+        return;
+    }
+    scrollTarget->getTransform()->translete(Vector3(0.f, 0.f, -Actor::SCROLL_SPEED));
 }
 
 std::unordered_set<std::shared_ptr<Actor>> ActorManager::getActors() const {

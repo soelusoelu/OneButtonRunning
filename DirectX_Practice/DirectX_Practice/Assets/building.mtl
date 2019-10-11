@@ -1,0 +1,54 @@
+newmtl Default
+Ka 0 0 0
+Kd 0.784314 0.784314 0.784314
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl blue
+Ka 0 0 0
+Kd 0 0.501961 1
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl green
+Ka 0 0 0
+Kd 0 1 0
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl orange
+Ka 0 0 0
+Kd 1 0.501961 0
+Ks 0 0 0
+Ni 1
+Ns 400
+Tf 1 1 1
+d 1
+
+newmtl red
+Ka 0 0 0
+Kd 1 0 0
+Ks 0.975 0.975 0.975
+Ni 1
+Ns 790
+Tf 1 1 1
+d 1
+
+newmtl yellow
+Ka 0 0 0
+Kd 1 1 0
+Ks 0.72 0.72 0.72
+Ni 1
+Ns 564
+Tf 1 1 1
+d 1
+

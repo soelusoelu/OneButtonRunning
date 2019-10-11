@@ -1,0 +1,215 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Utility\Input.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\Math.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\Singleton.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp" />
+    <ClCompile Include="Direct3D11.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Scene\GamePlay.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneBase.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\Actor.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\ActorManager.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\ComponentManagementOfActor.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\PlayerActor.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\Component.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\MeshComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\PlayerMoveComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\TransformComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\Mesh.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="System\GameSystem.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\IDManager.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Physics.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Random.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Renderer.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Pause.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UI.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UIManager.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Entry.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Actor\FieldActor.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Texture.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\Collision.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\SphereCollisionComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\EnemyActor.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="Utility\Input.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\Math.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\Singleton.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h" />
+    <ClInclude Include="Direct3D11.h" />
+    <ClInclude Include="DirectXIncLib.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Scene\GamePlay.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneBase.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\Actor.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\ActorManager.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\ComponentManagementOfActor.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\PlayerActor.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\Component.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\MeshComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\PlayerMoveComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\TransformComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\Mesh.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="System\GameSystem.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\IDManager.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Physics.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Random.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Renderer.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Pause.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UI.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UIManager.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Main.h" />
+    <ClInclude Include="Actor\FieldActor.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Texture.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\Collision.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\SphereCollisionComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\EnemyActor.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{7273cc92-b178-4206-927a-16c01a2f1e39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Actor">
+      <UniqueIdentifier>{e36a9bee-af64-409e-97f5-55971d323f81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System">
+      <UniqueIdentifier>{360f042a-a3a9-411e-a2e7-2b84f0c2f649}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{88db5578-67dd-4825-865f-a53f807d9e32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component">
+      <UniqueIdentifier>{7bfff64e-d623-4981-b9ae-19be33671310}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{fcbe93d9-19b3-4796-8e04-a1a6b5f9a470}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{916830e1-a4ae-4151-ab30-6b78150c3a50}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shader\Geometry_Material_Texture.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\Geometry_Material_Texture_Skin.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\Mesh.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>

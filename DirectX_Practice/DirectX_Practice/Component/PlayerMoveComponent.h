@@ -6,21 +6,21 @@ class Actor;
 
 class PlayerMoveComponent : public Component {
     enum State {
-        OnGround,
-        FlyingUp,
-        FlyingDown
+		OnGround,
+		JumpUp,
+		JumpDown,
     };
 public:
     PlayerMoveComponent(Actor* owner, int updateOrder = 10);
     virtual void start() override;
-    virtual void update() override;
+	virtual void update() override;
 
 private:
-    bool canMovement();
+	void fall();
+	void jump();
 
-    float mSpeed;
-    float mJumpPower;
-    float mBreakPower;
-    const float FALL_SPEED;
     State mState;
+	const float FALL_SPEED;
+	const float JUMP_POWER;
+	float mJumpSpeed;
 };

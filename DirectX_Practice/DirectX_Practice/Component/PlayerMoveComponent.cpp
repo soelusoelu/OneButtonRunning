@@ -15,7 +15,7 @@ PlayerMoveComponent::PlayerMoveComponent(Actor* owner, int updateOrder) :
 	MAX_FALL_SPEED(0.5f),
     JUMP_POWER(0.8f),
     mVelocityY(0.0f),
-    mButtonDownTime(0.0f),
+    mButtonDownTime(0),
     mIsLongJumpHold(false),
     mRotateAngle(0.0f){
 }

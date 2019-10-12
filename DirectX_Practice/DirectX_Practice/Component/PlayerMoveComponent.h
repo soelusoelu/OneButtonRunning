@@ -24,7 +24,7 @@ private:
 	const float MAX_FALL_SPEED;
 	const float JUMP_POWER;
 	float mVelocityY; //Y軸の移動速度
-	float mButtonDownTime;//ボタン押した時間
+	int mButtonDownTime;//ボタン押した時間
 	bool mIsLongJumpHold;//ろんぐじょんぷ（大ジャンプ）判定用
 	float mRotateAngle;
 };

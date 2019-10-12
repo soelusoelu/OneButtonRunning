@@ -14,6 +14,8 @@ Actor::Actor(const char* tag) :
 void Actor::update() {
     mComponentManager->start();
     if (mState == State::Active) {
+        computeWorldTransform();
+
         mComponentManager->update();
         updateActor();
 

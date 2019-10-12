@@ -13,7 +13,6 @@ SphereCollisionComponent::SphereCollisionComponent(Actor* owner) :
     mSphere(),
     mSphereMesh(nullptr),
     mDefaultRadius(0.f) {
-    Singleton<GameSystem>::instance().getPhysics()->addSphere(this);
 }
 
 SphereCollisionComponent::~SphereCollisionComponent() {
@@ -21,6 +20,8 @@ SphereCollisionComponent::~SphereCollisionComponent() {
 }
 
 void SphereCollisionComponent::start() {
+    Singleton<GameSystem>::instance().getPhysics()->addSphere(this);
+
     std::shared_ptr<MeshComponent> mesh = mOwner->getComponentManager()->getComponent<MeshComponent>();
     if (mesh) {
         mesh->getMesh()->createSphere(&mSphere);

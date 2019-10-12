@@ -17,7 +17,10 @@ GamePlay::GamePlay() :
     mState(GameState::Play) {
     Actor::instantiate<PlayerActor>();
     Actor::instantiate<FieldActor>();
-    Actor::instantiate<EnemyActor>(Vector3(0.f, -0.5f, 5.f), Quaternion::identity);
+    for (int i = 0; i < 5; i++) {
+        Actor::instantiate<EnemyActor>(Vector3(0.f, -0.5f + i, 5.f + i * 0.1f), Quaternion::identity);
+    }
+    //Actor::instantiate<EnemyActor>(Vector3(0.f, -0.5f, 5.f), Quaternion::identity);
 }
 
 GamePlay::~GamePlay() {
@@ -30,12 +33,13 @@ void GamePlay::update() {
     if (mState == GameState::Play) {
         Singleton<ActorManager>::instance().update();
 
+        //総当たり判定
+        Singleton<GameSystem>::instance().getPhysics()->sweepAndPrune();
+
         //if (Input::getKeyDown(Input::KeyCode::Space)) {
         //    new Pause(this);
         //}
     }
-
-    Singleton<GameSystem>::instance().getPhysics()->hit();
 
     //UIは最後に必ず
     Singleton<UIManager>::instance().update();

@@ -47,8 +47,6 @@ void ActorManager::addActor(Actor* actor) {
     //    mActors.emplace(actor);
     //}
     mPendingActors.emplace(actor);
-    //最初に必ず座標計算
-    actor->computeWorldTransform();
 }
 
 void ActorManager::clear() {

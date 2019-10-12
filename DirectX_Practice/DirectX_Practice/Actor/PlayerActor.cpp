@@ -9,7 +9,6 @@ PlayerActor::PlayerActor(const char* tag) :
     mPlayerMove(new PlayerMoveComponent(this)),
     mMesh(new MeshComponent(this, "Chips.obj")),
     mSphere(new SphereCollisionComponent(this)) {
-    //getTransform()->setScale(2.f);
 }
 
 void PlayerActor::updateActor() {

@@ -136,34 +136,31 @@ bool Physics::isInside(D3DXVECTOR3* intersect, D3DXVECTOR3* a, D3DXVECTOR3* b, D
     return false;
 }
 
-void Physics::sweepAndPrune(std::function<void(Actor*, Actor*)> f) {
-    //min.xが小さい順にソート
-    //std::sort(mSpheres.begin(), mSpheres.end(),
-    //    [](SphereCollisionComponent* a, SphereCollisionComponent* b) {
-    //        return a->getCollision().mMin.x < b->getCollision().mMin.x;
-    //    });
+void Physics::sweepAndPrune() {
+    //mCenter.zが小さい順にソート
+    std::sort(mSpheres.begin(), mSpheres.end(), [](SphereCollisionComponent* a, SphereCollisionComponent* b) {
+        return a->getSphere().mCenter.z < b->getSphere().mCenter.z;
+    });
 
-    //for (size_t i = 0; i < mSpheres.size(); i++) {
-    //    //mBoxes[i]のmax.xを取得
-    //    SphereCollisionComponent* a = mSpheres[i];
-    //    if (!a->getEnable()) {
-    //        break;
-    //    }
-    //    float max = a->getCollision().mMax.x;
-    //    for (size_t j = i + 1; j < mSpheres.size(); j++) {
-    //        SphereCollisionComponent* b = mSpheres[j];
-    //        if (!b->getEnable()) {
-    //            break;
-    //        }
-    //        //もしmBoxes[j]のmin.xが、mBoxes[i]のmax.x境界を超えていたら、
-    //        //mBoxes[i]と交差する可能性があるボックスは存在しない
-    //        if (b->getCollision().mMin.x > max) {
-    //            break;
-    //        } else if (intersect(a->getCollision(), b->getCollision())) {
-    //            f(a->getOwner(), b->getOwner());
-    //        }
-    //    }
-    //}
+    for (size_t i = 0; i < mSpheres.size(); i++) {
+        //一番左がプレイヤーじゃなかったらもう一度
+        if (mSpheres[i]->getOwner()->getTag() != "Player") {
+            continue;
+        }
+        //mSpheres[i]の中心+半径を取得
+        auto a = mSpheres[i]->getSphere();
+        float max = a.mCenter.z + a.mRadius;
+        for (size_t j = i + 1; j < mSpheres.size(); j++) {
+            //もしmSpheres[j]の中心-半径が、mSpheres[i]の中心+半径を超えていたら、
+            //mSpheres[i]と交差する可能性があるボックスは存在しない
+            auto b = mSpheres[j]->getSphere();
+            if (b.mCenter.z - b.mRadius > max) {
+                break;
+            } else if (intersect(a, b)) {
+                hit(mSpheres[i]->getOwner(), mSpheres[j]->getOwner());
+            }
+        }
+    }
 }
 
 void Physics::addSphere(SphereCollisionComponent* sphere) {
@@ -178,13 +175,6 @@ void Physics::removeSphere(SphereCollisionComponent* sphere) {
     }
 }
 
-void Physics::hit() {
-    static bool first = true;
-    if (mSpheres.size() <= 1 || first) {
-        first = false;
-        return;
-    }
-    if (intersect(mSpheres[0]->getSphere(), mSpheres[1]->getSphere())) {
-        Actor::destroy(mSpheres[1]->getOwner());
-    }
+void Physics::hit(Actor* player, Actor* another) {
+    Actor::destroy(another);
 }

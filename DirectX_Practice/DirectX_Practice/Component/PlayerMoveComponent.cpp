@@ -12,33 +12,39 @@ PlayerMoveComponent::PlayerMoveComponent(Actor* owner, int updateOrder) :
     Component(owner, updateOrder),
     mState(State::JumpDown),
 	FALL_SPEED(0.01f),
-	MAX_FALL_SPEED(1.0f),
-    JUMP_POWER(0.5f),
+	MAX_FALL_SPEED(0.5f),
+    JUMP_POWER(0.8f),
     mVelocityY(0.0f),
     mButtonDownTime(0.0f),
-    mIsLongJumpHold(false){
+    mIsLongJumpHold(false),
+    mRotateAngle(0.0f){
 }
 
 void PlayerMoveComponent::start() {
 }
 
 void PlayerMoveComponent::update() {
-	jump();
 	fall();
+	jump();
+	rotate();
 }
 
 void PlayerMoveComponent::fall() {
 	//if (mState == State::OnGround) {
 	//	return;
 	//}
-	auto s = mOwner->getTransform()->getPosition();
-    float startUpPos = 1.f;
-	Ray ray(s + Vector3::up * startUpPos, s + Vector3::down * 50.f);
-	Physics::CollisionInfo collInfo;
-	mVelocityY -= FALL_SPEED;//段々落下速度が速くなる
-	if (mVelocityY <= -MAX_FALL_SPEED) {
-		mVelocityY = -MAX_FALL_SPEED;//落下速度が速くなりすぎないようにする
+
+	if (mState != State::OnGround) {
+		mVelocityY -= FALL_SPEED;//段々落下速度が速くなる
+		if (mVelocityY <= -MAX_FALL_SPEED) {
+			mVelocityY = -MAX_FALL_SPEED;//落下速度が速くなりすぎないようにする
+		}
 	}
+
+	auto s = mOwner->getTransform()->getPosition();
+    float startUpPos = 1.0f;
+	Ray ray(s + Vector3::up * startUpPos, s + Vector3::down * 50.0f);
+	Physics::CollisionInfo collInfo;
 	Vector3 len = Vector3(0.f, mVelocityY, 0.f);
 	if (Singleton<GameSystem>::instance().getPhysics()->rayCastField(&ray, &collInfo)) {
 		if (collInfo.mLength <= 0.4f + startUpPos) {
@@ -59,22 +65,47 @@ void PlayerMoveComponent::jump()
 
 	//離したらじょんぷの大きさの判定終わり
 	if (mIsLongJumpHold == true && Input::getKeyUp(Input::KeyCode::Space)) {
+
+		if (mButtonDownTime >= 10) {
+			mButtonDownTime = 10;
+		}
+		mVelocityY = (JUMP_POWER * 0.5f) + (JUMP_POWER * mButtonDownTime * 0.05f);//10フレ押したら元のじょんぷぱぅわーと同じ値になる式（汚い）
+		mState = State::JumpUp;
+
 		mIsLongJumpHold = false;
 		mButtonDownTime = 0;
 	}
 
 	if (mIsLongJumpHold == true) {
 		mButtonDownTime++;
-		mState = State::JumpUp;
 
-		//10フレ押したら最大じょんぷなので判定終わり
-		if (mButtonDownTime >= 10) {
-			mButtonDownTime = 0;
-			mIsLongJumpHold = false;
+		//mState = State::JumpUp;
+		////10フレ押したら最大じょんぷなので判定終わり
+		//if (mButtonDownTime >= 10) {
+		//	mButtonDownTime = 0;
+		//	mIsLongJumpHold = false;
+		//}
+		//else {
+		//	mVelocityY = (JUMP_POWER * 0.5f) + (JUMP_POWER * mButtonDownTime * 0.05f);//10フレ押したら元のじょんぷぱぅわーと同じ値になる式（汚い）
+		//}
+	}
+}
+
+void PlayerMoveComponent::rotate()
+{
+	if (mState == State::JumpUp || mState == State::JumpDown) {
+		if (Input::getKey(Input::KeyCode::Space)) {
+			mRotateAngle = -3;
 		}
 		else {
-			mVelocityY = (JUMP_POWER * 0.5f) + (JUMP_POWER * mButtonDownTime * 0.05f);//10フレ押したら元のじょんぷぱぅわーと同じ値になる式（汚い）
+			mRotateAngle = 0.5;
 		}
+		mOwner->getTransform()->rotate(Vector3(1.0f, 0.0f, 0.0f), mRotateAngle);
 	}
+
+	if (mState == State::OnGround) {
+		mRotateAngle = 0;
+		mOwner->getTransform()->setRotation(Vector3(1.0f, 0.0f, 0.0f), 0);//着地したら真っ直ぐになる
+	}	
 }
 

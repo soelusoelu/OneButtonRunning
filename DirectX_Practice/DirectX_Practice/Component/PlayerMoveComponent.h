@@ -18,6 +18,7 @@ public:
 private:
 	void fall();
 	void jump();
+	void rotate();
 
     State mState;
 	const float FALL_SPEED;
@@ -26,4 +27,5 @@ private:
 	float mVelocityY; //Y軸の移動速度
 	float mButtonDownTime;//ボタン押した時間
 	bool mIsLongJumpHold;//ろんぐじょんぷ（大ジャンプ）判定用
+	float mRotateAngle;
 };

@@ -20,9 +20,6 @@ PlayerMoveComponent::PlayerMoveComponent(Actor* owner, int updateOrder) :
     mRotateAngle(0.0f){
 }
 
-void PlayerMoveComponent::start() {
-}
-
 void PlayerMoveComponent::update() {
 	fall();
 	jump();
@@ -30,10 +27,6 @@ void PlayerMoveComponent::update() {
 }
 
 void PlayerMoveComponent::fall() {
-	//if (mState == State::OnGround) {
-	//	return;
-	//}
-
 	if (mState != State::OnGround) {
 		mVelocityY -= FALL_SPEED;//段々落下速度が速くなる
 		if (mVelocityY <= -MAX_FALL_SPEED) {
@@ -64,7 +57,7 @@ void PlayerMoveComponent::jump()
 	}
 
 	//離したらじょんぷの大きさの判定終わり
-	if (mIsLongJumpHold == true && Input::getKeyUp(Input::KeyCode::Space)) {
+	if (mIsLongJumpHold && Input::getKeyUp(Input::KeyCode::Space)) {
 
 		if (mButtonDownTime >= 10) {
 			mButtonDownTime = 10;
@@ -76,7 +69,7 @@ void PlayerMoveComponent::jump()
 		mButtonDownTime = 0;
 	}
 
-	if (mIsLongJumpHold == true) {
+	if (mIsLongJumpHold) {
 		mButtonDownTime++;
 
 		//mState = State::JumpUp;
@@ -95,17 +88,17 @@ void PlayerMoveComponent::rotate()
 {
 	if (mState == State::JumpUp || mState == State::JumpDown) {
 		if (Input::getKey(Input::KeyCode::Space)) {
-			mRotateAngle = -3;
+			mRotateAngle = -3.f;
 		}
 		else {
-			mRotateAngle = 0.5;
+			mRotateAngle = 0.5f;
 		}
-		mOwner->getTransform()->rotate(Vector3(1.0f, 0.0f, 0.0f), mRotateAngle);
+		mOwner->getTransform()->rotate(Vector3::right, mRotateAngle);
 	}
 
 	if (mState == State::OnGround) {
 		mRotateAngle = 0;
-		mOwner->getTransform()->setRotation(Vector3(1.0f, 0.0f, 0.0f), 0);//着地したら真っ直ぐになる
+		mOwner->getTransform()->setRotation(Vector3::right, 0);//着地したら真っ直ぐになる
 	}	
 }
 

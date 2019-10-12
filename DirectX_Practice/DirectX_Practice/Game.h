@@ -1,16 +1,10 @@
-#pragma once
+Ôªø#pragma once
 
 #include "Window.h"
 #include "Direct3D11.h"
+#include "DirectXIncLib.h"
 
 #define TITLE L"DirectX Practice"
-
-#define SAFE_DELETE(p) { if(p) { delete (p); (p) = nullptr; } }
-#define SAFE_DELETE_ARRAY(p) { if(p) { delete[] (p); (p) = nullptr; } }
-#define SAFE_RELEASE(p) { if(p) { (p)->Release(); (p) = NULL; } }
-#define MFAIL(code,string) if(FAILED(code) ) { MessageBox(0, string, L"error",MB_OK); return E_FAIL; }
-#define MFALSE(code,string) if(!(code) ) { MessageBox(0, string, L"error",MB_OK); return E_FAIL; }
-#define MSG(t) MessageBox(0, t, 0, MB_OK);
 
 class Main;
 
@@ -36,7 +30,7 @@ private:
     Main* mMain;
 };
 
-//ÉvÉçÉgÉ^ÉCÉv
+//„Éó„É≠„Éà„Çø„Ç§„Éó
 void initDirectory(WCHAR* root);
 void setRootDirectory();
 void setAssetsDirectory();

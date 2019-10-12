@@ -88,6 +88,9 @@
     <ClCompile Include="Actor\EnemyActor.cpp">
       <Filter>Actor</Filter>
     </ClCompile>
+    <ClCompile Include="Shader\Shader.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -176,6 +179,9 @@
     </ClInclude>
     <ClInclude Include="Actor\EnemyActor.h">
       <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\Shader.h">
+      <Filter>Shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

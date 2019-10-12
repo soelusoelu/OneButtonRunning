@@ -146,6 +146,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Scene\GamePlay.cpp" />
     <ClCompile Include="Scene\SceneBase.cpp" />
+    <ClCompile Include="Shader\Shader.cpp" />
     <ClCompile Include="System\GameSystem.cpp" />
     <ClCompile Include="System\IDManager.cpp" />
     <ClCompile Include="System\Physics.cpp" />
@@ -181,6 +182,7 @@
     <ClInclude Include="Main.h" />
     <ClInclude Include="Scene\GamePlay.h" />
     <ClInclude Include="Scene\SceneBase.h" />
+    <ClInclude Include="Shader\Shader.h" />
     <ClInclude Include="System\GameSystem.h" />
     <ClInclude Include="System\IDManager.h" />
     <ClInclude Include="System\Physics.h" />

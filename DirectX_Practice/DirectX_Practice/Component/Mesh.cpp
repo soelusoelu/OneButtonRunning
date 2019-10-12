@@ -1,8 +1,11 @@
-#include "Mesh.h"
+ï»¿#include "Mesh.h"
 #include "SphereCollisionComponent.h"
 #include "../Camera.h"
 #include "../Direct3D11.h"
 #include "../Game.h"
+#include "../System/GameSystem.h"
+#include "../System/Renderer.h"
+#include "../Shader/Shader.h"
 
 Mesh::Mesh() {
     ZeroMemory(this, sizeof(Mesh));
@@ -11,33 +14,24 @@ Mesh::Mesh() {
 Mesh::~Mesh() {
     SAFE_DELETE_ARRAY(m_pMaterial);
     SAFE_DELETE_ARRAY(m_ppIndexBuffer);
-    SAFE_RELEASE(m_pConstantBuffer0);
-    SAFE_RELEASE(m_pConstantBuffer1);
-    SAFE_RELEASE(m_pVertexShader);
-    SAFE_RELEASE(m_pPixelShader);
     SAFE_RELEASE(m_pVertexBuffer);
-    SAFE_RELEASE(m_pVertexLayout);
     SAFE_RELEASE(m_pSampleLinear);
     SAFE_RELEASE(m_pTexture);
-    SAFE_RELEASE(mBlendState);
     SAFE_DELETE_ARRAY(pvVertexBuffer);
     SAFE_DELETE_ARRAY(ppiVertexIndex);
     SAFE_DELETE_ARRAY(dwNumFaceInMaterial);
     SAFE_DELETE_ARRAY(mCoord);
 }
 
-HRESULT Mesh::Init(const std::string& fileName) {
+HRESULT Mesh::init(const std::string& fileName) {
     m_pDevice = Direct3D11::mDevice;
     m_pDeviceContext = Direct3D11::mDeviceContext;
     mRasterizerState = Direct3D11::mRasterizerState;
     mRasterizerStateBack = Direct3D11::mRasterizerStateBack;
 
-    if (FAILED(InitShader())) {
-        MessageBox(0, L"ƒƒbƒVƒ…—pƒVƒF[ƒ_[ì¬¸”s", NULL, MB_OK);
-        return E_FAIL;
-    }
+    mShader = Singleton<GameSystem>::instance().getRenderer()->getShader("Mesh.hlsl");
     if (FAILED(LoadStaticMesh(fileName))) {
-        MessageBox(0, L"ƒƒbƒVƒ…ì¬¸”s", NULL, MB_OK);
+        MessageBox(0, L"ãƒ¡ãƒƒã‚·ãƒ¥ä½œæˆå¤±æ•—", NULL, MB_OK);
         return E_FAIL;
     }
 
@@ -52,7 +46,7 @@ void Mesh::draw(D3DXMATRIX world, float alpha) const {
 }
 
 void Mesh::createSphere(Sphere* sphere) const {
-    //ƒoƒEƒ“ƒfƒBƒ“ƒOƒXƒtƒBƒAì¬
+    //ãƒã‚¦ãƒ³ãƒ‡ã‚£ãƒ³ã‚°ã‚¹ãƒ•ã‚£ã‚¢ä½œæˆ
     D3DXVECTOR3 center;
     D3DXComputeBoundingSphere(mCoord, m_dwNumVert, sizeof(D3DXVECTOR3), &center, &sphere->mRadius);
     sphere->mCenter.x = center.x;
@@ -60,144 +54,57 @@ void Mesh::createSphere(Sphere* sphere) const {
     sphere->mCenter.z = center.z;
 }
 
-HRESULT Mesh::InitShader() {
-    //hlslƒtƒ@ƒCƒ‹“Ç‚İ‚İ ƒuƒƒuì¬@ƒuƒƒu‚Æ‚ÍƒVƒF[ƒ_[‚Ì‰ò‚İ‚½‚¢‚È‚à‚ÌBXXƒVƒF[ƒ_[‚Æ‚µ‚Ä“Á’¥‚ğ‚½‚È‚¢BŒã‚ÅŠeíƒVƒF[ƒ_[‚É¬‚è“¾‚éB
-    ID3D10Blob* pCompiledShader = NULL;
-    ID3D10Blob* pErrors = NULL;
-    //ƒuƒƒu‚©‚çƒo[ƒeƒbƒNƒXƒVƒF[ƒ_[ì¬
-    setShaderDirectory();
-    if (FAILED(D3DX11CompileFromFile(L"Mesh.hlsl", NULL, NULL, "VS", "vs_5_0", 0, 0, NULL, &pCompiledShader, &pErrors, NULL))) {
-        MessageBox(0, L"hlsl“Ç‚İ‚İ¸”s", NULL, MB_OK);
-        return E_FAIL;
-    }
-    SAFE_RELEASE(pErrors);
-
-    if (FAILED(m_pDevice->CreateVertexShader(pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), NULL, &m_pVertexShader))) {
-        SAFE_RELEASE(pCompiledShader);
-        MessageBox(0, L"ƒo[ƒeƒbƒNƒXƒVƒF[ƒ_[ì¬¸”s", NULL, MB_OK);
-        return E_FAIL;
-    }
-    //’¸“_ƒCƒ“ƒvƒbƒgƒŒƒCƒAƒEƒg‚ğ’è‹`	
-    D3D11_INPUT_ELEMENT_DESC layout[] =
-    {
-        { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-        { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-        { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-    };
-    UINT numElements = sizeof(layout) / sizeof(layout[0]);
-    //’¸“_ƒCƒ“ƒvƒbƒgƒŒƒCƒAƒEƒg‚ğì¬
-    if (FAILED(m_pDevice->CreateInputLayout(layout, numElements, pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), &m_pVertexLayout))) {
-        return FALSE;
-    }
-    //ƒuƒƒu‚©‚çƒsƒNƒZƒ‹ƒVƒF[ƒ_[ì¬
-    if (FAILED(D3DX11CompileFromFile(L"Mesh.hlsl", NULL, NULL, "PS", "ps_5_0", 0, 0, NULL, &pCompiledShader, &pErrors, NULL))) {
-        MessageBox(0, L"hlsl“Ç‚İ‚İ¸”s", NULL, MB_OK);
-        return E_FAIL;
-    }
-    SAFE_RELEASE(pErrors);
-    if (FAILED(m_pDevice->CreatePixelShader(pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), NULL, &m_pPixelShader))) {
-        SAFE_RELEASE(pCompiledShader);
-        MessageBox(0, L"ƒsƒNƒZƒ‹ƒVƒF[ƒ_[ì¬¸”s", NULL, MB_OK);
-        return E_FAIL;
-    }
-    SAFE_RELEASE(pCompiledShader);
-    //ƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@[ì¬@•ÏŠ·s—ñ“n‚µ—p
-    D3D11_BUFFER_DESC cb;
-    cb.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-    cb.ByteWidth = sizeof(SIMPLESHADER_CONSTANT_BUFFER0);
-    cb.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-    cb.MiscFlags = 0;
-    cb.Usage = D3D11_USAGE_DYNAMIC;
-
-    if (FAILED(m_pDevice->CreateBuffer(&cb, NULL, &m_pConstantBuffer0))) {
-        return E_FAIL;
-    }
-    //ƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@[ì¬  ƒ}ƒeƒŠƒAƒ‹“n‚µ—p
-    cb.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-    cb.ByteWidth = sizeof(SIMPLESHADER_CONSTANT_BUFFER1);
-    cb.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-    cb.MiscFlags = 0;
-    cb.Usage = D3D11_USAGE_DYNAMIC;
-
-    if (FAILED(m_pDevice->CreateBuffer(&cb, NULL, &m_pConstantBuffer1))) {
-        return E_FAIL;
-    }
-
-    //ƒAƒ‹ƒtƒ@ƒuƒŒƒ“ƒh—pƒuƒŒƒ“ƒhƒXƒe[ƒgì¬
-    D3D11_BLEND_DESC bd;
-    ZeroMemory(&bd, sizeof(D3D11_BLEND_DESC));
-    bd.IndependentBlendEnable = false;
-    bd.AlphaToCoverageEnable = false;
-    bd.RenderTarget[0].BlendEnable = true;
-    bd.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
-    bd.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-    bd.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-    bd.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-    bd.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-    bd.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-    bd.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-
-    if (FAILED(m_pDevice->CreateBlendState(&bd, &mBlendState))) {
-        return E_FAIL;
-    }
-
-    UINT mask = 0xffffffff;
-    m_pDeviceContext->OMSetBlendState(mBlendState, NULL, mask);
-
-    return S_OK;
-}
-
 HRESULT Mesh::LoadMaterialFromFile(const std::string& fileName, MY_MATERIAL** ppMaterial) {
-    //ƒ}ƒeƒŠƒAƒ‹ƒtƒ@ƒCƒ‹‚ğŠJ‚¢‚Ä“à—e‚ğ“Ç‚İ‚Ş
+    //ãƒãƒ†ãƒªã‚¢ãƒ«ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã„ã¦å†…å®¹ã‚’èª­ã¿è¾¼ã‚€
     FILE* fp = NULL;
     fopen_s(&fp, fileName.c_str(), "rt");
     char key[110] = { 0 };
     D3DXVECTOR4 v(0, 0, 0, 1);
 
-    //ƒ}ƒeƒŠƒAƒ‹”‚ğ’²‚×‚é
+    //ãƒãƒ†ãƒªã‚¢ãƒ«æ•°ã‚’èª¿ã¹ã‚‹
     m_dwNumMaterial = 0;
     while (!feof(fp)) {
-        //ƒL[ƒ[ƒh“Ç‚İ‚İ
+        //ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰èª­ã¿è¾¼ã¿
         fscanf_s(fp, "%s ", key, sizeof(key));
-        //ƒ}ƒeƒŠƒAƒ‹–¼
+        //ãƒãƒ†ãƒªã‚¢ãƒ«å
         if (strcmp(key, "newmtl") == 0) {
             m_dwNumMaterial++;
         }
     }
     MY_MATERIAL* pMaterial = new MY_MATERIAL[m_dwNumMaterial];
 
-    //–{“Ç‚İ‚İ	
+    //æœ¬èª­ã¿è¾¼ã¿	
     fseek(fp, SEEK_SET, 0);
     INT iMCount = -1;
 
     while (!feof(fp)) {
-        //ƒL[ƒ[ƒh“Ç‚İ‚İ
+        //ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰èª­ã¿è¾¼ã¿
         fscanf_s(fp, "%s ", key, sizeof(key));
-        //ƒ}ƒeƒŠƒAƒ‹–¼
+        //ãƒãƒ†ãƒªã‚¢ãƒ«å
         if (strcmp(key, "newmtl") == 0) {
             iMCount++;
             fscanf_s(fp, "%s ", key, sizeof(key));
             strcpy_s(pMaterial[iMCount].szName, key);
         }
-        //Ka@ƒAƒ“ƒrƒGƒ“ƒg
+        //Kaã€€ã‚¢ãƒ³ãƒ“ã‚¨ãƒ³ãƒˆ
         if (strcmp(key, "Ka") == 0) {
             fscanf_s(fp, "%f %f %f", &v.x, &v.y, &v.z);
             pMaterial[iMCount].Ka = v;
         }
-        //Kd@ƒfƒBƒtƒ…[ƒY
+        //Kdã€€ãƒ‡ã‚£ãƒ•ãƒ¥ãƒ¼ã‚º
         if (strcmp(key, "Kd") == 0) {
             fscanf_s(fp, "%f %f %f", &v.x, &v.y, &v.z);
             pMaterial[iMCount].Kd = v;
         }
-        //Ks@ƒXƒyƒLƒ…ƒ‰[
+        //Ksã€€ã‚¹ãƒšã‚­ãƒ¥ãƒ©ãƒ¼
         if (strcmp(key, "Ks") == 0) {
             fscanf_s(fp, "%f %f %f", &v.x, &v.y, &v.z);
             pMaterial[iMCount].Ks = v;
         }
-        //map_Kd@ƒeƒNƒXƒ`ƒƒ[
+        //map_Kdã€€ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¼
         if (strcmp(key, "map_Kd") == 0) {
             fscanf_s(fp, "%s", &pMaterial[iMCount].szTextureName, sizeof(pMaterial[iMCount].szTextureName));
-            //ƒeƒNƒXƒ`ƒƒ[‚ğì¬
+            //ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¼ã‚’ä½œæˆ
             if (FAILED(D3DX11CreateShaderResourceViewFromFileA(m_pDevice, pMaterial[iMCount].szTextureName, NULL, NULL, &pMaterial[iMCount].pTexture, NULL))) {
                 return E_FAIL;
             }
@@ -215,51 +122,51 @@ HRESULT Mesh::LoadStaticMesh(const std::string& fileName) {
     int v1 = 0, v2 = 0, v3 = 0;
     int vn1 = 0, vn2 = 0, vn3 = 0;
     int vt1 = 0, vt2 = 0, vt3 = 0;
-    DWORD dwVCount = 0;//“Ç‚İ‚İƒJƒEƒ“ƒ^[
-    DWORD dwVNCount = 0;//“Ç‚İ‚İƒJƒEƒ“ƒ^[
-    DWORD dwVTCount = 0;//“Ç‚İ‚İƒJƒEƒ“ƒ^[
-    DWORD dwFCount = 0;//“Ç‚İ‚İƒJƒEƒ“ƒ^[
+    DWORD dwVCount = 0;//èª­ã¿è¾¼ã¿ã‚«ã‚¦ãƒ³ã‚¿ãƒ¼
+    DWORD dwVNCount = 0;//èª­ã¿è¾¼ã¿ã‚«ã‚¦ãƒ³ã‚¿ãƒ¼
+    DWORD dwVTCount = 0;//èª­ã¿è¾¼ã¿ã‚«ã‚¦ãƒ³ã‚¿ãƒ¼
+    DWORD dwFCount = 0;//èª­ã¿è¾¼ã¿ã‚«ã‚¦ãƒ³ã‚¿ãƒ¼
 
     char key[200] = { 0 };
-    //OBJƒtƒ@ƒCƒ‹‚ğŠJ‚¢‚Ä“à—e‚ğ“Ç‚İ‚Ş
+    //OBJãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã„ã¦å†…å®¹ã‚’èª­ã¿è¾¼ã‚€
     setAssetsDirectory();
     FILE* fp = NULL;
     fopen_s(&fp, fileName.c_str(), "rt");
 
-    //–‘O‚É’¸“_”Aƒ|ƒŠƒSƒ“”‚ğ’²‚×‚é
+    //äº‹å‰ã«é ‚ç‚¹æ•°ã€ãƒãƒªã‚´ãƒ³æ•°ã‚’èª¿ã¹ã‚‹
     while (!feof(fp)) {
-        //ƒL[ƒ[ƒh“Ç‚İ‚İ
+        //ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰èª­ã¿è¾¼ã¿
         fscanf_s(fp, "%s ", key, sizeof(key));
-        //ƒ}ƒeƒŠƒAƒ‹“Ç‚İ‚İ
+        //ãƒãƒ†ãƒªã‚¢ãƒ«èª­ã¿è¾¼ã¿
         if (strcmp(key, "mtllib") == 0) {
             fscanf_s(fp, "%s ", key, sizeof(key));
             LoadMaterialFromFile(key, &m_pMaterial);
         }
-        //’¸“_
+        //é ‚ç‚¹
         if (strcmp(key, "v") == 0) {
             m_dwNumVert++;
         }
-        //–@ü
+        //æ³•ç·š
         if (strcmp(key, "vn") == 0) {
             dwVNCount++;
         }
-        //ƒeƒNƒXƒ`ƒƒ[À•W
+        //ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¼åº§æ¨™
         if (strcmp(key, "vt") == 0) {
             dwVTCount++;
         }
-        //ƒtƒFƒCƒXiƒ|ƒŠƒSƒ“j
+        //ãƒ•ã‚§ã‚¤ã‚¹ï¼ˆãƒãƒªã‚´ãƒ³ï¼‰
         if (strcmp(key, "f") == 0) {
             m_dwNumFace++;
         }
     }
 
-    //ˆê“I‚Èƒƒ‚ƒŠŠm•Ûi’¸“_ƒoƒbƒtƒ@‚ÆƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@j
+    //ä¸€æ™‚çš„ãªãƒ¡ãƒ¢ãƒªç¢ºä¿ï¼ˆé ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã¨ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ï¼‰
     pvVertexBuffer = new MY_VERTEX[m_dwNumVert];
     mCoord = new D3DXVECTOR3[m_dwNumVert];
     D3DXVECTOR3* pvNormal = new D3DXVECTOR3[dwVNCount];
     D3DXVECTOR2* pvTexture = new D3DXVECTOR2[dwVTCount];
 
-    //–{“Ç‚İ‚İ	
+    //æœ¬èª­ã¿è¾¼ã¿	
     fseek(fp, SEEK_SET, 0);
     dwVCount = 0;
     dwVNCount = 0;
@@ -267,11 +174,11 @@ HRESULT Mesh::LoadStaticMesh(const std::string& fileName) {
     dwFCount = 0;
 
     while (!feof(fp)) {
-        //ƒL[ƒ[ƒh “Ç‚İ‚İ
+        //ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰ èª­ã¿è¾¼ã¿
         ZeroMemory(key, sizeof(key));
         fscanf_s(fp, "%s ", key, sizeof(key));
 
-        //’¸“_ “Ç‚İ‚İ
+        //é ‚ç‚¹ èª­ã¿è¾¼ã¿
         if (strcmp(key, "v") == 0) {
             fscanf_s(fp, "%f %f %f", &x, &y, &z);
             mCoord[dwVCount].x = x;
@@ -280,7 +187,7 @@ HRESULT Mesh::LoadStaticMesh(const std::string& fileName) {
             dwVCount++;
         }
 
-        //–@ü “Ç‚İ‚İ
+        //æ³•ç·š èª­ã¿è¾¼ã¿
         if (strcmp(key, "vn") == 0) {
             fscanf_s(fp, "%f %f %f", &x, &y, &z);
             pvNormal[dwVNCount].x = x;
@@ -289,21 +196,21 @@ HRESULT Mesh::LoadStaticMesh(const std::string& fileName) {
             dwVNCount++;
         }
 
-        //ƒeƒNƒXƒ`ƒƒ[À•W “Ç‚İ‚İ
+        //ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¼åº§æ¨™ èª­ã¿è¾¼ã¿
         if (strcmp(key, "vt") == 0) {
             fscanf_s(fp, "%f %f", &x, &y);
-            pvTexture[dwVTCount].x = -x;//OBJƒtƒ@ƒCƒ‹‚ÍX¬•ª‚ª‹t‚È‚Ì‚Å‡‚í‚¹‚é
-            pvTexture[dwVTCount].y = -y;//OBJƒtƒ@ƒCƒ‹‚ÍY¬•ª‚ª‹t‚È‚Ì‚Å‡‚í‚¹‚é
+            pvTexture[dwVTCount].x = -x;//OBJãƒ•ã‚¡ã‚¤ãƒ«ã¯Xæˆåˆ†ãŒé€†ãªã®ã§åˆã‚ã›ã‚‹
+            pvTexture[dwVTCount].y = -y;//OBJãƒ•ã‚¡ã‚¤ãƒ«ã¯Yæˆåˆ†ãŒé€†ãªã®ã§åˆã‚ã›ã‚‹
             dwVTCount++;
         }
     }
 
-    //ƒ}ƒeƒŠƒAƒ‹‚Ì”‚¾‚¯ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@[‚ğì¬
+    //ãƒãƒ†ãƒªã‚¢ãƒ«ã®æ•°ã ã‘ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ãƒ¼ã‚’ä½œæˆ
     m_ppIndexBuffer = new ID3D11Buffer * [m_dwNumMaterial];
 
-    //ƒtƒFƒCƒX@“Ç‚İ‚İ@ƒoƒ‰ƒoƒ‰‚Éû˜^‚³‚ê‚Ä‚¢‚é‰Â”\«‚ª‚ ‚é‚Ì‚ÅAƒ}ƒeƒŠƒAƒ‹–¼‚ğ—Š‚è‚É‚Â‚È‚¬‡‚í‚¹‚é
+    //ãƒ•ã‚§ã‚¤ã‚¹ã€€èª­ã¿è¾¼ã¿ã€€ãƒãƒ©ãƒãƒ©ã«åéŒ²ã•ã‚Œã¦ã„ã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ã®ã§ã€ãƒãƒ†ãƒªã‚¢ãƒ«åã‚’é ¼ã‚Šã«ã¤ãªãåˆã‚ã›ã‚‹
     bool boFlag = false;
-    int* piFaceBuffer = new int[m_dwNumFace * 3];//‚R’¸“_ƒ|ƒŠƒSƒ“‚È‚Ì‚ÅA1ƒtƒFƒCƒX=3’¸“_(3ƒCƒ“ƒfƒbƒNƒX)
+    int* piFaceBuffer = new int[m_dwNumFace * 3];//ï¼“é ‚ç‚¹ãƒãƒªã‚´ãƒ³ãªã®ã§ã€1ãƒ•ã‚§ã‚¤ã‚¹=3é ‚ç‚¹(3ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹)
     ppiVertexIndex = new int* [m_dwNumMaterial];
     dwNumFaceInMaterial = new DWORD[m_dwNumMaterial];
     for (DWORD i = 0; i < m_dwNumMaterial; i++) {
@@ -311,11 +218,11 @@ HRESULT Mesh::LoadStaticMesh(const std::string& fileName) {
         dwFCount = 0;
 
         while (!feof(fp)) {
-            //ƒL[ƒ[ƒh “Ç‚İ‚İ
+            //ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰ èª­ã¿è¾¼ã¿
             ZeroMemory(key, sizeof(key));
             fscanf_s(fp, "%s ", key, sizeof(key));
 
-            //ƒtƒFƒCƒX “Ç‚İ‚İ¨’¸“_ƒCƒ“ƒfƒbƒNƒX‚É
+            //ãƒ•ã‚§ã‚¤ã‚¹ èª­ã¿è¾¼ã¿â†’é ‚ç‚¹ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã«
             if (strcmp(key, "usemtl") == 0) {
                 fscanf_s(fp, "%s ", key, sizeof(key));
                 if (strcmp(key, m_pMaterial[i].szName) == 0) {
@@ -325,10 +232,10 @@ HRESULT Mesh::LoadStaticMesh(const std::string& fileName) {
                 }
             }
             if (strcmp(key, "f") == 0 && boFlag == true) {
-                if (m_pMaterial[i].pTexture != NULL)//ƒeƒNƒXƒ`ƒƒ[‚ ‚èƒT[ƒtƒFƒCƒX
+                if (m_pMaterial[i].pTexture != NULL)//ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¼ã‚ã‚Šã‚µãƒ¼ãƒ•ã‚§ã‚¤ã‚¹
                 {
                     fscanf_s(fp, "%d/%d/%d %d/%d/%d %d/%d/%d", &v1, &vt1, &vn1, &v2, &vt2, &vn2, &v3, &vt3, &vn3);
-                } else//ƒeƒNƒXƒ`ƒƒ[–³‚µƒT[ƒtƒFƒCƒX
+                } else//ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¼ç„¡ã—ã‚µãƒ¼ãƒ•ã‚§ã‚¤ã‚¹
                 {
                     fscanf_s(fp, "%d//%d %d//%d %d//%d", &v1, &vn1, &v2, &vn2, &v3, &vn3);
                 }
@@ -337,7 +244,7 @@ HRESULT Mesh::LoadStaticMesh(const std::string& fileName) {
                 piFaceBuffer[dwFCount * 3 + 1] = v2 - 1;
                 piFaceBuffer[dwFCount * 3 + 2] = v3 - 1;
                 dwFCount++;
-                //’¸“_\‘¢‘Ì‚É‘ã“ü
+                //é ‚ç‚¹æ§‹é€ ä½“ã«ä»£å…¥
                 pvVertexBuffer[v1 - 1].vPos = mCoord[v1 - 1];
                 pvVertexBuffer[v1 - 1].vNorm = pvNormal[vn1 - 1];
                 pvVertexBuffer[v1 - 1].vTex = pvTexture[vt1 - 1];
@@ -349,14 +256,14 @@ HRESULT Mesh::LoadStaticMesh(const std::string& fileName) {
                 pvVertexBuffer[v3 - 1].vTex = pvTexture[vt3 - 1];
             }
         }
-        if (dwFCount == 0)//g—p‚³‚ê‚Ä‚¢‚È‚¢ƒ}ƒeƒŠƒAƒ‹‘Îô
+        if (dwFCount == 0)//ä½¿ç”¨ã•ã‚Œã¦ã„ãªã„ãƒãƒ†ãƒªã‚¢ãƒ«å¯¾ç­–
         {
             m_ppIndexBuffer[i] = NULL;
             dwNumFaceInMaterial[i] = NULL;
             continue;
         }
 
-        //ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@[‚ğì¬
+        //ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ãƒ¼ã‚’ä½œæˆ
         D3D11_BUFFER_DESC bd;
         bd.Usage = D3D11_USAGE_DEFAULT;
         bd.ByteWidth = sizeof(int) * dwFCount * 3;
@@ -370,7 +277,7 @@ HRESULT Mesh::LoadStaticMesh(const std::string& fileName) {
         if (FAILED(m_pDevice->CreateBuffer(&bd, &InitData, &m_ppIndexBuffer[i])))
             return FALSE;
         m_pMaterial[i].dwNumFace = dwFCount;
-        //’¸“_ƒCƒ“ƒfƒbƒNƒXƒf[ƒ^‚ğ•Û‘¶‚µ‚Ä‚¨‚­
+        //é ‚ç‚¹ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒ‡ãƒ¼ã‚¿ã‚’ä¿å­˜ã—ã¦ãŠã
         ppiVertexIndex[i] = new int[dwFCount * 3];
         memcpy(ppiVertexIndex[i], piFaceBuffer, sizeof(int) * dwFCount * 3);
 
@@ -379,7 +286,7 @@ HRESULT Mesh::LoadStaticMesh(const std::string& fileName) {
     delete[] piFaceBuffer;
     fclose(fp);
 
-    //ƒo[ƒeƒbƒNƒXƒoƒbƒtƒ@[‚ğì¬
+    //ãƒãƒ¼ãƒ†ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ãƒ¼ã‚’ä½œæˆ
     D3D11_BUFFER_DESC bd;
     bd.Usage = D3D11_USAGE_DEFAULT;
     bd.ByteWidth = sizeof(MY_VERTEX) * m_dwNumVert;
@@ -392,11 +299,11 @@ HRESULT Mesh::LoadStaticMesh(const std::string& fileName) {
         return FALSE;
     }
 
-    //ˆê“I‚È“ü‚ê•¨‚ÍA‚à‚Í‚â•s—v
+    //ä¸€æ™‚çš„ãªå…¥ã‚Œç‰©ã¯ã€ã‚‚ã¯ã‚„ä¸è¦
     delete[] pvNormal;
     delete[] pvTexture;
 
-    //ƒeƒNƒXƒ`ƒƒ[—pƒTƒ“ƒvƒ‰[ì¬
+    //ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¼ç”¨ã‚µãƒ³ãƒ—ãƒ©ãƒ¼ä½œæˆ
     D3D11_SAMPLER_DESC SamDesc;
     ZeroMemory(&SamDesc, sizeof(D3D11_SAMPLER_DESC));
 
@@ -410,55 +317,55 @@ HRESULT Mesh::LoadStaticMesh(const std::string& fileName) {
 }
 
 void Mesh::RendererMesh(D3DXMATRIX world, float alpha) const {
-    //g—p‚·‚éƒVƒF[ƒ_[‚Ì“o˜^	
-    m_pDeviceContext->VSSetShader(m_pVertexShader, NULL, 0);
-    m_pDeviceContext->PSSetShader(m_pPixelShader, NULL, 0);
-    //ƒVƒF[ƒ_[‚ÌƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@[‚ÉŠeíƒf[ƒ^‚ğ“n‚·
+    //ä½¿ç”¨ã™ã‚‹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ç™»éŒ²	
+    m_pDeviceContext->VSSetShader(mShader->getVertexShader(), NULL, 0);
+    m_pDeviceContext->PSSetShader(mShader->getPixelShader(), NULL, 0);
+    //ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ã‚³ãƒ³ã‚¹ã‚¿ãƒ³ãƒˆãƒãƒƒãƒ•ã‚¡ãƒ¼ã«å„ç¨®ãƒ‡ãƒ¼ã‚¿ã‚’æ¸¡ã™
     D3D11_MAPPED_SUBRESOURCE pData;
-    if (SUCCEEDED(m_pDeviceContext->Map(m_pConstantBuffer0, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
+    if (SUCCEEDED(m_pDeviceContext->Map(mShader->mConstantBuffer0, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
         SIMPLESHADER_CONSTANT_BUFFER0 sg;
-        //ƒ[ƒ‹ƒhs—ñ‚ğ“n‚·
+        //ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã‚’æ¸¡ã™
         sg.mW = world;
         D3DXMatrixTranspose(&sg.mW, &sg.mW);
-        //ƒ[ƒ‹ƒhAƒJƒƒ‰AË‰es—ñ‚ğ“n‚·
+        //ãƒ¯ãƒ¼ãƒ«ãƒ‰ã€ã‚«ãƒ¡ãƒ©ã€å°„å½±è¡Œåˆ—ã‚’æ¸¡ã™
         sg.mWVP = world * Singleton<Camera>::instance().getView() * Singleton<Camera>::instance().getProjection();
         D3DXMatrixTranspose(&sg.mWVP, &sg.mWVP);
-        //ƒ‰ƒCƒg‚Ì•ûŒü‚ğ“n‚·
+        //ãƒ©ã‚¤ãƒˆã®æ–¹å‘ã‚’æ¸¡ã™
         //sg.vLightDir = D3DXVECTOR4(vLight.x, vLight.y, vLight.z, 0.0f);
         sg.vLightDir = D3DXVECTOR4(1.f, -1.f, 1.f, 0.0f);
-        //‹“_ˆÊ’u‚ğ“n‚·
+        //è¦–ç‚¹ä½ç½®ã‚’æ¸¡ã™
         sg.vEye = D3DXVECTOR4(Singleton<Camera>::instance().getPosition(), 0);
 
         memcpy_s(pData.pData, pData.RowPitch, (void*)&sg, sizeof(SIMPLESHADER_CONSTANT_BUFFER0));
-        m_pDeviceContext->Unmap(m_pConstantBuffer0, 0);
+        m_pDeviceContext->Unmap(mShader->mConstantBuffer0, 0);
     }
-    //‚±‚ÌƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@[‚ğg‚¤ƒVƒF[ƒ_[‚Ì“o˜^
-    m_pDeviceContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer0);
-    m_pDeviceContext->PSSetConstantBuffers(0, 1, &m_pConstantBuffer0);
-    //’¸“_ƒCƒ“ƒvƒbƒgƒŒƒCƒAƒEƒg‚ğƒZƒbƒg
-    m_pDeviceContext->IASetInputLayout(m_pVertexLayout);
-    //ƒvƒŠƒ~ƒeƒBƒuEƒgƒ|ƒƒW[‚ğƒZƒbƒg
+    //ã“ã®ã‚³ãƒ³ã‚¹ã‚¿ãƒ³ãƒˆãƒãƒƒãƒ•ã‚¡ãƒ¼ã‚’ä½¿ã†ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ç™»éŒ²
+    m_pDeviceContext->VSSetConstantBuffers(0, 1, &mShader->mConstantBuffer0);
+    m_pDeviceContext->PSSetConstantBuffers(0, 1, &mShader->mConstantBuffer0);
+    //é ‚ç‚¹ã‚¤ãƒ³ãƒ—ãƒƒãƒˆãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆã‚’ã‚»ãƒƒãƒˆ
+    m_pDeviceContext->IASetInputLayout(mShader->getVertexLayout());
+    //ãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–ãƒ»ãƒˆãƒãƒ­ã‚¸ãƒ¼ã‚’ã‚»ãƒƒãƒˆ
     m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-    //ƒo[ƒeƒbƒNƒXƒoƒbƒtƒ@[‚ğƒZƒbƒg
+    //ãƒãƒ¼ãƒ†ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ãƒ¼ã‚’ã‚»ãƒƒãƒˆ
     UINT stride = sizeof(MY_VERTEX);
     UINT offset = 0;
     m_pDeviceContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
-    //ƒ}ƒeƒŠƒAƒ‹‚Ì”‚¾‚¯A‚»‚ê‚¼‚ê‚Ìƒ}ƒeƒŠƒAƒ‹‚ÌƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@|‚ğ•`‰æ
+    //ãƒãƒ†ãƒªã‚¢ãƒ«ã®æ•°ã ã‘ã€ãã‚Œãã‚Œã®ãƒãƒ†ãƒªã‚¢ãƒ«ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ï¼ã‚’æç”»
     for (DWORD i = 0; i < m_dwNumMaterial; i++) {
-        //g—p‚³‚ê‚Ä‚¢‚È‚¢ƒ}ƒeƒŠƒAƒ‹‘Îô
+        //ä½¿ç”¨ã•ã‚Œã¦ã„ãªã„ãƒãƒ†ãƒªã‚¢ãƒ«å¯¾ç­–
         if (m_pMaterial[i].dwNumFace == 0) {
             continue;
         }
-        //ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@[‚ğƒZƒbƒg
+        //ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ãƒ¼ã‚’ã‚»ãƒƒãƒˆ
         stride = sizeof(int);
         offset = 0;
         m_pDeviceContext->IASetIndexBuffer(m_ppIndexBuffer[i], DXGI_FORMAT_R32_UINT, 0);
 
-        //ƒ}ƒeƒŠƒAƒ‹‚ÌŠe—v‘f‚ğƒGƒtƒFƒNƒgiƒVƒF[ƒ_[j‚É“n‚·
+        //ãƒãƒ†ãƒªã‚¢ãƒ«ã®å„è¦ç´ ã‚’ã‚¨ãƒ•ã‚§ã‚¯ãƒˆï¼ˆã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ï¼‰ã«æ¸¡ã™
         D3D11_MAPPED_SUBRESOURCE pData;
-        if (SUCCEEDED(m_pDeviceContext->Map(m_pConstantBuffer1, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
+        if (SUCCEEDED(m_pDeviceContext->Map(mShader->mConstantBuffer1, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
             SIMPLESHADER_CONSTANT_BUFFER1 sg;
-            //ƒeƒNƒXƒ`ƒƒ[‚ğƒVƒF[ƒ_[‚É“n‚·
+            //ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¼ã‚’ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã«æ¸¡ã™
             if (m_pMaterial[i].szTextureName[0] != NULL) {
                 m_pDeviceContext->PSSetSamplers(0, 1, &m_pSampleLinear);
                 m_pDeviceContext->PSSetShaderResources(0, 1, &m_pMaterial[i].pTexture);
@@ -467,16 +374,16 @@ void Mesh::RendererMesh(D3DXMATRIX world, float alpha) const {
                 sg.vTexture.x = 0;
             }
 
-            sg.vAmbient = m_pMaterial[i].Ka;//ƒAƒ“ƒrƒGƒ“ƒg‚ğ‚ğƒVƒF[ƒ_[‚É“n‚·
-            sg.vDiffuse = m_pMaterial[i].Kd;//ƒfƒBƒtƒ…[ƒYƒJƒ‰[‚ğƒVƒF[ƒ_[‚É“n‚·
+            sg.vAmbient = m_pMaterial[i].Ka;//ã‚¢ãƒ³ãƒ“ã‚¨ãƒ³ãƒˆã‚’ã‚’ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã«æ¸¡ã™
+            sg.vDiffuse = m_pMaterial[i].Kd;//ãƒ‡ã‚£ãƒ•ãƒ¥ãƒ¼ã‚ºã‚«ãƒ©ãƒ¼ã‚’ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã«æ¸¡ã™
             sg.vDiffuse.w = alpha;
-            sg.vSpecular = m_pMaterial[i].Ks;//ƒXƒyƒLƒ…ƒ‰[‚ğƒVƒF[ƒ_[‚É“n‚·
+            sg.vSpecular = m_pMaterial[i].Ks;//ã‚¹ãƒšã‚­ãƒ¥ãƒ©ãƒ¼ã‚’ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã«æ¸¡ã™
             memcpy_s(pData.pData, pData.RowPitch, (void*)&sg, sizeof(SIMPLESHADER_CONSTANT_BUFFER1));
-            m_pDeviceContext->Unmap(m_pConstantBuffer1, 0);
+            m_pDeviceContext->Unmap(mShader->mConstantBuffer1, 0);
         }
-        m_pDeviceContext->VSSetConstantBuffers(1, 1, &m_pConstantBuffer1);
-        m_pDeviceContext->PSSetConstantBuffers(1, 1, &m_pConstantBuffer1);
-        //ƒvƒŠƒ~ƒeƒBƒu‚ğƒŒƒ“ƒ_ƒŠƒ“ƒO
+        m_pDeviceContext->VSSetConstantBuffers(1, 1, &mShader->mConstantBuffer1);
+        m_pDeviceContext->PSSetConstantBuffers(1, 1, &mShader->mConstantBuffer1);
+        //ãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–ã‚’ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°
         m_pDeviceContext->DrawIndexed(m_pMaterial[i].dwNumFace * 3, 0, 0);
     }
 }

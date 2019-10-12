@@ -1,4 +1,4 @@
-#include "Game.h"
+ï»¿#include "Game.h"
 #include "Main.h"
 #include "Component/Mesh.h"
 #include "Scene/GamePlay.h"
@@ -30,7 +30,7 @@ void Game::run(HINSTANCE hInstance) {
     }
     ShowWindow(mHwnd, SW_SHOW);
     UpdateWindow(mHwnd);
-    // ƒƒbƒZ[ƒWƒ‹[ƒv
+    // ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒ«ãƒ¼ãƒ—
     MSG msg = { 0 };
     ZeroMemory(&msg, sizeof(msg));
     while (msg.message != WM_QUIT) {
@@ -49,54 +49,25 @@ HRESULT Game::init() {
     if (!mWindow) {
         return E_FAIL;
     }
-    MFAIL(mWindow->initWindow(mInstance, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, TITLE), L"ƒEƒBƒ“ƒhƒEì¬Ž¸”s");
+    MFAIL(mWindow->initWindow(mInstance, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, TITLE), L"ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆå¤±æ•—");
     mHwnd = mWindow->getHwnd();
     //direct3D11
     D3DInit di;
     mD3D11 = new Direct3D11();
     if (mD3D11 == NULL) {
-        MSG(L"Direct3D‚Ì‰Šú‰»Ž¸”s");
+        MSG(L"Direct3Dã®åˆæœŸåŒ–å¤±æ•—");
         return E_FAIL;
     }
     di.mHwnd = mHwnd;
-    MFAIL(mD3D11->init(&di), L"Direct3D‰Šú‰»Ž¸”s");
+    MFAIL(mD3D11->init(&di), L"Direct3DåˆæœŸåŒ–å¤±æ•—");
 
-    MFAIL(Input::init(mHwnd), L"DirectInput‰Šú‰»Ž¸”s");
+    MFAIL(Input::init(mHwnd), L"DirectInputåˆæœŸåŒ–å¤±æ•—");
 
     mMain = new Main();
 
-    ////camera
-    //m_pCamera = new CAMERA;
-    //m_pCamera->Init(WINDOW_WIDTH, WINDOW_HEIGHT);
-    //m_pCamera->SetCameraPosition(0, 0, -1);
-
-    ////field mesh
-    //m_pFieldMesh = new MESH;
-    //m_pFieldMesh->Init(m_pD3d);
-    //MFAIL(m_pFieldMesh->InitStaticMesh("field.obj"), L"ƒtƒB[ƒ‹ƒh“Ç‚Ýž‚ÝŽ¸”s");
-    //m_pFieldMesh->m_vPos = D3DXVECTOR3(0, 0, 0);
-    ////shot mesh
-    //m_pShotMesh = new MESH;
-    //m_pShotMesh->Init(m_pD3d);
-    //MFAIL(m_pShotMesh->InitStaticMesh("shot.obj"), L"’e “Ç‚Ýž‚ÝŽ¸”s");
-    //m_pShotMesh->m_vPos = D3DXVECTOR3(0, 0, 0);
-    //// Hito skin mesh
-    //m_pHito = new CHARACTER;
-    //m_pHito->Init(m_pD3d);
-    //MFAIL(m_pHito->CreateFromFBX("hito.fbx"), L"ŽålŒö“Ç‚Ýž‚ÝŽ¸”s");
-    //m_pHito->m_vPos = D3DXVECTOR3(0, 5, 0);
-    //// Monster skin mesh
-    //for (int i = 0; i < MAX_MONSTER; i++) {
-    //    m_pMonster[i] = new CHARACTER;
-    //    m_pMonster[i]->Init(m_pD3d);
-    //    MFAIL(m_pMonster[i]->CreateFromFBX("buyobuyo.fbx"), L"ŽålŒö“Ç‚Ýž‚ÝŽ¸”s");
-    //    float x = ((float)rand() / (float)RAND_MAX) * 20.0f - 10.0f;
-    //    float y = ((float)rand() / (float)RAND_MAX) * 20.0f - 10.0f;
-    //    m_pMonster[i]->m_vPos = D3DXVECTOR3(x, 10, y);
-    //}
     ////Sound(XAuido2)
     //m_pSound = new SOUND;
-    //MFAIL(m_pSound->Init(), L"ƒTƒEƒ“ƒh‰Šú‰»Ž¸”s");
+    //MFAIL(m_pSound->Init(), L"ã‚µã‚¦ãƒ³ãƒ‰åˆæœŸåŒ–å¤±æ•—");
 
     //SetSoundDirectory();
     //m_iBGMSound = m_pSound->LoadSound("bgm.wav");

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../DirectXIncLib.h"
 #include "../Utility/Collision.h"
@@ -6,39 +6,24 @@
 #include <stdio.h>
 #include <string>
 
-#define SAFE_RELEASE(x) if(x){x->Release(); x=0;}
-#define SAFE_DELETE(x) if(x){delete x; x=0;}
-#define SAFE_DELETE_ARRAY(x) if(x){delete[] x; x=0;}
+class Shader;
 
-//’¸“_‚Ì\‘¢‘Ì
+//é ‚ç‚¹ã®æ§‹é€ ä½“
 struct MY_VERTEX {
     D3DXVECTOR3 vPos;
     D3DXVECTOR3 vNorm;
     D3DXVECTOR2 vTex;
 };
-//SimpleƒVƒF[ƒ_[—p‚ÌƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@[‚ÌƒAƒvƒŠ‘¤\‘¢‘Ì ‚à‚¿‚ë‚ñƒVƒF[ƒ_[“à‚ÌƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@[‚Æˆê’v‚µ‚Ä‚¢‚é•K—v‚ ‚è
-struct SIMPLESHADER_CONSTANT_BUFFER0 {
-    D3DXMATRIX mW;//ƒ[ƒ‹ƒhs—ñ
-    D3DXMATRIX mWVP;//ƒ[ƒ‹ƒh‚©‚çË‰e‚Ü‚Å‚Ì•ÏŠ·s—ñ
-    D3DXVECTOR4 vLightDir;//ƒ‰ƒCƒg•ûŒü
-    D3DXVECTOR4 vEye;//ƒJƒƒ‰ˆÊ’u
-};
 
-struct SIMPLESHADER_CONSTANT_BUFFER1 {
-    D3DXVECTOR4 vAmbient;//ƒAƒ“ƒrƒGƒ“ƒgŒõ
-    D3DXVECTOR4 vDiffuse;//ƒfƒBƒtƒ…[ƒYF
-    D3DXVECTOR4 vSpecular;//‹¾–Ê”½Ë
-    D3DXVECTOR4 vTexture;//ƒeƒNƒXƒ`ƒƒ[‚ª“\‚ç‚ê‚Ä‚¢‚éƒƒbƒVƒ…‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO
-};
-//ƒIƒŠƒWƒiƒ‹@ƒ}ƒeƒŠƒAƒ‹\‘¢‘Ì
+//ã‚ªãƒªã‚¸ãƒŠãƒ«ã€€ãƒãƒ†ãƒªã‚¢ãƒ«æ§‹é€ ä½“
 struct MY_MATERIAL {
     CHAR szName[110];
-    D3DXVECTOR4 Ka;//ƒAƒ“ƒrƒGƒ“ƒg
-    D3DXVECTOR4 Kd;//ƒfƒBƒtƒ…[ƒY
-    D3DXVECTOR4 Ks;//ƒXƒyƒLƒ…ƒ‰[
-    CHAR szTextureName[110];//ƒeƒNƒXƒ`ƒƒ[ƒtƒ@ƒCƒ‹–¼
+    D3DXVECTOR4 Ka;//ã‚¢ãƒ³ãƒ“ã‚¨ãƒ³ãƒˆ
+    D3DXVECTOR4 Kd;//ãƒ‡ã‚£ãƒ•ãƒ¥ãƒ¼ã‚º
+    D3DXVECTOR4 Ks;//ã‚¹ãƒšã‚­ãƒ¥ãƒ©ãƒ¼
+    CHAR szTextureName[110];//ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«å
     ID3D11ShaderResourceView* pTexture;
-    DWORD dwNumFace;//‚»‚Ìƒ}ƒeƒŠƒAƒ‹‚Å‚ ‚éƒ|ƒŠƒSƒ“”
+    DWORD dwNumFace;//ãã®ãƒãƒ†ãƒªã‚¢ãƒ«ã§ã‚ã‚‹ãƒãƒªã‚´ãƒ³æ•°
     MY_MATERIAL() {
         ZeroMemory(this, sizeof(MY_MATERIAL));
     }
@@ -51,7 +36,7 @@ class Mesh {
 public:
     Mesh();
     ~Mesh();
-    HRESULT Init(const std::string& fileName);
+    HRESULT init(const std::string& fileName);
     void draw(D3DXMATRIX world, float alpha) const;
     void createSphere(Sphere* sphere) const;
 
@@ -69,7 +54,6 @@ public:
     }
 
 private:
-    HRESULT InitShader();
     HRESULT LoadMaterialFromFile(const std::string& fileName, MY_MATERIAL** ppMaterial);
     HRESULT LoadStaticMesh(const std::string& fileName);
     void RendererMesh(D3DXMATRIX world, float alpha) const;
@@ -83,21 +67,15 @@ private:
     DWORD m_dwNumFace;
     ID3D11Buffer* m_pVertexBuffer;
     ID3D11Buffer** m_ppIndexBuffer;
-    ID3D11InputLayout* m_pVertexLayout;
-    ID3D11VertexShader* m_pVertexShader;
-    ID3D11PixelShader* m_pPixelShader;
-    ID3D11Buffer* m_pConstantBuffer0;
-    ID3D11Buffer* m_pConstantBuffer1;
     DWORD m_dwNumMaterial;
     MY_MATERIAL* m_pMaterial;
     ID3D11SamplerState* m_pSampleLinear;
     ID3D11ShaderResourceView* m_pTexture;
-    ID3D11BlendState* mBlendState; //ƒAƒ‹ƒtƒ@ƒuƒŒƒ“ƒfƒBƒ“ƒO
 
     MY_VERTEX* pvVertexBuffer;
     int** ppiVertexIndex;
     DWORD* dwNumFaceInMaterial;
-
     D3DXVECTOR3* mCoord;
 
+    std::shared_ptr<Shader> mShader;
 };

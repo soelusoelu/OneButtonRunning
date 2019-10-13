@@ -966,21 +966,21 @@ class Rect {
 public:
     float left;
     float top;
-    float right;
-    float bottom;
+    float width;
+    float height;
 
     Rect() :
         left(0.f),
         top(0.f),
-        right(0.f),
-        bottom(0.f) {
+        width(0.f),
+        height(0.f) {
     }
 
-    explicit Rect(float l, float t, float r, float b) :
+    explicit Rect(float l, float t, float w, float h) :
         left(l),
         top(t),
-        right(r),
-        bottom(b) {
+        width(w),
+        height(h) {
     }
 };
 
@@ -990,6 +990,13 @@ public:
     float g;
     float b;
     float a;
+
+    Color() :
+        r(1.f),
+        g(1.f),
+        b(1.f),
+        a(1.f) {
+    }
 
     Color(float r, float g, float b, float a) :
         r(r),

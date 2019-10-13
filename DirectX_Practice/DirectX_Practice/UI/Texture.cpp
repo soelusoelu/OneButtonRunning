@@ -6,9 +6,12 @@
 #include "../System/Renderer.h"
 #include "../Camera.h"
 
-Texture::Texture() :
-    mPosition(Vector3::zero) {
-    ZeroMemory(this, sizeof(Texture));
+Texture::Texture(Vector2 size) :
+    mSize(size),
+    mPosition(Vector2::zero),
+    mScale(Vector2::one),
+    mColor(Vector3::one, 1.f),
+    mUV(0.f, 0.f, 1.f, 1.f) {
 }
 
 Texture::~Texture() {
@@ -29,15 +32,25 @@ void Texture::init(const std::string& fileName) {
 }
 
 void Texture::draw() const {
-    D3DXMATRIX mWorld;
-    D3DXMATRIX mView;
     //ワールドトランスフォーム（絶対座標変換）
-    D3DXMatrixRotationY(&mWorld, 0.0f);
-    // ビュートランスフォーム（視点座標変換）
-    D3DXVECTOR3 vEyePt(0.f, 0.f, -2.f); //カメラ（視点）位置
+    D3DXMATRIX world;
+    D3DXMATRIX scale;
+    D3DXMATRIX trans;
+    D3DXMatrixScaling(&scale, mSize.x * mScale.x * mUV.width, mSize.y * mScale.y * mUV.height, 1.f);
+    D3DXMatrixTranslation(&trans, mPosition.x, mPosition.y, 0.f);
+    world = scale * trans;
+    //ビュートランスフォーム（視点座標変換）
+    D3DXMATRIX mView;
+    D3DXVECTOR3 vEyePt(0.f, 0.f, -1.f); //カメラ（視点）位置
     D3DXVECTOR3 vLookatPt(0.f, 0.f, 0.f);//注視位置
     D3DXVECTOR3 vUpVec(0.f, 1.f, 0.f);//上方位置
     D3DXMatrixLookAtLH(&mView, &vEyePt, &vLookatPt, &vUpVec);
+    //プロジェクション
+    D3DXMATRIX mProj;
+    D3DXMATRIX mProjTrans;
+    D3DXMatrixScaling(&mProj, 2.f / Game::WINDOW_WIDTH, -2.f / Game::WINDOW_HEIGHT, 1.f);
+    D3DXMatrixTranslation(&mProjTrans, -1.f, 1.f, 0.f);
+    mProj *= mProjTrans;
 
     //使用するシェーダーの登録	
     mDeviceContext->VSSetShader(mShader->getVertexShader(), NULL, 0);
@@ -48,9 +61,12 @@ void Texture::draw() const {
     TextureShaderConstantBuffer cb;
     if (SUCCEEDED(mDeviceContext->Map(mShader->mConstantBuffer0, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
         //ワールド、カメラ、射影行列を渡す
-        D3DXMATRIX m = mWorld * mView * Singleton<Camera>::instance().getProjection();
+        D3DXMATRIX m = world * mView * mProj;
         D3DXMatrixTranspose(&m, &m);
         cb.mWVP = m;
+        cb.mColor = mColor;
+        cb.mRect = mUV;
+        //cb.mColor.w = alpha;
         memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
         mDeviceContext->Unmap(mShader->mConstantBuffer0, 0);
     }
@@ -69,31 +85,68 @@ void Texture::draw() const {
     mDeviceContext->Draw(4, 0);
 }
 
-HRESULT Texture::createTexture(const std::string & fileName) {
-    //バーテックスバッファー作成
-    TextureVertex vertices[] =
-    {
-        Vector3(-0.5f, 0.5f, 0.f), Vector2(0.f, 0.f), //左上
-        Vector3(-0.5f, -0.5f, 0.f), Vector2(0.f, 1.f), //左下
-        Vector3(0.5f, -0.5f, 0.f), Vector2(1.f, 1.f), //右下
-        Vector3(0.5f, 0.5f, 0.f), Vector2(1.f, 0.f), //右上
-    };
-    D3D11_BUFFER_DESC bd;
-    bd.Usage = D3D11_USAGE_DEFAULT;
-    bd.ByteWidth = sizeof(TextureVertex) * 4;
-    bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-    bd.CPUAccessFlags = 0;
-    bd.MiscFlags = 0;
+void Texture::setPosition(Vector2 pos) {
+    mPosition = pos;
+}
 
-    D3D11_SUBRESOURCE_DATA InitData;
-    InitData.pSysMem = vertices;
-    if (FAILED(mDevice->CreateBuffer(&bd, &InitData, &mVertexBuffer))) {
-        return E_FAIL;
+void Texture::setScale(Vector2 scale) {
+    mScale = scale;
+}
+
+void Texture::setColor(Vector3 color) {
+    mColor.r = color.x;
+    mColor.g = color.y;
+    mColor.b = color.z;
+}
+
+void Texture::setColor(float r, float g, float b) {
+    mColor.r = r;
+    mColor.g = g;
+    mColor.b = b;
+}
+
+void Texture::setAlpha(float alpha) {
+    mColor.a = alpha;
+}
+
+void Texture::setUV(Rect uv) {
+    mUV = uv;
+}
+
+void Texture::setUV(float l, float t, float w, float h) {
+    mUV.left = l;
+    mUV.top = t;
+    mUV.width = w;
+    mUV.height = h;
+}
+
+HRESULT Texture::createTexture(const std::string & fileName) {
+    if (!mVertexBuffer) {
+        //バーテックスバッファー作成
+        TextureVertex vertices[] =
+        {
+            Vector3(0.f, 0.f, 0.f), Vector2(0.f, 0.f), //左上
+            Vector3(1.f, 0.0f, 0.f), Vector2(1.f, 0.f), //右上
+            Vector3(0.f, 1.f, 0.f), Vector2(0.f, 1.f), //左下
+            Vector3(1.f, 1.f, 0.f), Vector2(1.f, 1.f), //右下
+        };
+        D3D11_BUFFER_DESC bd;
+        bd.Usage = D3D11_USAGE_DEFAULT;
+        bd.ByteWidth = sizeof(TextureVertex) * 4;
+        bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+        bd.CPUAccessFlags = 0;
+        bd.MiscFlags = 0;
+
+        D3D11_SUBRESOURCE_DATA InitData;
+        InitData.pSysMem = vertices;
+        if (FAILED(mDevice->CreateBuffer(&bd, &InitData, &mVertexBuffer))) {
+            return E_FAIL;
+        }
+        //バーテックスバッファーをセット
+        UINT stride = sizeof(TextureVertex);
+        UINT offset = 0;
+        mDeviceContext->IASetVertexBuffers(0, 1, &mVertexBuffer, &stride, &offset);
     }
-    //バーテックスバッファーをセット
-    UINT stride = sizeof(TextureVertex);
-    UINT offset = 0;
-    mDeviceContext->IASetVertexBuffers(0, 1, &mVertexBuffer, &stride, &offset);
     //テクスチャー用サンプラー作成
     D3D11_SAMPLER_DESC SamDesc;
     ZeroMemory(&SamDesc, sizeof(D3D11_SAMPLER_DESC));
@@ -110,3 +163,5 @@ HRESULT Texture::createTexture(const std::string & fileName) {
 
     return S_OK;
 }
+
+ID3D11Buffer* Texture::mVertexBuffer = nullptr;

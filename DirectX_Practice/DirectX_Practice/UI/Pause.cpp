@@ -9,7 +9,7 @@ Pause::Pause(GamePlay* game) :
     UI(),
     mGame(game) {
     mGame->setState(GamePlay::GameState::Paused);
-    mTexture = Singleton<GameSystem>::instance().getRenderer()->getTexture("directx11.jpg");
+    mTexture = Singleton<GameSystem>::instance().getRenderer()->getTexture("kuppa.png", Vector2(548.f, 599.f));
 }
 
 Pause::~Pause() {
@@ -23,7 +23,5 @@ void Pause::update() {
 }
 
 void Pause::draw() const {
-    if (mTexture) {
-        mTexture->draw();
-    }
+    mTexture->draw();
 }

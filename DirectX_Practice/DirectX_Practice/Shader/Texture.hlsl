@@ -4,7 +4,9 @@ SamplerState g_samLinear : register(s0); //サンプラーはレジスターs(n)
 
 cbuffer global
 {
-    matrix g_mWVP; //ワールドから射影までの変換行列
+    matrix gWVP; //ワールドから射影までの変換行列
+    float4 gColor;
+    float4 gUV;
 };
 
 //構造体
@@ -20,8 +22,8 @@ struct VS_OUTPUT
 VS_OUTPUT VS(float4 Pos : POSITION, float2 Tex : TEXCOORD)
 {
     VS_OUTPUT output = (VS_OUTPUT) 0;
-    output.Pos = mul(Pos, g_mWVP);
-    output.Tex = Tex;
+    output.Pos = mul(Pos, gWVP);
+    output.Tex = Tex * float2(gUV.z, gUV.w) + float2(gUV.x, gUV.y);
 
     return output;
 }
@@ -31,5 +33,7 @@ VS_OUTPUT VS(float4 Pos : POSITION, float2 Tex : TEXCOORD)
 //
 float4 PS(VS_OUTPUT input) : SV_Target
 {
-    return g_texDecal.Sample(g_samLinear, input.Tex);
+    float4 color = g_texDecal.Sample(g_samLinear, input.Tex);
+    color *= gColor;
+    return color;
 }

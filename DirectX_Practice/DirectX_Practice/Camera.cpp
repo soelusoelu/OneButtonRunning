@@ -10,7 +10,7 @@ Camera::Camera() :
     mUp(Vector3::up),
     mPlayerPosition(mCameraPosition) {
     D3DXMatrixLookAtLH(&mView, &mCameraPosition.toD3DXVECTOR3(), &mLookAt.toD3DXVECTOR3(), &mUp.toD3DXVECTOR3());
-    D3DXMatrixPerspectiveFovLH(&mProj, Math::Pi / 4, Game::WINDOW_WIDTH / Game::WINDOW_HEIGHT, 0.1f, 1000.f);
+    D3DXMatrixPerspectiveFovLH(&mProj, Math::Pi / 4, (float)Game::WINDOW_WIDTH / (float)Game::WINDOW_HEIGHT, 0.1f, 1000.f);
 }
 
 void Camera::update(std::shared_ptr<PlayerActor> player) {
@@ -28,7 +28,7 @@ void Camera::update(std::shared_ptr<PlayerActor> player) {
         mCameraPosition = Vector3(
             player->getTransform()->getPosition().x + 7.f + posY * 2.f,
             player->getTransform()->getPosition().y + 2.f - posY * 0.5f,
-            player->getTransform()->getPosition().z - 5.f - posY * 1.8f
+            player->getTransform()->getPosition().z - 7.f - posY * 2.f
         );
         mPlayerPosition = player->getTransform()->getPosition();
         //mLookAt = Vector3(mPlayerPosition.x, mPlayerPosition.y + 1.5f, mPlayerPosition.z + 1.5f); //注視点

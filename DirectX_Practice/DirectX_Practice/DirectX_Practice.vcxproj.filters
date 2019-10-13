@@ -208,13 +208,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Shader\Geometry_Material_Texture.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="Shader\Geometry_Material_Texture_Skin.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
     <FxCompile Include="Shader\Mesh.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\Texture.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>

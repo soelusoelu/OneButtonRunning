@@ -3,26 +3,16 @@
 #include "../DirectXIncLib.h"
 #include <string>
 
-//Simpleシェーダー用のコンスタントバッファーのアプリ側構造体 もちろんシェーダー内のコンスタントバッファーと一致している必要あり
-struct SIMPLESHADER_CONSTANT_BUFFER0 {
-    D3DXMATRIX mW;//ワールド行列
-    D3DXMATRIX mWVP;//ワールドから射影までの変換行列
-    D3DXVECTOR4 vLightDir;//ライト方向
-    D3DXVECTOR4 vEye;//カメラ位置
-};
-
-struct SIMPLESHADER_CONSTANT_BUFFER1 {
-    D3DXVECTOR4 vAmbient;//アンビエント光
-    D3DXVECTOR4 vDiffuse;//ディフューズ色
-    D3DXVECTOR4 vSpecular;//鏡面反射
-    D3DXVECTOR4 vTexture;//テクスチャーが貼られているメッシュかどうかのフラグ
-};
-
 class Shader {
 public:
+    enum ShaderType {
+        Mesh,
+        Texture
+    };
+
     Shader();
     ~Shader();
-    void init(const std::string& fileName);
+    void init(ShaderType type);
 
     ID3D11VertexShader* getVertexShader() const {
         return mVertexShader;
@@ -37,7 +27,8 @@ public:
     ID3D11Buffer* mConstantBuffer1;
 
 private:
-    HRESULT initShader(const std::string& fileName);
+    HRESULT initMeshShader();
+    HRESULT initTextureShader();
 
     ID3D11Device* mDevice;
     ID3D11DeviceContext* mDeviceContext;

@@ -1,16 +1,26 @@
-#include <Windows.h>
+ï»¿#include <Windows.h>
 #include "Game.h"
+//ãƒ¡ãƒ¢ãƒªãƒªãƒ¼ã‚¯æ¤œå‡ºç”¨
+#ifdef _DEBUG
+#include <stdlib.h>
+#include <crtdbg.h>
+#endif // _DEBUG
+//#define new ::new(_NORMAL_BLOCK, __FILE__, __LINE__)
+//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, INT) {
     Game* game = new Game();
     if (game == nullptr) {
-        MessageBox(0, L"ƒNƒ‰ƒX¶¬Ž¸”s ƒAƒvƒŠ‚ðI—¹‚µ‚Ü‚·", NULL, MB_OK);
+        MessageBox(0, L"ã‚¯ãƒ©ã‚¹ç”Ÿæˆå¤±æ•— ã‚¢ãƒ—ãƒªã‚’çµ‚äº†ã—ã¾ã™", NULL, MB_OK);
         return 0;
     }
 
     game->run(hInstance);
 
     delete game;
+
+    //ãƒ¡ãƒ¢ãƒªãƒªãƒ¼ã‚¯æ¤œå‡ºé–¢æ•°
+    _CrtDumpMemoryLeaks();
 
     return 0;
 }

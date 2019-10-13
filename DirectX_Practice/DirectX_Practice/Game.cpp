@@ -132,3 +132,10 @@ void setShaderDirectory() {
     wcscat_s(tmp, L"\\Shader");
     SetCurrentDirectory(tmp);
 }
+
+void setTextureDirectory() {
+    WCHAR tmp[1024] = { 0 };
+    wcsncpy_s(tmp, szRootPath, wcslen(szRootPath));
+    wcscat_s(tmp, L"\\Assets/Texture");
+    SetCurrentDirectory(tmp);
+}

@@ -35,3 +35,4 @@ void initDirectory(WCHAR* root);
 void setRootDirectory();
 void setAssetsDirectory();
 void setShaderDirectory();
+void setTextureDirectory();

@@ -4,6 +4,7 @@
 #include <memory>
 
 class GamePlay;
+class Texture;
 
 class Pause : public UI {
 public:
@@ -14,4 +15,5 @@ public:
 
 private:
     GamePlay* mGame;
+    std::shared_ptr<Texture> mTexture;
 };

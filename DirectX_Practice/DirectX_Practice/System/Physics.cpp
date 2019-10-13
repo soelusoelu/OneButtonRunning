@@ -23,9 +23,9 @@ bool Physics::rayCastField(Ray* ray, CollisionInfo* outColl) {
                 int index2 = mesh->getVertexIndex()[i][k * 3 + 1];
                 int index3 = mesh->getVertexIndex()[i][k * 3 + 2];
 
-                v1 = mesh->getVertexBuffer()[index1].vPos;
-                v2 = mesh->getVertexBuffer()[index2].vPos;
-                v3 = mesh->getVertexBuffer()[index3].vPos;
+                v1 = mesh->getVertexBuffer()[index1].mPos;
+                v2 = mesh->getVertexBuffer()[index2].mPos;
+                v3 = mesh->getVertexBuffer()[index3].mPos;
                 //3点から平面方程式を作る
                 D3DXPLANE plane;
                 calcPlane(&plane, &v1, &v2, &v3);

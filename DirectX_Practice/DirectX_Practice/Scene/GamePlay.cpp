@@ -36,9 +36,9 @@ void GamePlay::update() {
         //総当たり判定
         Singleton<GameSystem>::instance().getPhysics()->sweepAndPrune();
 
-        //if (Input::getKeyDown(Input::KeyCode::Space)) {
-        //    new Pause(this);
-        //}
+        if (Input::getKeyDown(Input::KeyCode::Escape)) {
+            new Pause(this);
+        }
     }
 
     //UIは最後に必ず

@@ -17,13 +17,13 @@ void MeshComponent::update() {
 void MeshComponent::draw(float alpha) const {
     if (mEnabled) {
         auto w = mOwner->getWorldTransform();
-        mMesh->draw(w.toD3DXMATRIX(), alpha);
+        mMesh->draw(w, alpha);
     }
 }
 
 void MeshComponent::draw(Matrix4 world, float alpha) const {
     if (mEnabled) {
-        mMesh->draw(world.toD3DXMATRIX(), alpha);
+        mMesh->draw(world, alpha);
     }
 }
 

@@ -1,8 +1,8 @@
 ﻿#include "Mesh.h"
 #include "SphereCollisionComponent.h"
-#include "../Camera.h"
 #include "../Direct3D11.h"
 #include "../Game.h"
+#include "../Camera/Camera.h"
 #include "../System/GameSystem.h"
 #include "../System/Renderer.h"
 #include "../Shader/Shader.h"
@@ -26,11 +26,13 @@ Mesh::~Mesh() {
     SAFE_RELEASE(mSampleLinear);
     SAFE_RELEASE(mTexture);
     SAFE_DELETE_ARRAY(mMyVertexBuffer);
+
     //メモリリークの原因
     //for (int i = 0; i < m_dwNumMaterial; i++) {
-    //    SAFE_DELETE_ARRAY(ppiVertexIndex[i]);
+    //    SAFE_DELETE_ARRAY(mVertexIndex[i]);
     //}
     SAFE_DELETE_ARRAY(mVertexIndex);
+
     SAFE_DELETE_ARRAY(mNumFaceInMaterial);
     SAFE_DELETE_ARRAY(mCoord);
 }
@@ -50,7 +52,7 @@ HRESULT Mesh::init(const std::string& fileName) {
     return S_OK;
 }
 
-void Mesh::draw(D3DXMATRIX world, float alpha) const {
+void Mesh::draw(Matrix4 world, float alpha) const {
     mDeviceContext->RSSetState(mRasterizerState);
     RendererMesh(world, alpha);
     mDeviceContext->RSSetState(mRasterizerStateBack);
@@ -326,8 +328,8 @@ HRESULT Mesh::LoadStaticMesh(const std::string& fileName) {
     return S_OK;
 }
 
-void Mesh::RendererMesh(D3DXMATRIX world, float alpha) const {
-    //使用するシェーダーの登録	
+void Mesh::RendererMesh(Matrix4 world, float alpha) const {
+    //使用するシェーダーの登録
     mDeviceContext->VSSetShader(mShader->getVertexShader(), NULL, 0);
     mDeviceContext->PSSetShader(mShader->getPixelShader(), NULL, 0);
     //シェーダーのコンスタントバッファーに各種データを渡す
@@ -336,15 +338,14 @@ void Mesh::RendererMesh(D3DXMATRIX world, float alpha) const {
         SIMPLESHADER_CONSTANT_BUFFER0 sg;
         //ワールド行列を渡す
         sg.mW = world;
-        D3DXMatrixTranspose(&sg.mW, &sg.mW);
+        sg.mW.transpose();
         //ワールド、カメラ、射影行列を渡す
         sg.mWVP = world * Singleton<Camera>::instance().getView() * Singleton<Camera>::instance().getProjection();
-        D3DXMatrixTranspose(&sg.mWVP, &sg.mWVP);
+        sg.mWVP.transpose();
         //ライトの方向を渡す
-        //sg.vLightDir = D3DXVECTOR4(vLight.x, vLight.y, vLight.z, 0.0f);
-        sg.vLightDir = D3DXVECTOR4(1.f, -1.f, 1.f, 0.0f);
+        sg.vLightDir = Vector4(1.f, -1.f, 1.f, 0.0f);
         //視点位置を渡す
-        sg.vEye = D3DXVECTOR4(Singleton<Camera>::instance().getPosition(), 0);
+        sg.vEye = Vector4(Singleton<Camera>::instance().getPosition(), 0);
 
         memcpy_s(pData.pData, pData.RowPitch, (void*)&sg, sizeof(SIMPLESHADER_CONSTANT_BUFFER0));
         mDeviceContext->Unmap(mShader->mConstantBuffer0, 0);

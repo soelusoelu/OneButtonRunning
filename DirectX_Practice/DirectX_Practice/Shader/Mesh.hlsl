@@ -48,7 +48,7 @@ VS_OUTPUT VS(float4 Pos : POSITION, float4 Norm : NORMAL, float2 Tex : TEXCOORD)
     float3 Normal = normalize(output.Normal);
     float3 LightDir = normalize(output.Light);
     float3 ViewDir = normalize(output.EyeVector);
-    float4 NL = saturate(dot(Normal, LightDir));
+    float NL = saturate(dot(Normal, LightDir));
 	
     float3 Reflect = normalize(2 * NL * Normal - LightDir);
     float4 specular = pow(saturate(dot(Reflect, ViewDir)), 4);

@@ -16,4 +16,5 @@ public:
 private:
     GamePlay* mGame;
     std::shared_ptr<Texture> mTexture;
+    std::shared_ptr<Texture> mTexture2;
 };

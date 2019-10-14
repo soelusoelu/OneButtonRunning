@@ -3,7 +3,7 @@
 #include "../Actor/EnemyActor.h"
 #include "../Actor/FieldActor.h"
 #include "../Actor/PlayerActor.h"
-#include "../Camera.h"
+#include "../Camera/Camera.h"
 #include "../Component/TransformComponent.h"
 #include "../System/GameSystem.h"
 #include "../System/Physics.h"
@@ -15,6 +15,7 @@
 GamePlay::GamePlay() :
     SceneBase(),
     mState(GameState::Play) {
+    Actor::instantiate<PlayerActor>();
     Actor::instantiate<PlayerActor>();
     Actor::instantiate<FieldActor>();
     for (int i = 0; i < 5; i++) {
@@ -46,7 +47,7 @@ void GamePlay::update() {
 }
 
 void GamePlay::draw() const {
-    Singleton<ActorManager>::instance().draw();
+    //Singleton<ActorManager>::instance().draw();
     Singleton<UIManager>::instance().draw();
     Singleton<Camera>::instance().update(Singleton<ActorManager>::instance().getPlayer());
 }

@@ -1,16 +1,15 @@
 ﻿#include "Camera.h"
-#include "DirectXIncLib.h"
-#include "Game.h"
-#include "Actor/PlayerActor.h"
-#include "Component/TransformComponent.h"
+#include "../Game.h"
+#include "../Actor/PlayerActor.h"
+#include "../Component/TransformComponent.h"
 
 Camera::Camera() :
     mCameraPosition(Vector3::zero),
     mLookAt(Vector3::zero),
     mUp(Vector3::up),
     mPlayerPosition(mCameraPosition) {
-    D3DXMatrixLookAtLH(&mView, &mCameraPosition.toD3DXVECTOR3(), &mLookAt.toD3DXVECTOR3(), &mUp.toD3DXVECTOR3());
-    D3DXMatrixPerspectiveFovLH(&mProj, Math::Pi / 4, (float)Game::WINDOW_WIDTH / (float)Game::WINDOW_HEIGHT, 0.1f, 1000.f);
+    mView = Matrix4::createLookAt(mCameraPosition, mLookAt, mUp);
+    mProj = Matrix4::createPerspectiveFOV(45.f, Game::WINDOW_WIDTH, Game::WINDOW_HEIGHT, 0.1f, 1000.f);
 }
 
 void Camera::update(std::shared_ptr<PlayerActor> player) {
@@ -35,21 +34,21 @@ void Camera::update(std::shared_ptr<PlayerActor> player) {
         mLookAt = Vector3(mPlayerPosition.x, mPlayerPosition.y + 1.5f, mPlayerPosition.z + 1.5f + posY * 0.5f); //注視点
     }
 
-    D3DXMatrixLookAtLH(&mView, &mCameraPosition.toD3DXVECTOR3(), &mLookAt.toD3DXVECTOR3(), &mUp.toD3DXVECTOR3());
+    mView = Matrix4::createLookAt(mCameraPosition, mLookAt, mUp);
 }
 
 void Camera::update() {
-    D3DXMatrixLookAtLH(&mView, &mCameraPosition.toD3DXVECTOR3(), &mLookAt.toD3DXVECTOR3(), &mUp.toD3DXVECTOR3());
+    mView = Matrix4::createLookAt(mCameraPosition, mLookAt, mUp);
 }
 
-D3DXVECTOR3 Camera::getPosition() {
-    return mCameraPosition.toD3DXVECTOR3();
+Vector3 Camera::getPosition() {
+    return mCameraPosition;
 }
 
-D3DXMATRIX Camera::getView() {
+Matrix4 Camera::getView() {
     return mView;
 }
 
-D3DXMATRIX Camera::getProjection() {
+Matrix4 Camera::getProjection() {
     return mProj;
 }

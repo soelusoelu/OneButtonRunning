@@ -13,7 +13,6 @@
     </ClCompile>
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="Direct3D11.cpp" />
-    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Scene\GamePlay.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
@@ -91,6 +90,10 @@
     <ClCompile Include="Shader\Shader.cpp">
       <Filter>Shader</Filter>
     </ClCompile>
+    <ClCompile Include="Camera\Camera.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -106,7 +109,6 @@
     <ClInclude Include="Window.h" />
     <ClInclude Include="Direct3D11.h" />
     <ClInclude Include="DirectXIncLib.h" />
-    <ClInclude Include="Camera.h" />
     <ClInclude Include="Scene\GamePlay.h">
       <Filter>Scene</Filter>
     </ClInclude>
@@ -183,6 +185,10 @@
     <ClInclude Include="Shader\Shader.h">
       <Filter>Shader</Filter>
     </ClInclude>
+    <ClInclude Include="Camera\Camera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utility">
@@ -205,6 +211,9 @@
     </Filter>
     <Filter Include="UI">
       <UniqueIdentifier>{916830e1-a4ae-4151-ab30-6b78150c3a50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{4aa8cd31-d9c6-40a3-9afd-e8c6d0c1a2ad}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

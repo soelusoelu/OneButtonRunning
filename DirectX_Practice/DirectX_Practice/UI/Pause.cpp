@@ -10,6 +10,8 @@ Pause::Pause(GamePlay* game) :
     mGame(game) {
     mGame->setState(GamePlay::GameState::Paused);
     mTexture = Singleton<GameSystem>::instance().getRenderer()->getTexture("kuppa.png", Vector2(548.f, 599.f));
+    mTexture2 = Singleton<GameSystem>::instance().getRenderer()->getTexture("kuppa.png", Vector2(548.f, 599.f));
+    mTexture2->setPosition(Vector2(300.f, 200.f));
 }
 
 Pause::~Pause() {
@@ -24,4 +26,5 @@ void Pause::update() {
 
 void Pause::draw() const {
     mTexture->draw();
+    mTexture2->draw();
 }

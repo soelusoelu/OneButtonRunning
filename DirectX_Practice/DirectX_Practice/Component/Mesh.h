@@ -2,6 +2,7 @@
 
 #include "../DirectXIncLib.h"
 #include "../Utility/Collision.h"
+#include "../Utility/Math.h"
 #include <memory>
 #include <stdio.h>
 #include <string>
@@ -9,10 +10,10 @@
 
 //Simpleシェーダー用のコンスタントバッファーのアプリ側構造体 もちろんシェーダー内のコンスタントバッファーと一致している必要あり
 struct SIMPLESHADER_CONSTANT_BUFFER0 {
-    D3DXMATRIX mW;//ワールド行列
-    D3DXMATRIX mWVP;//ワールドから射影までの変換行列
-    D3DXVECTOR4 vLightDir;//ライト方向
-    D3DXVECTOR4 vEye;//カメラ位置
+    Matrix4 mW;//ワールド行列
+    Matrix4 mWVP;//ワールドから射影までの変換行列
+    Vector4 vLightDir;//ライト方向
+    Vector4 vEye;//カメラ位置
 };
 
 struct SIMPLESHADER_CONSTANT_BUFFER1 {
@@ -53,7 +54,7 @@ public:
     Mesh();
     ~Mesh();
     HRESULT init(const std::string& fileName);
-    void draw(D3DXMATRIX world, float alpha) const;
+    void draw(Matrix4 world, float alpha) const;
     void createSphere(Sphere* sphere) const;
 
     DWORD getNumMaterial() const {
@@ -72,7 +73,7 @@ public:
 private:
     HRESULT LoadMaterialFromFile(const std::string& fileName, Material** ppMaterial);
     HRESULT LoadStaticMesh(const std::string& fileName);
-    void RendererMesh(D3DXMATRIX world, float alpha) const;
+    void RendererMesh(Matrix4 world, float alpha) const;
 
     ID3D11Device* mDevice;
     ID3D11DeviceContext* mDeviceContext;

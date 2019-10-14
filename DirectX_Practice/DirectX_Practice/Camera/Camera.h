@@ -1,8 +1,7 @@
 #pragma once
 
-#include "Utility/Singleton.h"
-#include "Utility/Math.h"
-#include <memory>
+#include "../Utility/Singleton.h"
+#include "../Utility/Math.h"
 
 class PlayerActor;
 
@@ -11,9 +10,9 @@ class Camera {
 public:
     void update(std::shared_ptr<PlayerActor> player);
     void update();
-    D3DXVECTOR3 getPosition();
-    D3DXMATRIX getView();
-    D3DXMATRIX getProjection();
+    Vector3 getPosition();
+    Matrix4 getView();
+    Matrix4 getProjection();
 
 private:
     Camera();
@@ -24,7 +23,7 @@ private:
     Vector3 mUp;
     Vector3 mPlayerPosition;
 
-    D3DXMATRIX mView;
-    D3DXMATRIX mProj;
+    Matrix4 mView;
+    Matrix4 mProj;
 };
 

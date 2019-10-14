@@ -4,7 +4,6 @@
 #include "../Shader/Shader.h"
 #include "../System/GameSystem.h"
 #include "../System/Renderer.h"
-#include "../Camera.h"
 
 Texture::Texture(Vector2 size) :
     mSize(size),
@@ -165,3 +164,42 @@ HRESULT Texture::createTexture(const std::string & fileName) {
 }
 
 ID3D11Buffer* Texture::mVertexBuffer = nullptr;
+
+//何故かだめ
+//ワールドトランスフォーム（絶対座標変換）
+//Matrix4 world;
+//Matrix4 scale;
+//Matrix4 trans;
+//scale = Matrix4::createScale(mSize.x * mScale.x * mUV.width, mSize.y * mScale.y * mUV.height, 1.f);
+//trans = Matrix4::createTranslation(Vector3(mPosition, 0.f));
+//world = scale * trans;
+////ビュートランスフォーム（視点座標変換）
+//Matrix4 mView;
+//Vector3 vEyePt(0.f, 0.f, -1.f); //カメラ（視点）位置
+//Vector3 vLookatPt(0.f, 0.f, 0.f);//注視位置
+//Vector3 vUpVec(0.f, 1.f, 0.f);//上方位置
+//mView = Matrix4::createLookAt(vEyePt, vLookatPt, vUpVec);
+////プロジェクション
+//Matrix4 mProj;
+//mProj = Matrix4::createScale(2.f / Game::WINDOW_WIDTH, -2.f / Game::WINDOW_HEIGHT, 1.f);
+//trans = Matrix4::createTranslation(Vector3(-1.f, 1.f, 0.f));
+//mProj *= trans;
+//
+////使用するシェーダーの登録	
+//mDeviceContext->VSSetShader(mShader->getVertexShader(), NULL, 0);
+//mDeviceContext->PSSetShader(mShader->getPixelShader(), NULL, 0);
+//
+////シェーダーのコンスタントバッファーに各種データを渡す
+//D3D11_MAPPED_SUBRESOURCE pData;
+//TextureShaderConstantBuffer cb;
+//if (SUCCEEDED(mDeviceContext->Map(mShader->mConstantBuffer0, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
+//    //ワールド、カメラ、射影行列を渡す
+//    Matrix4 m = world * mView * mProj;
+//    m.transpose();
+//    cb.mWVP = m;
+//    cb.mColor = mColor;
+//    cb.mRect = mUV;
+//    //cb.mColor.w = alpha;
+//    memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
+//    mDeviceContext->Unmap(mShader->mConstantBuffer0, 0);
+//}

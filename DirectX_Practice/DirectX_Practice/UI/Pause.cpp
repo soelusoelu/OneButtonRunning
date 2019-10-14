@@ -1,5 +1,5 @@
 #include "Pause.h"
-#include "Texture.h"
+#include "Sprite.h"
 #include "../Scene/GamePlay.h"
 #include "../System/GameSystem.h"
 #include "../System/Renderer.h"
@@ -7,11 +7,11 @@
 
 Pause::Pause(GamePlay* game) :
     UI(),
-    mGame(game) {
+    mGame(game),
+    mSprite2(std::make_shared<Sprite>("cute_cat_illust_3737.png", Vector2(830.f, 800.f))),
+    mSprite(std::make_shared<Sprite>("kuppa.png", Vector2(548.f, 599.f))) {
     mGame->setState(GamePlay::GameState::Paused);
-    mTexture = Singleton<GameSystem>::instance().getRenderer()->getTexture("kuppa.png", Vector2(548.f, 599.f));
-    mTexture2 = Singleton<GameSystem>::instance().getRenderer()->getTexture("kuppa.png", Vector2(548.f, 599.f));
-    mTexture2->setPosition(Vector2(300.f, 200.f));
+    mSprite2->setPosition(Vector2(300.f, 200.f));
 }
 
 Pause::~Pause() {
@@ -25,6 +25,6 @@ void Pause::update() {
 }
 
 void Pause::draw() const {
-    mTexture->draw();
-    mTexture2->draw();
+    mSprite2->draw();
+    mSprite->draw();
 }

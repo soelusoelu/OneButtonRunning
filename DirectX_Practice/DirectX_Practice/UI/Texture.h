@@ -21,18 +21,10 @@ class Shader;
 
 class Texture {
 public:
-    Texture(Vector2 size);
+    Texture();
     ~Texture();
     void init(const std::string& fileName);
-    void draw() const;
-
-    void setPosition(Vector2 pos);
-    void setScale(Vector2 scale);
-    void setColor(Vector3 color);
-    void setColor(float r, float g, float b);
-    void setAlpha(float alpha);
-    void setUV(Rect uv);
-    void setUV(float l, float t, float w, float h);
+    void draw(Matrix4 world, Color color, Rect uv) const;
 
 private:
     HRESULT createTexture(const std::string& fileName);
@@ -44,11 +36,5 @@ private:
     ID3D11ShaderResourceView* mTexture; //テクスチャ
     ID3D11SamplerState* mSampleLinear;//テクスチャーのサンプラー
     static ID3D11Buffer* mVertexBuffer;
-
-    Vector2 mSize;
-    Vector2 mPosition;
-    Vector2 mScale;
-    Color mColor;
-    Rect mUV;
 };
 

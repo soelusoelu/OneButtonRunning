@@ -16,7 +16,7 @@ public:
 
     std::shared_ptr<Mesh> getMesh(const std::string& fileName);
     std::shared_ptr<Shader> getShader(Shader::ShaderType type);
-    std::shared_ptr<Texture> getTexture(const std::string& fileName, Vector2 size);
+    std::shared_ptr<Texture> getTexture(const std::string& fileName);
 
     void clear();
 

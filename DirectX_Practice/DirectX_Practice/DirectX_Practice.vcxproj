@@ -140,18 +140,18 @@
     <ClCompile Include="Component\PlayerMoveComponent.cpp" />
     <ClCompile Include="Component\SphereCollisionComponent.cpp" />
     <ClCompile Include="Component\TransformComponent.cpp" />
-    <ClCompile Include="Direct3D11.cpp" />
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Entry.cpp" />
+    <ClCompile Include="Device\IDManager.cpp" />
+    <ClCompile Include="Device\Physics.cpp" />
+    <ClCompile Include="Device\Random.cpp" />
+    <ClCompile Include="Device\Renderer.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Scene\GamePlay.cpp" />
     <ClCompile Include="Scene\SceneBase.cpp" />
     <ClCompile Include="Shader\Shader.cpp" />
-    <ClCompile Include="System\GameSystem.cpp" />
-    <ClCompile Include="System\IDManager.cpp" />
-    <ClCompile Include="System\Physics.cpp" />
-    <ClCompile Include="System\Random.cpp" />
-    <ClCompile Include="System\Renderer.cpp" />
+    <ClCompile Include="System\Direct3D11.cpp" />
+    <ClCompile Include="System\Entry.cpp" />
+    <ClCompile Include="System\Game.cpp" />
+    <ClCompile Include="System\Window.cpp" />
     <ClCompile Include="UI\Pause.cpp" />
     <ClCompile Include="UI\Sprite.cpp" />
     <ClCompile Include="UI\Texture.cpp" />
@@ -161,7 +161,6 @@
     <ClCompile Include="Utility\Input.cpp" />
     <ClCompile Include="Utility\Math.cpp" />
     <ClCompile Include="Utility\Singleton.cpp" />
-    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\Actor.h" />
@@ -177,18 +176,18 @@
     <ClInclude Include="Component\PlayerMoveComponent.h" />
     <ClInclude Include="Component\SphereCollisionComponent.h" />
     <ClInclude Include="Component\TransformComponent.h" />
-    <ClInclude Include="Direct3D11.h" />
-    <ClInclude Include="DirectXIncLib.h" />
-    <ClInclude Include="Game.h" />
+    <ClInclude Include="Device\IDManager.h" />
+    <ClInclude Include="Device\Physics.h" />
+    <ClInclude Include="Device\Random.h" />
+    <ClInclude Include="Device\Renderer.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="Scene\GamePlay.h" />
     <ClInclude Include="Scene\SceneBase.h" />
     <ClInclude Include="Shader\Shader.h" />
-    <ClInclude Include="System\GameSystem.h" />
-    <ClInclude Include="System\IDManager.h" />
-    <ClInclude Include="System\Physics.h" />
-    <ClInclude Include="System\Random.h" />
-    <ClInclude Include="System\Renderer.h" />
+    <ClInclude Include="System\Direct3D11.h" />
+    <ClInclude Include="System\DirectXIncLib.h" />
+    <ClInclude Include="System\Game.h" />
+    <ClInclude Include="System\Window.h" />
     <ClInclude Include="UI\Pause.h" />
     <ClInclude Include="UI\Sprite.h" />
     <ClInclude Include="UI\Texture.h" />
@@ -198,7 +197,6 @@
     <ClInclude Include="Utility\Input.h" />
     <ClInclude Include="Utility\Math.h" />
     <ClInclude Include="Utility\Singleton.h" />
-    <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\Mesh.hlsl">

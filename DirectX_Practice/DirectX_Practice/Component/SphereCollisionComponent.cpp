@@ -4,9 +4,7 @@
 #include "TransformComponent.h"
 #include "../Actor/Actor.h"
 #include "../Actor/ComponentManagementOfActor.h"
-#include "../System/GameSystem.h"
-#include "../System/Physics.h"
-#include "../Utility/Singleton.h"
+#include "../Device/Physics.h"
 
 SphereCollisionComponent::SphereCollisionComponent(Actor* owner) :
     Component(owner),
@@ -16,11 +14,11 @@ SphereCollisionComponent::SphereCollisionComponent(Actor* owner) :
 }
 
 SphereCollisionComponent::~SphereCollisionComponent() {
-    Singleton<GameSystem>::instance().getPhysics()->removeSphere(this);
+    Singleton<Physics>::instance().removeSphere(this);
 }
 
 void SphereCollisionComponent::start() {
-    Singleton<GameSystem>::instance().getPhysics()->addSphere(this);
+    Singleton<Physics>::instance().addSphere(this);
 
     std::shared_ptr<MeshComponent> mesh = mOwner->getComponentManager()->getComponent<MeshComponent>();
     if (mesh) {

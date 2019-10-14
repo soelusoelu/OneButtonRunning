@@ -1,9 +1,8 @@
 ﻿#include "Texture.h"
-#include "../Direct3D11.h"
-#include "../Game.h"
+#include "../Device/Renderer.h"
 #include "../Shader/Shader.h"
-#include "../System/GameSystem.h"
-#include "../System/Renderer.h"
+#include "../System/Direct3D11.h"
+#include "../System/Game.h"
 
 Texture::Texture() {
 }
@@ -18,7 +17,7 @@ void Texture::init(const std::string& fileName) {
     mDevice = Direct3D11::mDevice;
     mDeviceContext = Direct3D11::mDeviceContext;
 
-    mShader = Singleton<GameSystem>::instance().getRenderer()->getShader(Shader::ShaderType::Texture);
+    mShader = Singleton<Renderer>::instance().getShader(Shader::ShaderType::Texture);
 
     if (FAILED(createTexture(fileName))) {
         MessageBox(0, L"テクスチャ作成失敗", NULL, MB_OK);
@@ -26,19 +25,17 @@ void Texture::init(const std::string& fileName) {
 }
 
 void Texture::draw(Matrix4 world, Color color, Rect uv) const {
-    D3DXMATRIX mView;
-    D3DXVECTOR3 vEyePt(0.f, 0.f, -1.f); //カメラ（視点）位置
-    D3DXVECTOR3 vLookatPt(0.f, 0.f, 0.f);//注視位置
-    D3DXVECTOR3 vUpVec(0.f, 1.f, 0.f);//上方位置
-    D3DXMatrixLookAtLH(&mView, &vEyePt, &vLookatPt, &vUpVec);
     //プロジェクション
-    D3DXMATRIX mProj;
-    D3DXMATRIX mProjTrans;
-    D3DXMatrixScaling(&mProj, 2.f / Game::WINDOW_WIDTH, -2.f / Game::WINDOW_HEIGHT, 1.f);
-    D3DXMatrixTranslation(&mProjTrans, -1.f, 1.f, 0.f);
-    mProj *= mProjTrans;
+    D3DXMATRIX proj;
+    D3DXMatrixIdentity(&proj);
+    //原点をスクリーン左上にするために平行移動
+    proj._41 = -1.f;
+    proj._42 = 1.f;
+    //ピクセル単位で扱うために
+    proj._11 = 2.f / Game::WINDOW_WIDTH;
+    proj._22 = -2.f / Game::WINDOW_HEIGHT;
 
-    //使用するシェーダーの登録	
+    //使用するシェーダーの登録
     mDeviceContext->VSSetShader(mShader->getVertexShader(), NULL, 0);
     mDeviceContext->PSSetShader(mShader->getPixelShader(), NULL, 0);
 
@@ -47,12 +44,13 @@ void Texture::draw(Matrix4 world, Color color, Rect uv) const {
     TextureShaderConstantBuffer cb;
     if (SUCCEEDED(mDeviceContext->Map(mShader->mConstantBuffer0, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
         //ワールド、カメラ、射影行列を渡す
-        D3DXMATRIX m = world.toD3DXMATRIX() * mView * mProj;
+        D3DXMATRIX m = world.toD3DXMATRIX();
         D3DXMatrixTranspose(&m, &m);
-        cb.mWVP = m;
+        cb.mWorld = m;
+        D3DXMatrixTranspose(&proj, &proj);
+        cb.mProj = proj;
         cb.mColor = color;
         cb.mRect = uv;
-        //cb.mColor.w = alpha;
         memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
         mDeviceContext->Unmap(mShader->mConstantBuffer0, 0);
     }
@@ -116,68 +114,3 @@ HRESULT Texture::createTexture(const std::string & fileName) {
 }
 
 ID3D11Buffer* Texture::mVertexBuffer = nullptr;
-
-//何故かだめ
-//ビュートランスフォーム（視点座標変換）
-//Matrix4 mView;
-//Vector3 vEyePt(0.f, 0.f, -1.f); //カメラ（視点）位置
-//Vector3 vLookatPt(0.f, 0.f, 0.f);//注視位置
-//Vector3 vUpVec(0.f, 1.f, 0.f);//上方位置
-//mView = Matrix4::createLookAt(vEyePt, vLookatPt, vUpVec);
-////プロジェクション
-//Matrix4 mProj;
-//Matrix4 trans;
-//mProj = Matrix4::createScale(2.f / Game::WINDOW_WIDTH, -2.f / Game::WINDOW_HEIGHT, 1.f);
-//trans = Matrix4::createTranslation(Vector3(-1.f, 1.f, 0.f));
-//mProj *= trans;
-//
-////使用するシェーダーの登録	
-//mDeviceContext->VSSetShader(mShader->getVertexShader(), NULL, 0);
-//mDeviceContext->PSSetShader(mShader->getPixelShader(), NULL, 0);
-//
-////シェーダーのコンスタントバッファーに各種データを渡す
-//D3D11_MAPPED_SUBRESOURCE pData;
-//TextureShaderConstantBuffer cb;
-//if (SUCCEEDED(mDeviceContext->Map(mShader->mConstantBuffer0, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
-//    //ワールド、カメラ、射影行列を渡す
-//    Matrix4 m = world * mView * mProj;
-//    m.transpose();
-//    cb.mWVP = m;
-//    cb.mColor = color;
-//    cb.mRect = uv;
-//    //cb.mColor.w = alpha;
-//    memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
-//    mDeviceContext->Unmap(mShader->mConstantBuffer0, 0);
-//}
-
-//ビュートランスフォーム（視点座標変換）
-//D3DXMATRIX mView;
-//D3DXVECTOR3 vEyePt(0.f, 0.f, -1.f); //カメラ（視点）位置
-//D3DXVECTOR3 vLookatPt(0.f, 0.f, 0.f);//注視位置
-//D3DXVECTOR3 vUpVec(0.f, 1.f, 0.f);//上方位置
-//D3DXMatrixLookAtLH(&mView, &vEyePt, &vLookatPt, &vUpVec);
-////プロジェクション
-//D3DXMATRIX mProj;
-//D3DXMATRIX mProjTrans;
-//D3DXMatrixScaling(&mProj, 2.f / Game::WINDOW_WIDTH, -2.f / Game::WINDOW_HEIGHT, 1.f);
-//D3DXMatrixTranslation(&mProjTrans, -1.f, 1.f, 0.f);
-//mProj *= mProjTrans;
-//
-////使用するシェーダーの登録	
-//mDeviceContext->VSSetShader(mShader->getVertexShader(), NULL, 0);
-//mDeviceContext->PSSetShader(mShader->getPixelShader(), NULL, 0);
-//
-////シェーダーのコンスタントバッファーに各種データを渡す
-//D3D11_MAPPED_SUBRESOURCE pData;
-//TextureShaderConstantBuffer cb;
-//if (SUCCEEDED(mDeviceContext->Map(mShader->mConstantBuffer0, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
-//    //ワールド、カメラ、射影行列を渡す
-//    D3DXMATRIX m = world.toD3DXMATRIX() * mView * mProj;
-//    D3DXMatrixTranspose(&m, &m);
-//    cb.mWVP = m;
-//    cb.mColor = color;
-//    cb.mRect = uv;
-//    //cb.mColor.w = alpha;
-//    memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
-//    mDeviceContext->Unmap(mShader->mConstantBuffer0, 0);
-//}

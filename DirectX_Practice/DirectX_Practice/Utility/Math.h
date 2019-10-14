@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "../DirectXIncLib.h"
+#include "../System/DirectXIncLib.h"
 #include <cmath>
 #include <memory.h>
 #include <limits>

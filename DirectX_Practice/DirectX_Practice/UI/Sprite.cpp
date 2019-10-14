@@ -1,7 +1,6 @@
 #include "Sprite.h"
 #include "Texture.h"
-#include "../System/GameSystem.h"
-#include "../System/Renderer.h"
+#include "../Device/Renderer.h"
 #include <cassert>
 
 Sprite::Sprite(const std::string& fileName, Vector2 size) :
@@ -10,7 +9,7 @@ Sprite::Sprite(const std::string& fileName, Vector2 size) :
     mScale(Vector2::one),
     mColor(ColorPalette::white, 1.f),
     mUV(0.f, 0.f, 1.f, 1.f) {
-    mTexture = Singleton<GameSystem>::instance().getRenderer()->getTexture(fileName);
+    mTexture = Singleton<Renderer>::instance().getTexture(fileName);
 }
 
 Sprite::~Sprite() {

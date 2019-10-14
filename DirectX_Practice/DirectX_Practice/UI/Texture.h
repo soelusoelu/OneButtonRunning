@@ -1,9 +1,10 @@
 ﻿#pragma once
 
-#include "../DirectXIncLib.h"
+#include "../System/DirectXIncLib.h"
 #include "../Utility/Math.h"
 #include <memory>
 #include <string>
+#include <vector>
 
 //頂点の構造体
 struct TextureVertex {
@@ -12,7 +13,8 @@ struct TextureVertex {
 };
 
 struct TextureShaderConstantBuffer {
-    D3DXMATRIX mWVP;
+    D3DXMATRIX mWorld;
+    D3DXMATRIX mProj;
     Color mColor;
     Rect mRect;
 };

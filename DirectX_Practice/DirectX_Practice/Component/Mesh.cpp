@@ -1,11 +1,10 @@
 ﻿#include "Mesh.h"
 #include "SphereCollisionComponent.h"
-#include "../Direct3D11.h"
-#include "../Game.h"
 #include "../Camera/Camera.h"
-#include "../System/GameSystem.h"
-#include "../System/Renderer.h"
+#include "../Device/Renderer.h"
 #include "../Shader/Shader.h"
+#include "../System/Direct3D11.h"
+#include "../System/Game.h"
 //メモリリーク検出用
 #define _CRTDBG_MAP_ALLOC
 #ifdef _DEBUG
@@ -43,7 +42,7 @@ HRESULT Mesh::init(const std::string& fileName) {
     mRasterizerState = Direct3D11::mRasterizerState;
     mRasterizerStateBack = Direct3D11::mRasterizerStateBack;
 
-    mShader = Singleton<GameSystem>::instance().getRenderer()->getShader(Shader::ShaderType::Mesh);
+    mShader = Singleton<Renderer>::instance().getShader(Shader::ShaderType::Mesh);
     if (FAILED(LoadStaticMesh(fileName))) {
         MessageBox(0, L"メッシュ作成失敗", NULL, MB_OK);
         return E_FAIL;

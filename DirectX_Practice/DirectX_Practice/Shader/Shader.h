@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "../DirectXIncLib.h"
+#include "../System/DirectXIncLib.h"
 #include <string>
 
 class Shader {

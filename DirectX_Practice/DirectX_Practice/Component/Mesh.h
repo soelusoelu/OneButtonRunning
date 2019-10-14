@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "../DirectXIncLib.h"
+#include "../System/DirectXIncLib.h"
 #include "../Utility/Collision.h"
 #include "../Utility/Math.h"
 #include <memory>

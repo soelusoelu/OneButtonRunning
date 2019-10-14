@@ -1,8 +1,6 @@
 #include "Pause.h"
 #include "Sprite.h"
 #include "../Scene/GamePlay.h"
-#include "../System/GameSystem.h"
-#include "../System/Renderer.h"
 #include "../Utility/Input.h"
 
 Pause::Pause(GamePlay* game) :

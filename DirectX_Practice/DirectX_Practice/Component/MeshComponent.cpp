@@ -1,14 +1,13 @@
 #include "MeshComponent.h"
 #include "Mesh.h"
 #include "../Actor/Actor.h"
-#include "../System/GameSystem.h"
-#include "../System/Renderer.h"
+#include "../Device/Renderer.h"
 #include <string>
 
 MeshComponent::MeshComponent(Actor* owner, const std::string& filename) :
     Component(owner),
     mEnabled(true) {
-    mMesh = Singleton<GameSystem>::instance().getRenderer()->getMesh(filename);
+    mMesh = Singleton<Renderer>::instance().getMesh(filename);
 }
 
 void MeshComponent::update() {

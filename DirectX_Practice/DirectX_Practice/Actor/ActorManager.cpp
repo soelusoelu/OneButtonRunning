@@ -2,7 +2,7 @@
 #include "Actor.h"
 #include "PlayerActor.h"
 #include "../Component/TransformComponent.h"
-#include "../DirectXIncLib.h"
+#include "../System/DirectXIncLib.h"
 
 ActorManager::ActorManager() :
     mUpdatingActors(false) {

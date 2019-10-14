@@ -8,6 +8,9 @@
 #include "../Utility/Collision.h"
 #include <algorithm>
 
+Physics::Physics() = default;
+Physics::~Physics() = default;
+
 bool Physics::rayCastField(Ray* ray, CollisionInfo* outColl) {
     bool collided = false;
     float minLength = Math::infinity;

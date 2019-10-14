@@ -1,9 +1,9 @@
 ﻿#include "Game.h"
-#include "Main.h"
-#include "Component/Mesh.h"
-#include "Scene/GamePlay.h"
-#include "Utility/Input.h"
-#include "Utility/Singleton.h"
+#include "../Main.h"
+#include "../Component/Mesh.h"
+#include "../Scene/GamePlay.h"
+#include "../Utility/Input.h"
+#include "../Utility/Singleton.h"
 
 WCHAR szRootPath[1024] = { 0 };
 

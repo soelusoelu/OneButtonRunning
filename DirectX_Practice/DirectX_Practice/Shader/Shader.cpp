@@ -1,6 +1,6 @@
 ﻿#include "Shader.h"
-#include "../Game.h"
 #include "../Component/Mesh.h"
+#include "../System/Game.h"
 #include "../UI/Texture.h"
 
 Shader::Shader() {

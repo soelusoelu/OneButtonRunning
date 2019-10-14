@@ -5,8 +5,8 @@
 #include "../Actor/PlayerActor.h"
 #include "../Camera/Camera.h"
 #include "../Component/TransformComponent.h"
-#include "../System/GameSystem.h"
-#include "../System/Physics.h"
+#include "../Device/Physics.h"
+#include "../Device/Renderer.h"
 #include "../UI/Pause.h"
 #include "../UI/UIManager.h"
 #include "../Utility/Input.h"
@@ -15,7 +15,6 @@
 GamePlay::GamePlay() :
     SceneBase(),
     mState(GameState::Play) {
-    Actor::instantiate<PlayerActor>();
     Actor::instantiate<PlayerActor>();
     Actor::instantiate<FieldActor>();
     for (int i = 0; i < 5; i++) {
@@ -27,7 +26,7 @@ GamePlay::GamePlay() :
 GamePlay::~GamePlay() {
     Singleton<ActorManager>::instance().clear();
     Singleton<UIManager>::instance().clear();
-    Singleton<GameSystem>::instance().clear();
+    Singleton<Renderer>::instance().clear();
 }
 
 void GamePlay::update() {
@@ -35,7 +34,7 @@ void GamePlay::update() {
         Singleton<ActorManager>::instance().update();
 
         //総当たり判定
-        Singleton<GameSystem>::instance().getPhysics()->sweepAndPrune();
+        Singleton<Physics>::instance().sweepAndPrune();
 
         if (Input::getKeyDown(Input::KeyCode::Escape)) {
             new Pause(this);
@@ -47,7 +46,7 @@ void GamePlay::update() {
 }
 
 void GamePlay::draw() const {
-    //Singleton<ActorManager>::instance().draw();
+    Singleton<ActorManager>::instance().draw();
     Singleton<UIManager>::instance().draw();
     Singleton<Camera>::instance().update(Singleton<ActorManager>::instance().getPlayer());
 }

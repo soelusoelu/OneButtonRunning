@@ -2,8 +2,8 @@
 
 #include "../Utility/Math.h"
 #include "../Utility/Collision.h"
+#include "../Utility/Singleton.h"
 #include <vector>
-#include <functional>
 #include <memory>
 
 class GamePlay;
@@ -11,6 +11,7 @@ class SphereCollisionComponent;
 class Actor;
 
 class Physics {
+    friend class Singleton<Physics>;
 public:
     struct CollisionInfo {
         //衝突した点
@@ -34,6 +35,9 @@ public:
     void removeSphere(SphereCollisionComponent* sphere);
 
 private:
+    Physics();
+    ~Physics();
+
     void calcPlane(D3DXPLANE* plane, D3DXVECTOR3* a, D3DXVECTOR3* b, D3DXVECTOR3* c);
     bool intersectPlane(D3DXPLANE plane, Ray* ray, D3DXVECTOR3 v1, D3DXVECTOR3 v2, D3DXVECTOR3 v3, CollisionInfo* outColl);
     bool isInside(D3DXVECTOR3* intersect, D3DXVECTOR3* a, D3DXVECTOR3* b, D3DXVECTOR3* c);

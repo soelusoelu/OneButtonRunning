@@ -2,8 +2,7 @@
 #include "TransformComponent.h"
 #include "../Actor/Actor.h"
 #include "../Actor/ComponentManagementOfActor.h"
-#include "../System/GameSystem.h"
-#include "../System/Physics.h"
+#include "../Device/Physics.h"
 #include "../Utility/Collision.h"
 #include "../Utility/Input.h"
 #include "../Utility/Math.h"
@@ -39,7 +38,7 @@ void PlayerMoveComponent::fall() {
 	Ray ray(s + Vector3::up * startUpPos, s + Vector3::down * 50.0f);
 	Physics::CollisionInfo collInfo;
 	Vector3 len = Vector3(0.f, mVelocityY, 0.f);
-	if (Singleton<GameSystem>::instance().getPhysics()->rayCastField(&ray, &collInfo)) {
+	if (Singleton<Physics>::instance().rayCastField(&ray, &collInfo)) {
 		if (collInfo.mLength <= 0.4f + startUpPos) {
             len.y += (0.4f + startUpPos) - collInfo.mLength;
 			mVelocityY = 0.0f;

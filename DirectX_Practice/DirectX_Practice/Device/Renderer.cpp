@@ -2,9 +2,7 @@
 #include "../Component/Mesh.h"
 #include "../UI/Texture.h"
 
-Renderer::Renderer() {
-}
-
+Renderer::Renderer() = default;
 Renderer::~Renderer() = default;
 
 std::shared_ptr<Mesh> Renderer::getMesh(const std::string& fileName) {

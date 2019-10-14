@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Utility\Input.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
@@ -11,8 +10,6 @@
     <ClCompile Include="Utility\Singleton.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
-    <ClCompile Include="Window.cpp" />
-    <ClCompile Include="Direct3D11.cpp" />
     <ClCompile Include="Scene\GamePlay.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
@@ -46,21 +43,6 @@
     <ClCompile Include="Component\Mesh.cpp">
       <Filter>Component</Filter>
     </ClCompile>
-    <ClCompile Include="System\GameSystem.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="System\IDManager.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="System\Physics.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="System\Random.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="System\Renderer.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
     <ClCompile Include="UI\Pause.cpp">
       <Filter>UI</Filter>
     </ClCompile>
@@ -70,7 +52,6 @@
     <ClCompile Include="UI\UIManager.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="Entry.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Actor\FieldActor.cpp">
       <Filter>Actor</Filter>
@@ -96,9 +77,32 @@
     <ClCompile Include="UI\Sprite.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="Device\IDManager.cpp">
+      <Filter>Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Device\Physics.cpp">
+      <Filter>Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Device\Random.cpp">
+      <Filter>Device</Filter>
+    </ClCompile>
+    <ClCompile Include="Device\Renderer.cpp">
+      <Filter>Device</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Direct3D11.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Entry.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Game.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="System\Window.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Game.h" />
     <ClInclude Include="Utility\Input.h">
       <Filter>Utility</Filter>
     </ClInclude>
@@ -108,9 +112,6 @@
     <ClInclude Include="Utility\Singleton.h">
       <Filter>Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Window.h" />
-    <ClInclude Include="Direct3D11.h" />
-    <ClInclude Include="DirectXIncLib.h" />
     <ClInclude Include="Scene\GamePlay.h">
       <Filter>Scene</Filter>
     </ClInclude>
@@ -143,21 +144,6 @@
     </ClInclude>
     <ClInclude Include="Component\Mesh.h">
       <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="System\GameSystem.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\IDManager.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\Physics.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\Random.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="System\Renderer.h">
-      <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="UI\Pause.h">
       <Filter>UI</Filter>
@@ -193,6 +179,30 @@
     <ClInclude Include="UI\Sprite.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="Device\IDManager.h">
+      <Filter>Device</Filter>
+    </ClInclude>
+    <ClInclude Include="Device\Physics.h">
+      <Filter>Device</Filter>
+    </ClInclude>
+    <ClInclude Include="Device\Random.h">
+      <Filter>Device</Filter>
+    </ClInclude>
+    <ClInclude Include="Device\Renderer.h">
+      <Filter>Device</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Direct3D11.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\DirectXIncLib.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Game.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Window.h">
+      <Filter>System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utility">
@@ -200,9 +210,6 @@
     </Filter>
     <Filter Include="Actor">
       <UniqueIdentifier>{e36a9bee-af64-409e-97f5-55971d323f81}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="System">
-      <UniqueIdentifier>{360f042a-a3a9-411e-a2e7-2b84f0c2f649}</UniqueIdentifier>
     </Filter>
     <Filter Include="Scene">
       <UniqueIdentifier>{88db5578-67dd-4825-865f-a53f807d9e32}</UniqueIdentifier>
@@ -218,6 +225,12 @@
     </Filter>
     <Filter Include="Camera">
       <UniqueIdentifier>{4aa8cd31-d9c6-40a3-9afd-e8c6d0c1a2ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System">
+      <UniqueIdentifier>{360f042a-a3a9-411e-a2e7-2b84f0c2f649}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Device">
+      <UniqueIdentifier>{59e4a739-238f-46f5-80fc-ae72aa67b8ca}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

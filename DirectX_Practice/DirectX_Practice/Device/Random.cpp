@@ -7,7 +7,7 @@ Random::Random() {
 
 Random::~Random() = default;
 
-int Random::random() {
+unsigned Random::random() {
     return mt();
 }
 
@@ -20,3 +20,5 @@ float Random::randomRange(float min, float max) {
     std::uniform_real_distribution<float> dist(min, max);
     return dist(mt);
 }
+
+std::mt19937 Random::mt;

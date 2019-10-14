@@ -1,7 +1,7 @@
 ﻿#include "Camera.h"
-#include "../Game.h"
 #include "../Actor/PlayerActor.h"
 #include "../Component/TransformComponent.h"
+#include "../System/Game.h"
 
 Camera::Camera() :
     mCameraPosition(Vector3::zero),

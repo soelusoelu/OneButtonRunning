@@ -5,7 +5,7 @@
 
 Sprite::Sprite(const std::string& fileName, Vector2 size) :
     mSize(size),
-    mPosition(Vector2::zero),
+    mPosition(Vector3::zero),
     mScale(Vector2::one),
     mColor(ColorPalette::white, 1.f),
     mUV(0.f, 0.f, 1.f, 1.f) {
@@ -17,13 +17,14 @@ Sprite::~Sprite() {
 
 void Sprite::draw() {
     mWorld = Matrix4::createScale(mSize.x * mScale.x * mUV.width, mSize.y * mScale.y * mUV.height, 1.f);
-    mWorld *= Matrix4::createTranslation(Vector3(mPosition.x, mPosition.y, 0.f));
+    mWorld *= Matrix4::createTranslation(Vector3(mPosition.x, mPosition.y, mPosition.z));
 
     mTexture->draw(mWorld, mColor, mUV);
 }
 
 void Sprite::setPosition(Vector2 pos) {
-    mPosition = pos;
+    mPosition.x = pos.x;
+    mPosition.y = pos.y;
 }
 
 void Sprite::setScale(Vector2 scale) {
@@ -65,4 +66,8 @@ void Sprite::setUV(float l, float t, float w, float h) {
     mUV.top = t;
     mUV.width = w;
     mUV.height = h;
+}
+
+void Sprite::setPrimary(float z) {
+    mPosition.z = z;
 }

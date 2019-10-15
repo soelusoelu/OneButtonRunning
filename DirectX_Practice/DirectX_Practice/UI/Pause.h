@@ -15,6 +15,7 @@ public:
 
 private:
     GamePlay* mGame;
-    std::shared_ptr<Sprite> mSprite;
-    std::shared_ptr<Sprite> mSprite2;
+    std::shared_ptr<Sprite> mKuppaSprite;
+    std::shared_ptr<Sprite> mCatSprite;
+    std::shared_ptr<Sprite> mStage;
 };

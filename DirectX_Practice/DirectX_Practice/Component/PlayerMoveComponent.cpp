@@ -23,6 +23,11 @@ void PlayerMoveComponent::update() {
 	fall();
 	jump();
 	rotate();
+
+    float rot = Input::horizontal();
+    mOwner->getTransform()->rotate(Vector3::up, -rot);
+    float tra = Input::vertical();
+    mOwner->getTransform()->translete(mOwner->getTransform()->right() * tra * 0.05f);
 }
 
 void PlayerMoveComponent::fall() {
@@ -45,14 +50,20 @@ void PlayerMoveComponent::fall() {
 			mState = State::OnGround;
 		}
 	}
-	mOwner->getTransform()->translete(len);
+    ray = Ray(s, s + Vector3::down * 50.f);
+    if (Singleton<Physics>::instance().rayCastField(&ray, &collInfo)) {
+        if (collInfo.mLength < 0.4f) {
+            len.y += 0.4f - collInfo.mLength;
+        }
+    }
+    mOwner->getTransform()->translete(len);
 }
 
 void PlayerMoveComponent::jump()
 {
 	//接地中にボタン押したらじょんぷの大きさの判定始まり
 	if (mState == State::OnGround && Input::getKeyDown(Input::KeyCode::Space)) {
-		mIsLongJumpHold = true;		
+		mIsLongJumpHold = true;
 	}
 
 	//離したらじょんぷの大きさの判定終わり
@@ -95,9 +106,9 @@ void PlayerMoveComponent::rotate()
 		mOwner->getTransform()->rotate(Vector3::right, mRotateAngle);
 	}
 
-	if (mState == State::OnGround) {
-		mRotateAngle = 0;
-		mOwner->getTransform()->setRotation(Vector3::right, 0);//着地したら真っ直ぐになる
-	}	
+	//if (mState == State::OnGround) {
+	//	mRotateAngle = 0;
+	//	mOwner->getTransform()->setRotation(Vector3::right, 0);//着地したら真っ直ぐになる
+	//}	
 }
 

@@ -18,10 +18,11 @@ public:
     void setAlpha(float alpha);
     void setUV(Rect uv);
     void setUV(float l, float t, float w, float h);
+    void setPrimary(float z);
 
 private:
     Vector2 mSize;
-    Vector2 mPosition;
+    Vector3 mPosition;
     Vector2 mScale;
     Color mColor;
     Rect mUV;

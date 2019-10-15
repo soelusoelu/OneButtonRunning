@@ -26,7 +26,7 @@ public:
     };
 
     bool rayCastField(Ray* ray, CollisionInfo* outColl);
-    Vector3 slip(Ray* ray, Vector3 normal);
+    Vector3 slip(const Vector3& ray, Vector3 normal);
     //総当たり判定
     void sweepAndPrune();
 

@@ -51,9 +51,11 @@ bool Physics::rayCastField(Ray* ray, CollisionInfo* outColl) {
     return collided;
 }
 
-Vector3 Physics::slip(Ray* ray, Vector3 normal) {
-    Vector3 l = ray->mEnd - ray->mStart;
-    return (l - ((Vector3::dot(normal, l)) / normal.lengthSq()) * normal);
+Vector3 Physics::slip(const Vector3& ray, Vector3 normal) {
+    //Vector3 l = Vector3::normalize(ray->mEnd - ray->mStart);
+    Vector3 l = ray;
+    Vector3 s = l - ((Vector3::dot(normal, l)) / normal.lengthSq()) * normal;
+    return s;
 }
 
 void Physics::calcPlane(D3DXPLANE* plane, D3DXVECTOR3* a, D3DXVECTOR3* b, D3DXVECTOR3* c) {

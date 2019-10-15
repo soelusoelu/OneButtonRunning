@@ -14,13 +14,13 @@ void ActorManager::update() {
     mUpdatingActors = true;
     for (auto&& actor : mActors) {
         actor->update();
-        scrollExceptPlayer(actor);
+        //scrollExceptPlayer(actor);
     }
     mUpdatingActors = false;
 
     for (auto&& field : mFieldActors) {
         field->update();
-        scrollExceptPlayer(field);
+        //scrollExceptPlayer(field);
     }
 
     for (auto&& pending : mPendingActors) {

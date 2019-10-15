@@ -27,7 +27,7 @@ void PlayerMoveComponent::update() {
     float rot = Input::horizontal();
     mOwner->getTransform()->rotate(Vector3::up, -rot);
     float tra = Input::vertical();
-    mOwner->getTransform()->translete(mOwner->getTransform()->right() * tra * 0.05f);
+    mOwner->getTransform()->translete(mOwner->getTransform()->forward() * tra * 0.02f);
 }
 
 void PlayerMoveComponent::fall() {
@@ -44,18 +44,10 @@ void PlayerMoveComponent::fall() {
 	Physics::CollisionInfo collInfo;
 	Vector3 len = Vector3(0.f, mVelocityY, 0.f);
 	if (Singleton<Physics>::instance().rayCastField(&ray, &collInfo)) {
-		if (collInfo.mLength <= 0.5f + startUpPos) {
-            len.y += (0.5f + startUpPos) - collInfo.mLength;
-			mVelocityY = 0.0f;
-			mState = State::OnGround;
-		}
+        len.y += (0.4f + startUpPos) - collInfo.mLength;
+		mVelocityY = 0.0f;
+		mState = State::OnGround;
 	}
-    ray = Ray(s, s + Vector3::down * 50.f);
-    if (Singleton<Physics>::instance().rayCastField(&ray, &collInfo)) {
-        if (collInfo.mLength < 0.4f) {
-            len.y += 0.4f - collInfo.mLength;
-        }
-    }
     mOwner->getTransform()->translete(len);
 }
 

@@ -77,8 +77,10 @@ void PlayerMoveComponent::jump()
 		if (mButtonDownTime >= 10) {
 			mButtonDownTime = 10;
 		}
-		mVelocityY = (JUMP_POWER * 0.5f) + (JUMP_POWER * mButtonDownTime * 0.05f);//10フレ押したら元のじょんぷぱぅわーと同じ値になる式（汚い）
-		mState = State::JumpUp;
+		if (mState == State::OnGround) {
+			mVelocityY = (JUMP_POWER * 0.5f) + (JUMP_POWER * mButtonDownTime * 0.05f);//10フレ押したら元のじょんぷぱぅわーと同じ値になる式（汚い）
+			mState = State::JumpUp;
+		}
 
 		mIsLongJumpHold = false;
 		mButtonDownTime = 0;

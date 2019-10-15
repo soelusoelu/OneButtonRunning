@@ -15,7 +15,7 @@ void ActorManager::update() {
     for (auto&& actor : mActors) {
         actor->update();
         scrollExceptPlayer(actor);
-        deleteScreenOut(actor);
+		deleteScreenOut(actor);
     }
     mUpdatingActors = false;
 

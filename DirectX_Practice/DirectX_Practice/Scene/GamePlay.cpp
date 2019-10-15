@@ -16,7 +16,10 @@ GamePlay::GamePlay() :
     SceneBase(),
     mState(GameState::Play) {
     Actor::instantiate<PlayerActor>();
-    Actor::instantiate<FieldActor>();
+    //Actor::instantiate<FieldActor>();
+	new FieldActor("Road1.obj");
+	auto f = new FieldActor("Road2.obj");
+	f->getTransform()->setPosition(Vector3(0.0f, 0.0f, 22.0f));
     for (int i = 0; i < 5; i++) {
         Actor::instantiate<EnemyActor>(Vector3(0.f, 1.5f + i * 3.f, 5.f + i * 0.1f), Quaternion::identity);
     }

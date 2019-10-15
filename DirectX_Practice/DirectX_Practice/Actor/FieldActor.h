@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Actor.h"
+#include <string>
 
 class MeshComponent;
 
@@ -10,10 +11,11 @@ public:
     virtual void updateActor() override;
     virtual void drawActor() const override;
 
-private:
-    FieldActor(const char* tag = "Field");
+    FieldActor(const std::string& FileNmae, const char* tag = "Field");
     ~FieldActor() {};
+private:
 
     MeshComponent* mMesh;
+	std::string mFileName;
 };
 

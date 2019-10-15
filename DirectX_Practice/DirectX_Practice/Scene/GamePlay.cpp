@@ -18,7 +18,7 @@ GamePlay::GamePlay() :
     Actor::instantiate<PlayerActor>();
     Actor::instantiate<FieldActor>();
     for (int i = 0; i < 5; i++) {
-        Actor::instantiate<EnemyActor>(Vector3(0.f, -0.5f + i * 3.f, 5.f + i * 0.1f), Quaternion::identity);
+        Actor::instantiate<EnemyActor>(Vector3(0.f, 1.5f + i * 3.f, 5.f + i * 0.1f), Quaternion::identity);
     }
     //Actor::instantiate<EnemyActor>(Vector3(0.f, -0.5f, 5.f), Quaternion::identity);
 }

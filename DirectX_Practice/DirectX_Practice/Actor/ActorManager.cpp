@@ -15,6 +15,7 @@ void ActorManager::update() {
     for (auto&& actor : mActors) {
         actor->update();
         scrollExceptPlayer(actor);
+        deleteScreenOut(actor);
     }
     mUpdatingActors = false;
 
@@ -60,6 +61,12 @@ void ActorManager::scrollExceptPlayer(std::shared_ptr<Actor> scrollTarget) {
         return;
     }
     scrollTarget->getTransform()->translete(Vector3(0.f, 0.f, -Actor::SCROLL_SPEED));
+}
+
+void ActorManager::deleteScreenOut(std::shared_ptr<Actor> actor) {
+    if (actor->getTransform()->getPosition().z < -20.f) {
+        Actor::destroy(actor);
+    }
 }
 
 std::unordered_set<std::shared_ptr<Actor>> ActorManager::getActors() const {

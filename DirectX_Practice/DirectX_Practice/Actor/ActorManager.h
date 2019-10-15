@@ -19,6 +19,8 @@ public:
     void clear();
     //プレイヤー以外スクロール
     void scrollExceptPlayer(std::shared_ptr<Actor> scrollTarget);
+    //画面から消えたら削除
+    void deleteScreenOut(std::shared_ptr<Actor> actor);
 
     //全アクターの取得
     std::unordered_set<std::shared_ptr<Actor>> getActors() const;

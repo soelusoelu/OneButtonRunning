@@ -48,6 +48,18 @@ void PlayerMoveComponent::fall() {
 			mVelocityY = 0.0f;
 			mState = State::OnGround;
 		}
+		//接地していて下に地面があるなら接地状態維持
+		if (mState == State::OnGround) {
+			mState = State::OnGround;
+		}
+		//接地していなくて下に地面があり、落下中ならJumpDown
+		else if(mVelocityY < 0) {
+			mState = State::JumpDown;
+		}
+	}
+	//下に地面が無くて、落下中ならJumpDown
+	else if(mVelocityY < 0) {
+		mState = State::JumpDown;
 	}
 	mOwner->getTransform()->translete(Vector3(0.0f, len.y + mVelocityY, 0.0f));
 }
@@ -87,9 +99,9 @@ void PlayerMoveComponent::jump()
 	}
 
 	//落下している時はJumpDown状態
-	if (mVelocityY < 0) {
+	/*if (mVelocityY < 0) {
 		mState = State::JumpDown;
-	}
+	}*/
 }
 
 void PlayerMoveComponent::rotate()

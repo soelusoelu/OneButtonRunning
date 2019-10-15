@@ -76,11 +76,13 @@ void PlayerMoveComponent::jump()
 	//離したらじょんぷの大きさの判定終わり
 	if (mIsLongJumpHold && Input::getKeyUp(Input::KeyCode::Space)) {
 
-		if (mButtonDownTime >= 10) {
-			mButtonDownTime = 10;
-		}
-		mVelocityY = (JUMP_POWER * 0.5f) + (JUMP_POWER * mButtonDownTime * 0.05f);//10フレ押したら元のじょんぷぱぅわーと同じ値になる式（汚い）
-		mState = State::JumpUp;
+		//if (mButtonDownTime >= 10) {
+		//	mButtonDownTime = 10;
+		//}
+		//if (mState == State::OnGround) {
+		//	mVelocityY = (JUMP_POWER * 0.5f) + (JUMP_POWER * mButtonDownTime * 0.05f);//10フレ押したら元のじょんぷぱぅわーと同じ値になる式（汚い）
+		//	mState = State::JumpUp;
+		//}
 
 		mIsLongJumpHold = false;
 		mButtonDownTime = 0;
@@ -101,12 +103,16 @@ void PlayerMoveComponent::jump()
 		//else {
 		//	mVelocityY = (JUMP_POWER * 0.5f) + (JUMP_POWER * mButtonDownTime * 0.05f);//10フレ押したら元のじょんぷぱぅわーと同じ値になる式（汚い）
 		//}
+		mState = State::JumpUp;
+		//10フレ押したら最大じょんぷなので判定終わり
+		if (mButtonDownTime >= 10) {
+			mButtonDownTime = 0;
+			mIsLongJumpHold = false;
+		}
+		else {
+			mVelocityY = (JUMP_POWER * 0.5f) + (JUMP_POWER * mButtonDownTime * 0.05f);//10フレ押したら元のじょんぷぱぅわーと同じ値になる式（汚い）
+		}
 	}
-
-	//落下している時はJumpDown状態
-	/*if (mVelocityY < 0) {
-		mState = State::JumpDown;
-	}*/
 }
 
 void PlayerMoveComponent::rotate()

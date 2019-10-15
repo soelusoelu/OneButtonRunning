@@ -107,10 +107,6 @@ void PlayerMoveComponent::rotate()
 	if (mState == State::OnGround) {
 		mRotateAngle = 0;
 		mOwner->getTransform()->setRotation(Vector3::right, 0);//着地したら真っ直ぐになる
-<<<<<<< HEAD
-	}	
-=======
 	}
->>>>>>> origin/master
 }
 

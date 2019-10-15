@@ -41,8 +41,8 @@ void Texture::draw(Matrix4 world, Color color, Rect uv) const {
 
     //シェーダーのコンスタントバッファーに各種データを渡す
     D3D11_MAPPED_SUBRESOURCE pData;
-    TextureShaderConstantBuffer cb;
     if (SUCCEEDED(mDeviceContext->Map(mShader->mConstantBuffer0, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
+        TextureShaderConstantBuffer cb;
         //ワールド、カメラ、射影行列を渡す
         D3DXMATRIX m = world.toD3DXMATRIX();
         D3DXMatrixTranspose(&m, &m);

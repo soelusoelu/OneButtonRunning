@@ -334,6 +334,7 @@ void Mesh::RendererMesh(Matrix4 world, float alpha) const {
     //シェーダーのコンスタントバッファーに各種データを渡す
     D3D11_MAPPED_SUBRESOURCE pData;
     if (SUCCEEDED(mDeviceContext->Map(mShader->mConstantBuffer0, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
+        //テクスチャでないの、ほぼ確定でこのif文の中
         SIMPLESHADER_CONSTANT_BUFFER0 sg;
         //ワールド行列を渡す
         sg.mW = world;

@@ -69,7 +69,9 @@ void PlayerMoveComponent::jump()
 	//接地中にボタン押したらじょんぷの大きさの判定始まり
 	if (mState == State::OnGround && Input::getKeyDown(Input::KeyCode::Space)) {
 		mIsLongJumpHold = true;
-	}
+    } else {
+        Actor::mScrollSpeed = 0.05f;
+    }
 
 	//離したらじょんぷの大きさの判定終わり
 	if (mIsLongJumpHold && Input::getKeyUp(Input::KeyCode::Space)) {
@@ -86,6 +88,9 @@ void PlayerMoveComponent::jump()
 
 	if (mIsLongJumpHold) {
 		mButtonDownTime++;
+
+        Actor::mScrollSpeed += 0.01f;
+        Actor::mScrollSpeed = Math::Max(Actor::mScrollSpeed, 0.3f);
 
 		//mState = State::JumpUp;
 		////10フレ押したら最大じょんぷなので判定終わり

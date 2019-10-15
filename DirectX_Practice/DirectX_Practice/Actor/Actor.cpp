@@ -63,4 +63,4 @@ const char* Actor::getTag() const {
     return mTag;
 }
 
-const float Actor::SCROLL_SPEED = 0.05f;
+float Actor::mScrollSpeed = 0.05f;

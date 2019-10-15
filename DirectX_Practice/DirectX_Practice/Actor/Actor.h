@@ -48,7 +48,7 @@ public:
     const char* getTag() const;
 
 public:
-    static const float SCROLL_SPEED;
+    static float mScrollSpeed;
 
 private:
     std::shared_ptr<ComponentManagementOfActor> mComponentManager;

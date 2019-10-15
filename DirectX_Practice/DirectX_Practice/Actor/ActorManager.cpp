@@ -60,12 +60,18 @@ void ActorManager::scrollExceptPlayer(std::shared_ptr<Actor> scrollTarget) {
     if (scrollTarget->getTag() == "Player") {
         return;
     }
-    scrollTarget->getTransform()->translete(Vector3(0.f, 0.f, -Actor::SCROLL_SPEED));
+    scrollTarget->getTransform()->translete(Vector3(0.f, 0.f, -Actor::mScrollSpeed));
 }
 
 void ActorManager::deleteScreenOut(std::shared_ptr<Actor> actor) {
-    if (actor->getTransform()->getPosition().z < -20.f) {
-        Actor::destroy(actor);
+    if (actor->getTag() == "Player") {
+        if (actor->getTransform()->getPosition().y < -20.f) {
+            Actor::destroy(actor);
+        }
+    } else {
+        if (actor->getTransform()->getPosition().z < -20.f) {
+            Actor::destroy(actor);
+        }
     }
 }
 

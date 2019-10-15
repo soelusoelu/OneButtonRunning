@@ -98,9 +98,9 @@ void PlayerMoveComponent::rotate()
 		mOwner->getTransform()->rotate(Vector3::right, mRotateAngle);
 	}
 
-	//if (mState == State::OnGround) {
-	//	mRotateAngle = 0;
-	//	mOwner->getTransform()->setRotation(Vector3::right, 0);//着地したら真っ直ぐになる
-	//}	
+	if (mState == State::OnGround) {
+		mRotateAngle = 0;
+		mOwner->getTransform()->setRotation(Vector3::right, 0);//着地したら真っ直ぐになる
+	}	
 }
 

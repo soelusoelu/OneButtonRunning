@@ -5,6 +5,7 @@
 #include "../Component/Mesh.h"
 #include "../Component/MeshComponent.h"
 #include "../Component/SphereCollisionComponent.h"
+#include "../Component/TransformComponent.h"
 #include "../Utility/Collision.h"
 #include <algorithm>
 
@@ -26,9 +27,10 @@ bool Physics::rayCastField(Ray* ray, CollisionInfo* outColl) {
                 int index2 = mesh->getVertexIndex()[i][k * 3 + 1];
                 int index3 = mesh->getVertexIndex()[i][k * 3 + 2];
 
-                v1 = mesh->getVertexBuffer()[index1].mPos;
-                v2 = mesh->getVertexBuffer()[index2].mPos;
-                v3 = mesh->getVertexBuffer()[index3].mPos;
+                auto fp = field->getTransform()->getPosition();
+                v1 = mesh->getVertexBuffer()[index1].mPos + fp.toD3DXVECTOR3();
+                v2 = mesh->getVertexBuffer()[index2].mPos + fp.toD3DXVECTOR3();
+                v3 = mesh->getVertexBuffer()[index3].mPos + fp.toD3DXVECTOR3();
                 //3点から平面方程式を作る
                 D3DXPLANE plane;
                 calcPlane(&plane, &v1, &v2, &v3);

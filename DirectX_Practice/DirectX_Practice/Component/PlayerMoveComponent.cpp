@@ -34,13 +34,13 @@ void PlayerMoveComponent::fall() {
 	}
 
 	auto s = mOwner->getTransform()->getPosition();
-    float startUpPos = 1.0f;
+    float startUpPos = 5.0f;
 	Ray ray(s + Vector3::up * startUpPos, s + Vector3::down * 50.0f);
 	Physics::CollisionInfo collInfo;
 	Vector3 len = Vector3(0.f, mVelocityY, 0.f);
 	if (Singleton<Physics>::instance().rayCastField(&ray, &collInfo)) {
-		if (collInfo.mLength <= 0.4f + startUpPos) {
-            len.y += (0.4f + startUpPos) - collInfo.mLength;
+		if (collInfo.mLength <= 0.5f + startUpPos) {
+            len.y += (0.5f + startUpPos) - collInfo.mLength;
 			mVelocityY = 0.0f;
 			mState = State::OnGround;
 		}

@@ -8,15 +8,15 @@
 #include "../Utility/Math.h"
 
 PlayerMoveComponent::PlayerMoveComponent(Actor* owner, int updateOrder) :
-    Component(owner, updateOrder),
-    mState(State::JumpDown),
+	Component(owner, updateOrder),
+	mState(State::JumpDown),
 	FALL_SPEED(0.01f),
 	MAX_FALL_SPEED(0.5f),
-    JUMP_POWER(0.8f),
-    mVelocityY(0.0f),
-    mButtonDownTime(0),
-    mIsLongJumpHold(false),
-    mRotateAngle(0.0f){
+	JUMP_POWER(0.8f),
+	mVelocityY(0.0f),
+	mButtonDownTime(0),
+	mIsLongJumpHold(false),
+	mRotateAngle(0.0f) {
 }
 
 void PlayerMoveComponent::update() {
@@ -24,31 +24,32 @@ void PlayerMoveComponent::update() {
 	jump();
 	rotate();
 
-    float rot = Input::horizontal();
-    mOwner->getTransform()->rotate(Vector3::up, -rot);
-    float tra = Input::vertical();
-    mOwner->getTransform()->translete(mOwner->getTransform()->forward() * tra * 0.02f);
+	float rot = Input::horizontal();
+	mOwner->getTransform()->rotate(Vector3::up, -rot);
+	float tra = Input::vertical();
+	mOwner->getTransform()->translete(mOwner->getTransform()->forward() * tra * 0.02f);
 }
 
 void PlayerMoveComponent::fall() {
-	if (mState != State::OnGround) {
-		mVelocityY -= FALL_SPEED;//段々落下速度が速くなる
-		if (mVelocityY <= -MAX_FALL_SPEED) {
-			mVelocityY = -MAX_FALL_SPEED;//落下速度が速くなりすぎないようにする
-		}
+
+	mVelocityY -= FALL_SPEED;//段々落下速度が速くなる
+	if (mVelocityY <= -MAX_FALL_SPEED) {
+		mVelocityY = -MAX_FALL_SPEED;//落下速度が速くなりすぎないようにする
 	}
 
 	auto s = mOwner->getTransform()->getPosition();
-    float startUpPos = 5.0f;
-	Ray ray(s + Vector3::up * startUpPos, s + Vector3::down * 50.0f);
+	float startUpPos = 5.0f;
+	Ray ray(s + Vector3::up * startUpPos, s + Vector3::down * 50.f);
 	Physics::CollisionInfo collInfo;
 	Vector3 len = Vector3(0.f, mVelocityY, 0.f);
 	if (Singleton<Physics>::instance().rayCastField(&ray, &collInfo)) {
-        len.y += (0.4f + startUpPos) - collInfo.mLength;
-		mVelocityY = 0.0f;
-		mState = State::OnGround;
+		if (collInfo.mLength <= startUpPos && mState != State::JumpUp) {
+			len.y += (0.f + startUpPos) - collInfo.mLength;
+			mVelocityY = 0.0f;
+			mState = State::OnGround;
+		}
 	}
-    mOwner->getTransform()->translete(len);
+	mOwner->getTransform()->translete(Vector3(0.0f, len.y + mVelocityY, 0.0f));
 }
 
 void PlayerMoveComponent::jump()
@@ -84,6 +85,11 @@ void PlayerMoveComponent::jump()
 		//	mVelocityY = (JUMP_POWER * 0.5f) + (JUMP_POWER * mButtonDownTime * 0.05f);//10フレ押したら元のじょんぷぱぅわーと同じ値になる式（汚い）
 		//}
 	}
+
+	//落下している時はJumpDown状態
+	if (mVelocityY < 0) {
+		mState = State::JumpDown;
+	}
 }
 
 void PlayerMoveComponent::rotate()
@@ -98,9 +104,9 @@ void PlayerMoveComponent::rotate()
 		mOwner->getTransform()->rotate(Vector3::right, mRotateAngle);
 	}
 
-	//if (mState == State::OnGround) {
-	//	mRotateAngle = 0;
-	//	mOwner->getTransform()->setRotation(Vector3::right, 0);//着地したら真っ直ぐになる
-	//}	
+	if (mState == State::OnGround) {
+		mRotateAngle = 0;
+		mOwner->getTransform()->setRotation(Vector3::right, 0);//着地したら真っ直ぐになる
+	}
 }
 

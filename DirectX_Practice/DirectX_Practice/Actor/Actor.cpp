@@ -5,7 +5,7 @@
 
 Actor::Actor(const char* tag) :
     mComponentManager(std::make_shared<ComponentManagementOfActor>()),
-    mState(State::Active),
+    mState(ActorState::Active),
     mTransform(new TransformComponent(this)),
     mTag(tag) {
     Singleton<ActorManager>::instance().addActor(this);
@@ -13,7 +13,7 @@ Actor::Actor(const char* tag) :
 
 void Actor::update() {
     mComponentManager->start();
-    if (mState == State::Active) {
+    if (mState == ActorState::Active) {
         computeWorldTransform();
 
         mComponentManager->update();
@@ -36,11 +36,11 @@ void Actor::computeWorldTransform() {
 }
 
 void Actor::destroy(Actor* actor) {
-    actor->mState = Actor::State::Dead;
+    actor->mState = ActorState::Dead;
 }
 
 void Actor::destroy(std::shared_ptr<Actor> actor) {
-    actor->mState = Actor::State::Dead;
+    actor->mState = ActorState::Dead;
 }
 
 std::shared_ptr<ComponentManagementOfActor> Actor::getComponentManager() const {
@@ -55,7 +55,7 @@ TransformComponent* Actor::getTransform() const {
     return mTransform;
 }
 
-Actor::State Actor::getState() const {
+ActorState Actor::getState() const {
     return mState;
 }
 

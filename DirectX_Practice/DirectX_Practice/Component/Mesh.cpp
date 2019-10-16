@@ -5,17 +5,9 @@
 #include "../Shader/Shader.h"
 #include "../System/Direct3D11.h"
 #include "../System/Game.h"
-//メモリリーク検出用
-#define _CRTDBG_MAP_ALLOC
-#ifdef _DEBUG
-#include <stdlib.h>
-#include <crtdbg.h>
-#define new ::new(_NORMAL_BLOCK, __FILE__, __LINE__)
-#endif // _DEBUG
 
 Mesh::Mesh() {
     ZeroMemory(this, sizeof(Mesh));
-    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 }
 
 Mesh::~Mesh() {

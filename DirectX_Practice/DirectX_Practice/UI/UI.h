@@ -1,19 +1,24 @@
 ﻿#pragma once
 
+#include<memory>
+
+class SpriteManager;
+
+enum class UIState {
+    Active,
+    Closing
+};
+
 class UI {
 public:
-    enum State {
-        Active,
-        Closing
-    };
     UI();
     virtual ~UI() {};
     virtual void update() = 0;
-    virtual void draw() const = 0;
     void close();
-    State getState() const;
+    UIState getState() const;
+    std::shared_ptr<SpriteManager> getSpriteManager() const;
 
 protected:
-    State mState;
+    UIState mState;
+    std::shared_ptr<SpriteManager> mSpriteManager;
 };
-

@@ -16,15 +16,15 @@ Shader::~Shader() {
     SAFE_RELEASE(mBlendState);
 }
 
-void Shader::init(Shader::ShaderType type) {
+void Shader::init(ShaderType type) {
     mDevice = Direct3D11::mDevice;
     mDeviceContext = Direct3D11::mDeviceContext;
 
-    if (type == Shader::ShaderType::Mesh) {
+    if (type == ShaderType::Mesh) {
         if (FAILED(initMeshShader())) {
             MessageBox(0, L"メッシュ用シェーダー作成失敗", NULL, MB_OK);
         }
-    } else if (type == Shader::ShaderType::Texture) {
+    } else if (type == ShaderType::Texture) {
         if (FAILED(initTextureShader())) {
             MessageBox(0, L"テクスチャ用シェーダー作成失敗", NULL, MB_OK);
         }

@@ -23,11 +23,6 @@ void PlayerMoveComponent::update() {
 	fall();
 	jump();
 	rotate();
-
-	float rot = Input::horizontal();
-	mOwner->getTransform()->rotate(Vector3::up, -rot);
-	float tra = Input::vertical();
-	mOwner->getTransform()->translete(mOwner->getTransform()->forward() * tra * 0.02f);
 }
 
 void PlayerMoveComponent::fall() {

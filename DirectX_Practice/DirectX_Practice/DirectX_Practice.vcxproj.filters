@@ -101,6 +101,9 @@
     <ClCompile Include="System\Window.cpp">
       <Filter>System</Filter>
     </ClCompile>
+    <ClCompile Include="UI\SpriteManager.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utility\Input.h">
@@ -202,6 +205,9 @@
     </ClInclude>
     <ClInclude Include="System\Window.h">
       <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\SpriteManager.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

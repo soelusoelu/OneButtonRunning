@@ -1,4 +1,6 @@
 ﻿#include "UIManager.h"
+#include "SpriteManager.h"
+#include "Texture.h"
 #include "UI.h"
 
 UIManager::UIManager() = default;
@@ -10,17 +12,17 @@ void UIManager::pushUI(UI* ui) {
 
 void UIManager::update() {
     for (auto&& ui : mUIStack) {
-        if (ui->getState() == UI::State::Active) {
+        if (ui->getState() == UIState::Active) {
             ui->update();
+            ui->getSpriteManager()->update();
         }
     }
-
     removeClosingUI();
 }
 
 void UIManager::draw() const {
     for (const auto& ui : mUIStack) {
-        ui->draw();
+        ui->getSpriteManager()->draw();
     }
 }
 
@@ -31,7 +33,7 @@ void UIManager::clear() {
 void UIManager::removeClosingUI() {
     auto itr = mUIStack.begin();
     while (itr != mUIStack.end()) {
-        if ((*itr)->getState() == UI::State::Closing) {
+        if ((*itr)->getState() == UIState::Closing) {
             itr = mUIStack.erase(itr);
         } else {
             ++itr;

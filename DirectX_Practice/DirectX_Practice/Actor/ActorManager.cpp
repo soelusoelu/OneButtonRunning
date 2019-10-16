@@ -106,7 +106,7 @@ void ActorManager::divideActor(std::shared_ptr<Actor> actor) {
 void ActorManager::removeDeadActor() {
     auto itr = mActors.begin();
     while (itr != mActors.end()) {
-        if ((*itr)->getState() == Actor::State::Dead) {
+        if ((*itr)->getState() == ActorState::Dead) {
             itr = mActors.erase(itr);
         } else {
             ++itr;

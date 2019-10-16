@@ -14,7 +14,7 @@ Sprite::Sprite(UI* owner, const std::string& fileName, Vector2 size, float z) :
     mWorld(Matrix4::identity),
     mWorldUpdateFlag(true),
     mState(SpriteState::Active) {
-    owner->getSpriteManager()->addSprite(this);
+    owner->getSpriteManager()->add(this);
     mTexture = Singleton<Renderer>::instance().getTexture(fileName);
     mZSortFlag = true;
 }

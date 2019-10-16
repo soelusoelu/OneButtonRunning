@@ -2,7 +2,6 @@
 #include "Actor.h"
 #include "PlayerActor.h"
 #include "../Component/TransformComponent.h"
-#include "../System/DirectXIncLib.h"
 
 ActorManager::ActorManager() :
     mUpdatingActors(false) {
@@ -29,7 +28,7 @@ void ActorManager::update() {
     }
     mPendingActors.clear();
 
-    removeDeadActor();
+    remove();
 }
 
 void ActorManager::draw() const {
@@ -41,38 +40,30 @@ void ActorManager::draw() const {
     }
 }
 
-void ActorManager::addActor(Actor* actor) {
+void ActorManager::add(Actor* add) {
     //if (mUpdatingActors) {
     //    mPendingActors.emplace(actor);
     //} else {
     //    mActors.emplace(actor);
     //}
-    mPendingActors.emplace(actor);
+    mPendingActors.emplace(add);
+}
+
+void ActorManager::remove() {
+    auto itr = mActors.begin();
+    while (itr != mActors.end()) {
+        if ((*itr)->getState() == ActorState::Dead) {
+            itr = mActors.erase(itr);
+        } else {
+            ++itr;
+        }
+    }
 }
 
 void ActorManager::clear() {
     mPendingActors.clear();
     mActors.clear();
     mFieldActors.clear();
-}
-
-void ActorManager::scrollExceptPlayer(std::shared_ptr<Actor> scrollTarget) {
-    if (scrollTarget->getTag() == "Player") {
-        return;
-    }
-    scrollTarget->getTransform()->translete(Vector3(0.f, 0.f, -Actor::mScrollSpeed));
-}
-
-void ActorManager::deleteScreenOut(std::shared_ptr<Actor> actor) {
-    if (actor->getTag() == "Player") {
-        if (actor->getTransform()->getPosition().y < -20.f) {
-            Actor::destroy(actor);
-        }
-    } else {
-        if (actor->getTransform()->getPosition().z < -20.f) {
-            Actor::destroy(actor);
-        }
-    }
 }
 
 std::unordered_set<std::shared_ptr<Actor>> ActorManager::getActors() const {
@@ -103,13 +94,21 @@ void ActorManager::divideActor(std::shared_ptr<Actor> actor) {
     }
 }
 
-void ActorManager::removeDeadActor() {
-    auto itr = mActors.begin();
-    while (itr != mActors.end()) {
-        if ((*itr)->getState() == ActorState::Dead) {
-            itr = mActors.erase(itr);
-        } else {
-            ++itr;
+void ActorManager::scrollExceptPlayer(std::shared_ptr<Actor> scrollTarget) {
+    if (scrollTarget->getTag() == "Player") {
+        return;
+    }
+    scrollTarget->getTransform()->translete(Vector3(0.f, 0.f, -Actor::mScrollSpeed));
+}
+
+void ActorManager::deleteScreenOut(std::shared_ptr<Actor> actor) {
+    if (actor->getTag() == "Player") {
+        if (actor->getTransform()->getPosition().y < -20.f) {
+            Actor::destroy(actor);
+        }
+    } else {
+        if (actor->getTransform()->getPosition().z < -20.f) {
+            Actor::destroy(actor);
         }
     }
 }

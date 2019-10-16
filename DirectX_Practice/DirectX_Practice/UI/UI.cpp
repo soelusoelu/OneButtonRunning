@@ -5,7 +5,6 @@
 UI::UI() :
     mState(UIState::Active),
     mSpriteManager(std::make_shared<SpriteManager>()) {
-    Singleton<UIManager>::instance().pushUI(this);
 }
 
 void UI::close() {

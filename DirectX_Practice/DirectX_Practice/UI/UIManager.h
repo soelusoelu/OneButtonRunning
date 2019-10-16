@@ -1,24 +1,21 @@
 ﻿#pragma once
 
-#include "../Utility/Singleton.h"
+#include "../Utility/IManager.h"
 #include <list>
 #include <memory>
 
 class UI;
 
-class UIManager {
-    friend Singleton<UIManager>;
+class UIManager : public IManager<UI> {
 public:
-    void pushUI(UI* ui);
-    void update();
-    void draw() const;
-    void clear();
-
-private:
     UIManager();
     ~UIManager();
-    //Closing状態のUIを削除
-    void removeClosingUI();
+    virtual void update() override;
+    virtual void draw() const override;
+    virtual void add(UI* add) override;
+    virtual void remove() override;
+    virtual void clear() override;
 
+private:
     std::list<std::unique_ptr<UI>> mUIStack;
 };

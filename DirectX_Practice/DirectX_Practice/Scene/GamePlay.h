@@ -1,6 +1,9 @@
 ﻿#pragma once
 
 #include "SceneBase.h"
+#include <memory>
+
+class UIManager;
 
 class GamePlay : public SceneBase {
 public:
@@ -21,5 +24,6 @@ public:
 
 private:
     GameState mState;
+    std::unique_ptr<UIManager> mUIManager;
 };
 

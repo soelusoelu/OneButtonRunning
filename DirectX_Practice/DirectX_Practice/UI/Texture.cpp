@@ -16,7 +16,7 @@ Texture::~Texture() {
 
 void Texture::init(const std::string& fileName) {
     if (!mShader) {
-        mShader = Singleton<Renderer>::instance().getShader(Shader::ShaderType::Texture);
+        mShader = Singleton<Renderer>::instance().getShader(ShaderType::Texture);
     }
 
     if (FAILED(createTexture(fileName))) {

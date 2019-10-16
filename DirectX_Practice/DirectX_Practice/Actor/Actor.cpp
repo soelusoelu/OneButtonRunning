@@ -8,7 +8,7 @@ Actor::Actor(const char* tag) :
     mState(ActorState::Active),
     mTransform(new TransformComponent(this)),
     mTag(tag) {
-    Singleton<ActorManager>::instance().addActor(this);
+    Singleton<ActorManager>::instance().add(this);
 }
 
 void Actor::update() {

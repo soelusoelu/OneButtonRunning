@@ -10,25 +10,24 @@
 #include "../UI/Pause.h"
 #include "../UI/UIManager.h"
 #include "../Utility/Input.h"
-#include "../Utility/Collision.h"
 
 GamePlay::GamePlay() :
     SceneBase(),
-    mState(GameState::Play) {
+    mState(GameState::Play),
+    mUIManager(std::make_unique<UIManager>()) {
     Actor::instantiate<PlayerActor>();
     //Actor::instantiate<FieldActor>();
-	new FieldActor("Road1.obj");
-	auto f = new FieldActor("Road2.obj");
-	f->getTransform()->setPosition(Vector3(0.0f, 0.0f, 22.0f));
+    new FieldActor("Road1.obj");
+    auto f = new FieldActor("Road2.obj");
+    f->getTransform()->setPosition(Vector3(0.0f, 0.0f, 22.0f));
     for (int i = 0; i < 5; i++) {
         Actor::instantiate<EnemyActor>(Vector3(0.f, 1.5f + i * 3.f, 5.f + i * 0.1f), Quaternion::identity);
     }
-    //Actor::instantiate<EnemyActor>(Vector3(0.f, -0.5f, 5.f), Quaternion::identity);
 }
 
 GamePlay::~GamePlay() {
     Singleton<ActorManager>::instance().clear();
-    Singleton<UIManager>::instance().clear();
+    mUIManager->clear();
     Singleton<Renderer>::instance().clear();
 }
 
@@ -40,17 +39,17 @@ void GamePlay::update() {
         Singleton<Physics>::instance().sweepAndPrune();
 
         if (Input::getKeyDown(Input::KeyCode::Escape)) {
-            new Pause(this);
+            mUIManager->add(new Pause(this));
         }
     }
 
     //UIは最後に必ず
-    Singleton<UIManager>::instance().update();
+    mUIManager->update();
 }
 
 void GamePlay::draw() const {
     Singleton<ActorManager>::instance().draw();
-    Singleton<UIManager>::instance().draw();
+    mUIManager->draw();
     Singleton<Camera>::instance().update(Singleton<ActorManager>::instance().getPlayer());
 }
 

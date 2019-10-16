@@ -6,10 +6,6 @@
 UIManager::UIManager() = default;
 UIManager::~UIManager() = default;
 
-void UIManager::pushUI(UI* ui) {
-    mUIStack.emplace_back(ui);
-}
-
 void UIManager::update() {
     for (auto&& ui : mUIStack) {
         if (ui->getState() == UIState::Active) {
@@ -17,7 +13,7 @@ void UIManager::update() {
             ui->getSpriteManager()->update();
         }
     }
-    removeClosingUI();
+    remove();
 }
 
 void UIManager::draw() const {
@@ -26,11 +22,11 @@ void UIManager::draw() const {
     }
 }
 
-void UIManager::clear() {
-    mUIStack.clear();
+void UIManager::add(UI* add) {
+    mUIStack.emplace_back(add);
 }
 
-void UIManager::removeClosingUI() {
+void UIManager::remove() {
     auto itr = mUIStack.begin();
     while (itr != mUIStack.end()) {
         if ((*itr)->getState() == UIState::Closing) {
@@ -39,4 +35,8 @@ void UIManager::removeClosingUI() {
             ++itr;
         }
     }
+}
+
+void UIManager::clear() {
+    mUIStack.clear();
 }

@@ -209,6 +209,9 @@
     <ClInclude Include="UI\SpriteManager.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="Utility\IManager.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utility">

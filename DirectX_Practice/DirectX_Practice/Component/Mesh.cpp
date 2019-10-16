@@ -34,7 +34,7 @@ HRESULT Mesh::init(const std::string& fileName) {
     mRasterizerState = Direct3D11::mRasterizerState;
     mRasterizerStateBack = Direct3D11::mRasterizerStateBack;
 
-    mShader = Singleton<Renderer>::instance().getShader(Shader::ShaderType::Mesh);
+    mShader = Singleton<Renderer>::instance().getShader(ShaderType::Mesh);
     if (FAILED(LoadStaticMesh(fileName))) {
         MessageBox(0, L"メッシュ作成失敗", NULL, MB_OK);
         return E_FAIL;

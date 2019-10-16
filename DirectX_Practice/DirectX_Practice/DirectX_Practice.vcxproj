@@ -196,6 +196,7 @@
     <ClInclude Include="UI\UI.h" />
     <ClInclude Include="UI\UIManager.h" />
     <ClInclude Include="Utility\Collision.h" />
+    <ClInclude Include="Utility\IManager.h" />
     <ClInclude Include="Utility\Input.h" />
     <ClInclude Include="Utility\Math.h" />
     <ClInclude Include="Utility\Singleton.h" />

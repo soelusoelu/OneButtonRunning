@@ -1,21 +1,22 @@
 ﻿#pragma once
 
+#include "../Utility/IManager.h"
 #include <memory>
 #include <vector>
 
 class Sprite;
 
-class SpriteManager {
+class SpriteManager : public IManager<Sprite> {
 public:
     SpriteManager();
     ~SpriteManager();
-    void addSprite(Sprite* sprite);
-    void update();
-    void draw() const;
-    void clear();
+    virtual void update() override;
+    virtual void draw() const override;
+    virtual void add(Sprite* add) override;
+    virtual void remove() override;
+    virtual void clear() override;
 
 private:
-    void removeSprite();
     void sortByZ(bool flag);
 
     std::vector<std::shared_ptr<Sprite>> mSprites;

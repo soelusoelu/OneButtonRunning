@@ -3,16 +3,16 @@
 #include "SceneBase.h"
 #include <memory>
 
+enum class GameState {
+    Play,
+    Paused,
+    Quit
+};
+
 class UIManager;
 
 class GamePlay : public SceneBase {
 public:
-    enum GameState {
-        Play,
-        Paused,
-        Quit
-    };
-
     GamePlay();
     ~GamePlay();
 

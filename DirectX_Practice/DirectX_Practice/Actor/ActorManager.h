@@ -27,6 +27,8 @@ public:
 private:
     ActorManager();
     ~ActorManager();
+    ActorManager(const ActorManager&) = delete;
+    ActorManager operator=(const ActorManager&) = delete;
     //アクターをフィールドと分別
     void divideActor(std::shared_ptr<Actor> actor);
     //プレイヤー以外スクロール

@@ -15,7 +15,7 @@ Game::~Game() {
     SAFE_DELETE(mMain);
     SAFE_DELETE(mD3D11);
     SAFE_DELETE(mWindow);
-
+    Input::end();
     SingletonFinalizer::finalize();
 }
 

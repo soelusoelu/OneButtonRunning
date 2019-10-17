@@ -17,6 +17,8 @@ public:
     virtual void clear() override;
 
 private:
+    SpriteManager(const SpriteManager&) = delete;
+    SpriteManager operator=(const SpriteManager&) = delete;
     void sortByZ(bool flag);
 
     std::vector<std::shared_ptr<Sprite>> mSprites;

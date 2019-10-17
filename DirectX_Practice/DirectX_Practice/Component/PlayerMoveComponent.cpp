@@ -62,14 +62,14 @@ void PlayerMoveComponent::fall() {
 void PlayerMoveComponent::jump()
 {
 	//接地中にボタン押したらじょんぷの大きさの判定始まり
-	if (mState == State::OnGround && Input::getKeyDown(Input::KeyCode::Space)) {
+	if (mState == State::OnGround && Input::getKeyDown(KeyCode::Space)) {
 		mIsLongJumpHold = true;
     } else {
         Actor::mScrollSpeed = 0.05f;
     }
 
 	//離したらじょんぷの大きさの判定終わり
-	if (mIsLongJumpHold && Input::getKeyUp(Input::KeyCode::Space)) {
+	if (mIsLongJumpHold && Input::getKeyUp(KeyCode::Space)) {
 
 		//if (mButtonDownTime >= 10) {
 		//	mButtonDownTime = 10;
@@ -113,7 +113,7 @@ void PlayerMoveComponent::jump()
 void PlayerMoveComponent::rotate()
 {
 	if (mState == State::JumpUp || mState == State::JumpDown) {
-		if (Input::getKey(Input::KeyCode::Space)) {
+		if (Input::getKey(KeyCode::Space)) {
 			mRotateAngle = -3.f;
 		}
 		else {

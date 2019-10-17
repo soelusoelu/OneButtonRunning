@@ -38,7 +38,7 @@ void GamePlay::update() {
         //総当たり判定
         Singleton<Physics>::instance().sweepAndPrune();
 
-        if (Input::getKeyDown(Input::KeyCode::Escape)) {
+        if (Input::getKeyDown(KeyCode::Escape)) {
             mUIManager->add(new Pause(this));
         }
     }
@@ -53,7 +53,7 @@ void GamePlay::draw() const {
     Singleton<Camera>::instance().update(Singleton<ActorManager>::instance().getPlayer());
 }
 
-GamePlay::GameState GamePlay::getState() const {
+GameState GamePlay::getState() const {
     return mState;
 }
 

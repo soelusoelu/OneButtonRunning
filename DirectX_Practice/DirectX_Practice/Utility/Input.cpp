@@ -22,6 +22,11 @@ HRESULT Input::init(HWND hwnd) {
     return S_OK;
 }
 
+void Input::end() {
+    mDinput->Release();
+    mKeyDevice->Release();
+}
+
 void Input::update() {
     for (int i = 0; i < 256; i++) {
         mPreviousKeys[i] = mCurrentKeys[i];
@@ -34,15 +39,15 @@ void Input::update() {
 }
 
 bool Input::getKeyDown(KeyCode key) {
-    return (mCurrentKeys[key] & 0x80 && !(mPreviousKeys[key] & 0x80));
+    return (mCurrentKeys[static_cast<BYTE>(key)] & 0x80 && !(mPreviousKeys[static_cast<BYTE>(key)] & 0x80));
 }
 
 bool Input::getKey(KeyCode key) {
-    return mCurrentKeys[key] & 0x80;
+    return mCurrentKeys[static_cast<BYTE>(key)] & 0x80;
 }
 
 bool Input::getKeyUp(KeyCode key) {
-    return (!(mCurrentKeys[key] & 0x80) && mPreviousKeys[key] & 0x80);
+    return (!(mCurrentKeys[static_cast<BYTE>(key)] & 0x80) && mPreviousKeys[static_cast<BYTE>(key)] & 0x80);
 }
 
 int Input::horizontal() {

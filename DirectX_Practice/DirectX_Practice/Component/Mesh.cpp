@@ -19,9 +19,9 @@ Mesh::~Mesh() {
     SAFE_DELETE_ARRAY(mMyVertexBuffer);
 
     //メモリリークの原因
-    //for (int i = 0; i < mNumMaterial; i++) {
-    //    SAFE_DELETE_ARRAY(mVertexIndex[i]);
-    //}
+    for (int i = 0; i < mNumMaterial; i++) {
+        SAFE_DELETE_ARRAY(mVertexIndex[i]);
+    }
     SAFE_DELETE_ARRAY(mVertexIndex);
 
     SAFE_DELETE_ARRAY(mNumFaceInMaterial);

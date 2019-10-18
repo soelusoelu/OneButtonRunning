@@ -35,11 +35,14 @@ void SphereCollisionComponent::update() {
 void SphereCollisionComponent::onUpdateWorldTransform() {
     mSphere.mCenter = mOwner->getTransform()->getPosition();
     mSphere.mRadius = mDefaultRadius * mOwner->getTransform()->getScale().y;
+
+    mSphere.mRadius *= 0.7f;
+    mSphere.mCenter.y += mSphere.mRadius;
 }
 
 void SphereCollisionComponent::drawMesh(float alpha) const {
     Matrix4 w = Matrix4::createScale(mSphere.mRadius * 2);
-    w *= Matrix4::createTranslation(mOwner->getTransform()->getPosition());
+    w *= Matrix4::createTranslation(mSphere.mCenter);
     if (mSphereMesh) {
         mSphereMesh->draw(w, alpha);
     }

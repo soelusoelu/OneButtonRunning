@@ -13,30 +13,34 @@ struct TextureVertex {
 };
 
 struct TextureShaderConstantBuffer {
-    D3DXMATRIX mWorld;
-    D3DXMATRIX mProj;
+    Matrix4 mWorld;
+    Matrix4 mProj;
     Color mColor;
     Rect mRect;
 };
 
 class Shader;
+class Sprite;
 
 class Texture {
 public:
     Texture();
     ~Texture();
     void init(const std::string& fileName);
-    void draw(Matrix4 world, Color color, Rect uv) const;
+    static void drawAll(std::vector<std::shared_ptr<Sprite>> sprites);
+    ID3D11ShaderResourceView* getTexture() const {
+        return mTexture;
+    }
+    ID3D11SamplerState* getSampleLinear() const {
+        return mSampleLinear;
+    }
 
 private:
     HRESULT createTexture(const std::string& fileName);
 
-    ID3D11Device* mDevice;
-    ID3D11DeviceContext* mDeviceContext;
-
-    std::shared_ptr<Shader> mShader;
     ID3D11ShaderResourceView* mTexture; //テクスチャ
     ID3D11SamplerState* mSampleLinear;//テクスチャーのサンプラー
+    static std::shared_ptr<Shader> mShader;
     static ID3D11Buffer* mVertexBuffer;
 };
 

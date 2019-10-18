@@ -3,15 +3,16 @@
 #include "../Utility/Math.h"
 #include <memory>
 
+enum class ActorState {
+    Active,
+    Dead
+};
+
 class ComponentManagementOfActor;
 class TransformComponent;
 
 class Actor {
 public:
-    enum State {
-        Active,
-        Dead
-    };
     Actor(const char* tag = "");
     virtual ~Actor() {};
 
@@ -44,15 +45,15 @@ public:
     std::shared_ptr<ComponentManagementOfActor> getComponentManager() const;
     const Matrix4& getWorldTransform() const;
     TransformComponent* getTransform() const;
-    State getState() const;
+    ActorState getState() const;
     const char* getTag() const;
 
 public:
-    static const float SCROLL_SPEED;
+    static float mScrollSpeed;
 
 private:
     std::shared_ptr<ComponentManagementOfActor> mComponentManager;
-    State mState;
+    ActorState mState;
     Matrix4 mWorldTransform;
     TransformComponent* mTransform;
     const char* mTag;

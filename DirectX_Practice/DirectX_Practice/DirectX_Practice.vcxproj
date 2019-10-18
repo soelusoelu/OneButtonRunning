@@ -154,6 +154,7 @@
     <ClCompile Include="System\Window.cpp" />
     <ClCompile Include="UI\Pause.cpp" />
     <ClCompile Include="UI\Sprite.cpp" />
+    <ClCompile Include="UI\SpriteManager.cpp" />
     <ClCompile Include="UI\Texture.cpp" />
     <ClCompile Include="UI\UI.cpp" />
     <ClCompile Include="UI\UIManager.cpp" />
@@ -190,10 +191,12 @@
     <ClInclude Include="System\Window.h" />
     <ClInclude Include="UI\Pause.h" />
     <ClInclude Include="UI\Sprite.h" />
+    <ClInclude Include="UI\SpriteManager.h" />
     <ClInclude Include="UI\Texture.h" />
     <ClInclude Include="UI\UI.h" />
     <ClInclude Include="UI\UIManager.h" />
     <ClInclude Include="Utility\Collision.h" />
+    <ClInclude Include="Utility\IManager.h" />
     <ClInclude Include="Utility\Input.h" />
     <ClInclude Include="Utility\Math.h" />
     <ClInclude Include="Utility\Singleton.h" />

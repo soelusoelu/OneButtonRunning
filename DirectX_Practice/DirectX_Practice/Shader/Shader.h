@@ -3,13 +3,13 @@
 #include "../System/DirectXIncLib.h"
 #include <string>
 
+enum class ShaderType {
+    Mesh,
+    Texture
+};
+
 class Shader {
 public:
-    enum ShaderType {
-        Mesh,
-        Texture
-    };
-
     Shader();
     ~Shader();
     void init(ShaderType type);

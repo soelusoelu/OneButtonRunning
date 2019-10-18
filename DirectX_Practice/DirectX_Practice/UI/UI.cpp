@@ -1,15 +1,20 @@
 ﻿#include "UI.h"
+#include "SpriteManager.h"
 #include "UIManager.h"
 
 UI::UI() :
-    mState(State::Active) {
-    Singleton<UIManager>::instance().pushUI(this);
+    mState(UIState::Active),
+    mSpriteManager(std::make_shared<SpriteManager>()) {
 }
 
 void UI::close() {
-    mState = State::Closing;
+    mState = UIState::Closing;
 }
 
-UI::State UI::getState() const {
+UIState UI::getState() const {
     return mState;
+}
+
+std::shared_ptr<SpriteManager> UI::getSpriteManager() const {
+    return mSpriteManager;
 }

@@ -1,15 +1,18 @@
 ﻿#pragma once
 
 #include "SceneBase.h"
+#include <memory>
+
+enum class GameState {
+    Play,
+    Paused,
+    Quit
+};
+
+class UIManager;
 
 class GamePlay : public SceneBase {
 public:
-    enum GameState {
-        Play,
-        Paused,
-        Quit
-    };
-
     GamePlay();
     ~GamePlay();
 
@@ -21,5 +24,6 @@ public:
 
 private:
     GameState mState;
+    std::unique_ptr<UIManager> mUIManager;
 };
 

@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "../Utility/IManager.h"
 #include "../Utility/Singleton.h"
 #include <unordered_set>
 #include <memory>
@@ -7,20 +8,14 @@
 class Actor;
 class PlayerActor;
 
-class ActorManager {
+class ActorManager : public IManager<Actor> {
     friend class Singleton<ActorManager>;
 public:
-    void update();
-    void draw() const;
-
-    //アクター追加
-    void addActor(Actor* actor);
-    //所有アクターをすべて削除
-    void clear();
-    //プレイヤー以外スクロール
-    void scrollExceptPlayer(std::shared_ptr<Actor> scrollTarget);
-    //画面から消えたら削除
-    void deleteScreenOut(std::shared_ptr<Actor> actor);
+    virtual void update() override;
+    virtual void draw() const override;
+    virtual void add(Actor* add) override;
+    virtual void remove() override;
+    virtual void clear() override;
 
     //全アクターの取得
     std::unordered_set<std::shared_ptr<Actor>> getActors() const;
@@ -32,10 +27,14 @@ public:
 private:
     ActorManager();
     ~ActorManager();
+    ActorManager(const ActorManager&) = delete;
+    ActorManager operator=(const ActorManager&) = delete;
     //アクターをフィールドと分別
     void divideActor(std::shared_ptr<Actor> actor);
-    //Dead状態のアクターを削除
-    void removeDeadActor();
+    //プレイヤー以外スクロール
+    void scrollExceptPlayer(std::shared_ptr<Actor> scrollTarget);
+    //画面から消えたら削除
+    void deleteScreenOut(std::shared_ptr<Actor> actor);
 
     std::unordered_set<std::shared_ptr<Actor>> mActors;
     std::unordered_set<std::shared_ptr<Actor>> mPendingActors;

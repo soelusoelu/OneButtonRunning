@@ -18,7 +18,7 @@ std::shared_ptr<Mesh> Renderer::getMesh(const std::string& fileName) {
     return mesh;
 }
 
-std::shared_ptr<Shader> Renderer::getShader(Shader::ShaderType type) {
+std::shared_ptr<Shader> Renderer::getShader(ShaderType type) {
     std::shared_ptr<Shader> shader;
     auto itr = mShaders.find(type);
     if (itr != mShaders.end()) { //既に読み込まれている

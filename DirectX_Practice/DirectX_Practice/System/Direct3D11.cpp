@@ -50,6 +50,7 @@ HRESULT Direct3D11::init(D3DInit* pcd) {
 
     //深度ステンシルビューの作成
     D3D11_TEXTURE2D_DESC descDepth;
+    ZeroMemory(&descDepth, sizeof(descDepth));
     descDepth.Width = Game::WINDOW_WIDTH;
     descDepth.Height = Game::WINDOW_HEIGHT;
     descDepth.MipLevels = 1;
@@ -58,7 +59,7 @@ HRESULT Direct3D11::init(D3DInit* pcd) {
     descDepth.SampleDesc.Count = 1;
     descDepth.SampleDesc.Quality = 0;
     descDepth.Usage = D3D11_USAGE_DEFAULT;
-    descDepth.BindFlags = D3D10_BIND_DEPTH_STENCIL;
+    descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
     descDepth.CPUAccessFlags = 0;
     descDepth.MiscFlags = 0;
     mDevice->CreateTexture2D(&descDepth, NULL, &mDepthStencil);
@@ -109,7 +110,7 @@ void Direct3D11::clear() {
     //画面クリア（実際は単色で画面を塗りつぶす処理）
     float ClearColor[4] = { 0,0,1,1 };// クリア色作成　RGBAの順
     mDeviceContext->ClearRenderTargetView(mRenderTargetView, ClearColor);//画面クリア
-    mDeviceContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);//深度バッファクリア
+    mDeviceContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);//深度バッファクリア
 }
 
 HRESULT Direct3D11::present() {

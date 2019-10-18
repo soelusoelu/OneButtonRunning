@@ -5,17 +5,9 @@
 #include "../Shader/Shader.h"
 #include "../System/Direct3D11.h"
 #include "../System/Game.h"
-//メモリリーク検出用
-#define _CRTDBG_MAP_ALLOC
-#ifdef _DEBUG
-#include <stdlib.h>
-#include <crtdbg.h>
-#define new ::new(_NORMAL_BLOCK, __FILE__, __LINE__)
-#endif // _DEBUG
 
 Mesh::Mesh() {
     ZeroMemory(this, sizeof(Mesh));
-    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 }
 
 Mesh::~Mesh() {
@@ -42,7 +34,7 @@ HRESULT Mesh::init(const std::string& fileName) {
     mRasterizerState = Direct3D11::mRasterizerState;
     mRasterizerStateBack = Direct3D11::mRasterizerStateBack;
 
-    mShader = Singleton<Renderer>::instance().getShader(Shader::ShaderType::Mesh);
+    mShader = Singleton<Renderer>::instance().getShader(ShaderType::Mesh);
     if (FAILED(LoadStaticMesh(fileName))) {
         MessageBox(0, L"メッシュ作成失敗", NULL, MB_OK);
         return E_FAIL;
@@ -334,6 +326,7 @@ void Mesh::RendererMesh(Matrix4 world, float alpha) const {
     //シェーダーのコンスタントバッファーに各種データを渡す
     D3D11_MAPPED_SUBRESOURCE pData;
     if (SUCCEEDED(mDeviceContext->Map(mShader->mConstantBuffer0, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
+        //テクスチャでないの、ほぼ確定でこのif文の中
         SIMPLESHADER_CONSTANT_BUFFER0 sg;
         //ワールド行列を渡す
         sg.mW = world;

@@ -16,15 +16,15 @@ Shader::~Shader() {
     SAFE_RELEASE(mBlendState);
 }
 
-void Shader::init(Shader::ShaderType type) {
+void Shader::init(ShaderType type) {
     mDevice = Direct3D11::mDevice;
     mDeviceContext = Direct3D11::mDeviceContext;
 
-    if (type == Shader::ShaderType::Mesh) {
+    if (type == ShaderType::Mesh) {
         if (FAILED(initMeshShader())) {
             MessageBox(0, L"メッシュ用シェーダー作成失敗", NULL, MB_OK);
         }
-    } else if (type == Shader::ShaderType::Texture) {
+    } else if (type == ShaderType::Texture) {
         if (FAILED(initTextureShader())) {
             MessageBox(0, L"テクスチャ用シェーダー作成失敗", NULL, MB_OK);
         }
@@ -171,27 +171,6 @@ HRESULT Shader::initTextureShader() {
     if (FAILED(mDevice->CreateBuffer(&cb, NULL, &mConstantBuffer0))) {
         return E_FAIL;
     }
-
-    //アルファブレンド用ブレンドステート作成
-    D3D11_BLEND_DESC bd;
-    ZeroMemory(&bd, sizeof(D3D11_BLEND_DESC));
-    bd.IndependentBlendEnable = false;
-    bd.AlphaToCoverageEnable = false;
-    bd.RenderTarget[0].BlendEnable = true;
-    bd.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
-    bd.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-    bd.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-    bd.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-    bd.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-    bd.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-    bd.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-
-    if (FAILED(mDevice->CreateBlendState(&bd, &mBlendState))) {
-        return E_FAIL;
-    }
-
-    UINT mask = 0xffffffff;
-    mDeviceContext->OMSetBlendState(mBlendState, NULL, mask);
 
     return S_OK;
 }

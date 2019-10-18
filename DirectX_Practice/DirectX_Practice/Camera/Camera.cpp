@@ -25,9 +25,9 @@ void Camera::update(std::shared_ptr<PlayerActor> player) {
         //);
         //posYにかけた値でジャンプ時のカメラを補正する
         mCameraPosition = Vector3(
-            player->getTransform()->getPosition().x + 7.f + posY * 2.f,
-            player->getTransform()->getPosition().y + 2.f - posY * 0.5f,
-            player->getTransform()->getPosition().z - 7.f - posY * 2.f
+            player->getTransform()->getPosition().x + 5.f + posY * 2.f,
+            player->getTransform()->getPosition().y + 4.f - posY * 0.5f,
+            player->getTransform()->getPosition().z - 5.f - posY * 2.5f
         );
         mPlayerPosition = player->getTransform()->getPosition();
         //mLookAt = Vector3(mPlayerPosition.x, mPlayerPosition.y + 1.5f, mPlayerPosition.z + 1.5f); //注視点

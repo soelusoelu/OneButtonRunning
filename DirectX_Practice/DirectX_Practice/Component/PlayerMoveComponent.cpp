@@ -23,11 +23,6 @@ void PlayerMoveComponent::update() {
 	fall();
 	jump();
 	rotate();
-
-	float rot = Input::horizontal();
-	mOwner->getTransform()->rotate(Vector3::up, -rot);
-	float tra = Input::vertical();
-	mOwner->getTransform()->translete(mOwner->getTransform()->forward() * tra * 0.02f);
 }
 
 void PlayerMoveComponent::fall() {
@@ -67,12 +62,14 @@ void PlayerMoveComponent::fall() {
 void PlayerMoveComponent::jump()
 {
 	//接地中にボタン押したらじょんぷの大きさの判定始まり
-	if (mState == State::OnGround && Input::getKeyDown(Input::KeyCode::Space)) {
+	if (mState == State::OnGround && Input::getKeyDown(KeyCode::Space)) {
 		mIsLongJumpHold = true;
-	}
+    } else {
+        Actor::mScrollSpeed = 0.05f;
+    }
 
 	//離したらじょんぷの大きさの判定終わり
-	if (mIsLongJumpHold && Input::getKeyUp(Input::KeyCode::Space)) {
+	if (mIsLongJumpHold && Input::getKeyUp(KeyCode::Space)) {
 
 		//if (mButtonDownTime >= 10) {
 		//	mButtonDownTime = 10;
@@ -89,6 +86,18 @@ void PlayerMoveComponent::jump()
 	if (mIsLongJumpHold) {
 		mButtonDownTime++;
 
+        Actor::mScrollSpeed += 0.01f;
+        Actor::mScrollSpeed = Math::Max(Actor::mScrollSpeed, 0.3f);
+
+		//mState = State::JumpUp;
+		////10フレ押したら最大じょんぷなので判定終わり
+		//if (mButtonDownTime >= 10) {
+		//	mButtonDownTime = 0;
+		//	mIsLongJumpHold = false;
+		//}
+		//else {
+		//	mVelocityY = (JUMP_POWER * 0.5f) + (JUMP_POWER * mButtonDownTime * 0.05f);//10フレ押したら元のじょんぷぱぅわーと同じ値になる式（汚い）
+		//}
 		mState = State::JumpUp;
 		//10フレ押したら最大じょんぷなので判定終わり
 		if (mButtonDownTime >= 10) {
@@ -104,7 +113,7 @@ void PlayerMoveComponent::jump()
 void PlayerMoveComponent::rotate()
 {
 	if (mState == State::JumpUp || mState == State::JumpDown) {
-		if (Input::getKey(Input::KeyCode::Space)) {
+		if (Input::getKey(KeyCode::Space)) {
 			mRotateAngle = -3.f;
 		}
 		else {

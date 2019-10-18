@@ -10,16 +10,17 @@
 #include "../UI/Pause.h"
 #include "../UI/UIManager.h"
 #include "../Utility/Input.h"
+#include <string>
 
 GamePlay::GamePlay() :
     SceneBase(),
     mState(GameState::Play),
     mUIManager(std::make_unique<UIManager>()) {
     Actor::instantiate<PlayerActor>();
-    //Actor::instantiate<FieldActor>();
-    new FieldActor("Road1.obj");
-    auto f = new FieldActor("Road2.obj");
-    f->getTransform()->setPosition(Vector3(0.0f, 0.0f, 22.0f));
+    for (int i = 0; i < 2; i++) {
+        auto f =  new FieldActor("Road" + std::to_string(i + 1) + ".obj");
+        f->getTransform()->setPosition(Vector3(0.f, 0.f, 12.f * i));
+    }
     for (int i = 0; i < 5; i++) {
         Actor::instantiate<EnemyActor>(Vector3(0.f, 1.5f + i * 3.f, 5.f + i * 0.1f), Quaternion::identity);
     }

@@ -36,8 +36,8 @@ void SphereCollisionComponent::onUpdateWorldTransform() {
     mSphere.mCenter = mOwner->getTransform()->getPosition();
     mSphere.mRadius = mDefaultRadius * mOwner->getTransform()->getScale().y;
 
-    mSphere.mRadius *= 0.7f;
-    mSphere.mCenter.y += mSphere.mRadius;
+    //mSphere.mRadius *= 0.7f;
+    //mSphere.mCenter.y += mSphere.mRadius;
 }
 
 void SphereCollisionComponent::drawMesh(float alpha) const {

@@ -14,3 +14,7 @@ void FieldActor::updateActor() {
 void FieldActor::drawActor() const {
     mMesh->draw(getWorldTransform());
 }
+
+const std::vector<float> FieldActor::mPositionsY = {
+    9.9f
+};

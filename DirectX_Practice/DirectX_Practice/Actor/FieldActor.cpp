@@ -5,7 +5,6 @@
 FieldActor::FieldActor(const std::string& FileName, const char* tag) :
     Actor(tag),
     mMesh(new MeshComponent(this, FileName)) {
-	getTransform()->setPosition(Vector3(0.0f, 0.0f, 10.0f));
 }
 
 void FieldActor::updateActor() {

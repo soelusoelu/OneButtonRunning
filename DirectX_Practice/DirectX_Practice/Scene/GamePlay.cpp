@@ -44,6 +44,14 @@ GamePlay::GamePlay() :
     //    ));
     //}
 
+    //Actor::instantiate<FieldActor>();
+    //auto f1 = new FieldActor("Road1.obj");
+    //auto f2 = new FieldActor("Road4.obj");
+	//auto f3 = new FieldActor("Road3.obj");
+	//f1->getTransform()->setPosition(Vector3(-2.0f, -10.0f, 10.0f));
+    //f2->getTransform()->setPosition(Vector3(-2.0f, -11.2f, 22.0f));
+	//f3->getTransform()->setPosition(Vector3(-2.0f, -12.2f, 34.0f));
+
     for (int i = 0; i < 5; i++) {
         Actor::instantiate<EnemyActor>(Vector3(0.f, 1.5f + i * 3.f, 5.f + i * 0.1f), Quaternion::identity);
     }

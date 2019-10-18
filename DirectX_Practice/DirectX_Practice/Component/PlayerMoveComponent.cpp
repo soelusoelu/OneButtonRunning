@@ -12,7 +12,7 @@ PlayerMoveComponent::PlayerMoveComponent(Actor* owner, int updateOrder) :
 	mState(State::JumpDown),
 	FALL_SPEED(0.01f),
 	MAX_FALL_SPEED(0.5f),
-	JUMP_POWER(0.8f),
+	JUMP_POWER(0.5f),
 	mVelocityY(0.0f),
 	mButtonDownTime(0),
 	mIsLongJumpHold(false),

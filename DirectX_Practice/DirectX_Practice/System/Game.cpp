@@ -1,6 +1,7 @@
 ﻿#include "Game.h"
 #include "../Main.h"
 #include "../Component/Mesh.h"
+#include "../Device/Random.h"
 #include "../Scene/GamePlay.h"
 #include "../Utility/Input.h"
 #include "../Utility/Singleton.h"
@@ -62,6 +63,8 @@ HRESULT Game::init() {
     MFAIL(mD3D11->init(&di), L"Direct3D初期化失敗");
 
     MFAIL(Input::init(mHwnd), L"DirectInput初期化失敗");
+
+    Random::init();
 
     mMain = new Main();
 

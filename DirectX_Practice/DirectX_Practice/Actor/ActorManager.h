@@ -39,6 +39,9 @@ private:
     void scrollExceptPlayer(std::shared_ptr<Actor> scrollTarget);
     //画面から消えたら削除
     void deleteScreenOut(std::shared_ptr<Actor> actor);
+    //フィールドの数と位置をコントロール
+    void controlField();
+
 
     std::unordered_set<std::shared_ptr<Actor>> mActors;
     std::unordered_set<std::shared_ptr<Actor>> mPendingActors;

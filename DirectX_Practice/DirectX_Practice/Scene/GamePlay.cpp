@@ -7,7 +7,6 @@
 #include "../Camera/Camera.h"
 #include "../Component/TransformComponent.h"
 #include "../Device/Physics.h"
-#include "../Device/Random.h"
 #include "../Device/Renderer.h"
 #include "../UI/Pause.h"
 #include "../UI/UIManager.h"
@@ -18,43 +17,10 @@ GamePlay::GamePlay() :
     SceneBase(),
     mState(GameState::Play),
     mUIManager(std::make_unique<UIManager>()) {
-    Actor::instantiate<PlayerActor>();
+    Actor::instantiate<PlayerActor>(Vector3(0.f, 10.f, 0.f), Quaternion::identity);
 
-    int firstStage = Random::randomRange(1, 3);
-    auto f = new FieldActor(
-        "Road" + std::to_string(firstStage) + ".obj",
-        firstStage,
-        FieldHeightValues::FIRST_END[firstStage * 2],
-        FieldHeightValues::FIRST_END[firstStage * 2 + 1]
-    );
-    f->getTransform()->setPosition(Vector3(-2.f, -10.f, 12.f));
-
-    //for (int i = 0; i < 3; i++) {
-    //    int no = i + 1;
-    //    auto f =  new FieldActor(
-    //        "Road" + std::to_string(no) + ".obj",
-    //        no,
-    //        FieldHeightValues::FIRST_END[no * 2],
-    //        FieldHeightValues::FIRST_END[no * 2 + 1]
-    //    );
-    //    f->getTransform()->setPosition(Vector3(
-    //        -2.f,
-    //        Singleton<ActorManager>::instance().getLastField()->getEndY() - f->getFirstY(),
-    //        12.f * no + 12.f
-    //    ));
-    //}
-
-    //Actor::instantiate<FieldActor>();
-    //auto f1 = new FieldActor("Road1.obj");
-    //auto f2 = new FieldActor("Road4.obj");
-	//auto f3 = new FieldActor("Road3.obj");
-	//f1->getTransform()->setPosition(Vector3(-2.0f, -10.0f, 10.0f));
-    //f2->getTransform()->setPosition(Vector3(-2.0f, -11.2f, 22.0f));
-	//f3->getTransform()->setPosition(Vector3(-2.0f, -12.2f, 34.0f));
-
-    for (int i = 0; i < 5; i++) {
-        Actor::instantiate<EnemyActor>(Vector3(0.f, 1.5f + i * 3.f, 5.f + i * 0.1f), Quaternion::identity);
-    }
+    auto f = new FieldActor("Road1.obj", 1);
+    f->getTransform()->setPosition(Vector3(-2.f, 0.f, 12.f));
 }
 
 GamePlay::~GamePlay() {

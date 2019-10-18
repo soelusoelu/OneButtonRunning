@@ -104,6 +104,9 @@
     <ClCompile Include="UI\SpriteManager.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="Actor\FieldHeightValues.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utility\Input.h">

@@ -1,9 +1,12 @@
 ﻿#include "ActorManager.h"
 #include "Actor.h"
 #include "FieldActor.h"
+#include "FieldHeightValues.h"
 #include "PlayerActor.h"
 #include "../Component/TransformComponent.h"
+#include "../Device/Random.h"
 #include <cassert>
+#include <string>
 
 ActorManager::ActorManager() :
     mLastField(nullptr),
@@ -26,6 +29,7 @@ void ActorManager::update() {
         scrollExceptPlayer(field);
         deleteScreenOut(field);
     }
+    controlField();
 
     for (auto&& pending : mPendingActors) {
         divideActor(pending);
@@ -58,6 +62,14 @@ void ActorManager::remove() {
     while (itr != mActors.end()) {
         if ((*itr)->getState() == ActorState::Dead) {
             itr = mActors.erase(itr);
+        } else {
+            ++itr;
+        }
+    }
+    itr = mFieldActors.begin();
+    while (itr != mFieldActors.end()) {
+        if ((*itr)->getState() == ActorState::Dead) {
+            itr = mFieldActors.erase(itr);
         } else {
             ++itr;
         }
@@ -121,4 +133,19 @@ void ActorManager::deleteScreenOut(std::shared_ptr<Actor> actor) {
             Actor::destroy(actor);
         }
     }
+}
+
+void ActorManager::controlField() {
+    if (mFieldActors.size() > 10 || !mLastField) {
+        return;
+    }
+
+    int no = Random::randomRange(1, 4);
+    auto f = new FieldActor("Road" + std::to_string(no) + ".obj", no);
+
+    f->getTransform()->setPosition(Vector3(
+        -2.f,
+        (mLastField->getTransform()->getPosition().y + mLastField->getEndY()) - f->getFirstY(),
+        mLastField->getTransform()->getPosition().z + 12.f
+    ));
 }

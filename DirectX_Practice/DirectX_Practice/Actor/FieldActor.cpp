@@ -1,13 +1,14 @@
 #include "FieldActor.h"
+#include "FieldHeightValues.h"
 #include "../Component/MeshComponent.h"
 #include "../Component/TransformComponent.h"
 
-FieldActor::FieldActor(const std::string& FileName, int no, float first, float end, const char* tag) :
+FieldActor::FieldActor(const std::string& FileName, int no, const char* tag) :
     Actor(tag),
     mMesh(new MeshComponent(this, FileName)),
-    mFieldNo(no),
-    FIRST(first),
-    END(end) {
+    mNo(no),
+    FIRST(FieldHeightValues::FIRST_END[no * 2]),
+    END(FieldHeightValues::FIRST_END[no * 2 + 1]) {
 }
 
 void FieldActor::updateActor() {
@@ -26,5 +27,5 @@ const float FieldActor::getEndY() const {
 }
 
 int FieldActor::getNo() const {
-    return mFieldNo;
+    return mNo;
 }

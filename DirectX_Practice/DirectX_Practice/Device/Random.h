@@ -4,8 +4,7 @@
 
 class Random {
 public:
-    Random();
-    ~Random();
+    static void init();
     static unsigned random();
     static int randomRange(int min, int max);
     static float randomRange(float min, float max);

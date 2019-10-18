@@ -46,6 +46,9 @@ bool Physics::rayCastField(Ray* ray, CollisionInfo* outColl) {
                 }
             }
         }
+        if (collided) {
+            break;
+        }
     }
 
     outColl->mNormal = normal;

@@ -132,6 +132,7 @@
     <ClCompile Include="Actor\ComponentManagementOfActor.cpp" />
     <ClCompile Include="Actor\EnemyActor.cpp" />
     <ClCompile Include="Actor\FieldActor.cpp" />
+    <ClCompile Include="Actor\FieldHeightValues.cpp" />
     <ClCompile Include="Actor\PlayerActor.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="Component\Component.cpp" />

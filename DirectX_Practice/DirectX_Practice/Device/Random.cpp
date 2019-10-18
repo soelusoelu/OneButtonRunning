@@ -1,11 +1,9 @@
 #include "Random.h"
 
-Random::Random() {
+void Random::init() {
     std::random_device rd;
     mt.seed(rd());
 }
-
-Random::~Random() = default;
 
 unsigned Random::random() {
     return mt();

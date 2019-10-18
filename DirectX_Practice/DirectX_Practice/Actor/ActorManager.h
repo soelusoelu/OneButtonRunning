@@ -2,10 +2,12 @@
 
 #include "../Utility/IManager.h"
 #include "../Utility/Singleton.h"
-#include <unordered_set>
+#include <list>
 #include <memory>
+#include <unordered_set>
 
 class Actor;
+class FieldActor;
 class PlayerActor;
 
 class ActorManager : public IManager<Actor> {
@@ -20,9 +22,11 @@ public:
     //全アクターの取得
     std::unordered_set<std::shared_ptr<Actor>> getActors() const;
     //全地形の取得
-    std::unordered_set<std::shared_ptr<Actor>> getFields() const;
+    std::list<std::shared_ptr<Actor>> getFields() const;
     //アクター配列の中からプレイヤーを取得
     std::shared_ptr<PlayerActor> getPlayer() const;
+    //最後のフィールドを取得
+    std::shared_ptr<FieldActor> getLastField() const;
 
 private:
     ActorManager();
@@ -38,7 +42,8 @@ private:
 
     std::unordered_set<std::shared_ptr<Actor>> mActors;
     std::unordered_set<std::shared_ptr<Actor>> mPendingActors;
-    std::unordered_set<std::shared_ptr<Actor>> mFieldActors;
+    std::list<std::shared_ptr<Actor>> mFieldActors;
+    std::shared_ptr<FieldActor> mLastField;
     bool mUpdatingActors;
 };
 

@@ -1,9 +1,12 @@
 ﻿#include "ActorManager.h"
 #include "Actor.h"
+#include "FieldActor.h"
 #include "PlayerActor.h"
 #include "../Component/TransformComponent.h"
+#include <cassert>
 
 ActorManager::ActorManager() :
+    mLastField(nullptr),
     mUpdatingActors(false) {
 }
 
@@ -14,13 +17,14 @@ void ActorManager::update() {
     for (auto&& actor : mActors) {
         actor->update();
         scrollExceptPlayer(actor);
-		deleteScreenOut(actor);
+        deleteScreenOut(actor);
     }
     mUpdatingActors = false;
 
     for (auto&& field : mFieldActors) {
         field->update();
         scrollExceptPlayer(field);
+        deleteScreenOut(field);
     }
 
     for (auto&& pending : mPendingActors) {
@@ -70,7 +74,7 @@ std::unordered_set<std::shared_ptr<Actor>> ActorManager::getActors() const {
     return mActors;
 }
 
-std::unordered_set<std::shared_ptr<Actor>> ActorManager::getFields() const {
+std::list<std::shared_ptr<Actor>> ActorManager::getFields() const {
     return mFieldActors;
 }
 
@@ -86,9 +90,15 @@ std::shared_ptr<PlayerActor> ActorManager::getPlayer() const {
     return p;
 }
 
+std::shared_ptr<FieldActor> ActorManager::getLastField() const {
+    return mLastField;
+}
+
 void ActorManager::divideActor(std::shared_ptr<Actor> actor) {
     if (actor->getTag() == "Field") {
-        mFieldActors.emplace(actor);
+        mFieldActors.emplace_back(actor);
+        mLastField = std::dynamic_pointer_cast<FieldActor>(actor);
+        assert(mLastField);
     } else {
         mActors.emplace(actor);
     }
@@ -103,7 +113,7 @@ void ActorManager::scrollExceptPlayer(std::shared_ptr<Actor> scrollTarget) {
 
 void ActorManager::deleteScreenOut(std::shared_ptr<Actor> actor) {
     if (actor->getTag() == "Player") {
-        if (actor->getTransform()->getPosition().y < -20.f) {
+        if (actor->getTransform()->getPosition().y < -100.f) {
             Actor::destroy(actor);
         }
     } else {

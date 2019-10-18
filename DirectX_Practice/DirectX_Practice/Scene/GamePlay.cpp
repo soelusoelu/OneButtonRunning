@@ -2,10 +2,12 @@
 #include "../Actor/ActorManager.h"
 #include "../Actor/EnemyActor.h"
 #include "../Actor/FieldActor.h"
+#include "../Actor/FieldHeightValues.h"
 #include "../Actor/PlayerActor.h"
 #include "../Camera/Camera.h"
 #include "../Component/TransformComponent.h"
 #include "../Device/Physics.h"
+#include "../Device/Random.h"
 #include "../Device/Renderer.h"
 #include "../UI/Pause.h"
 #include "../UI/UIManager.h"
@@ -17,10 +19,31 @@ GamePlay::GamePlay() :
     mState(GameState::Play),
     mUIManager(std::make_unique<UIManager>()) {
     Actor::instantiate<PlayerActor>();
-    for (int i = 0; i < 2; i++) {
-        auto f =  new FieldActor("Road" + std::to_string(i + 1) + ".obj");
-        f->getTransform()->setPosition(Vector3(0.f, 0.f, 12.f * i));
-    }
+
+    int firstStage = Random::randomRange(1, 3);
+    auto f = new FieldActor(
+        "Road" + std::to_string(firstStage) + ".obj",
+        firstStage,
+        FieldHeightValues::FIRST_END[firstStage * 2],
+        FieldHeightValues::FIRST_END[firstStage * 2 + 1]
+    );
+    f->getTransform()->setPosition(Vector3(-2.f, -10.f, 12.f));
+
+    //for (int i = 0; i < 3; i++) {
+    //    int no = i + 1;
+    //    auto f =  new FieldActor(
+    //        "Road" + std::to_string(no) + ".obj",
+    //        no,
+    //        FieldHeightValues::FIRST_END[no * 2],
+    //        FieldHeightValues::FIRST_END[no * 2 + 1]
+    //    );
+    //    f->getTransform()->setPosition(Vector3(
+    //        -2.f,
+    //        Singleton<ActorManager>::instance().getLastField()->getEndY() - f->getFirstY(),
+    //        12.f * no + 12.f
+    //    ));
+    //}
+
     for (int i = 0; i < 5; i++) {
         Actor::instantiate<EnemyActor>(Vector3(0.f, 1.5f + i * 3.f, 5.f + i * 0.1f), Quaternion::identity);
     }

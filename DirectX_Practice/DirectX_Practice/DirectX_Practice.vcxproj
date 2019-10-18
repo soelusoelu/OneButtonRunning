@@ -169,6 +169,7 @@
     <ClInclude Include="Actor\ComponentManagementOfActor.h" />
     <ClInclude Include="Actor\EnemyActor.h" />
     <ClInclude Include="Actor\FieldActor.h" />
+    <ClInclude Include="Actor\FieldHeightValues.h" />
     <ClInclude Include="Actor\PlayerActor.h" />
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Component\Component.h" />

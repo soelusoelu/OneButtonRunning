@@ -212,6 +212,9 @@
     <ClInclude Include="Utility\IManager.h">
       <Filter>Utility</Filter>
     </ClInclude>
+    <ClInclude Include="Actor\FieldHeightValues.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utility">

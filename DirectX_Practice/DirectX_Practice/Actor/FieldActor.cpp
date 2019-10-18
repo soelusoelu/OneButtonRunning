@@ -2,10 +2,12 @@
 #include "../Component/MeshComponent.h"
 #include "../Component/TransformComponent.h"
 
-FieldActor::FieldActor(const std::string& FileName, const char* tag) :
+FieldActor::FieldActor(const std::string& FileName, int no, float first, float end, const char* tag) :
     Actor(tag),
-    mMesh(new MeshComponent(this, FileName)) {
-	getTransform()->setPosition(Vector3(0.0f, 0.0f, 10.0f));
+    mMesh(new MeshComponent(this, FileName)),
+    mFieldNo(no),
+    FIRST(first),
+    END(end) {
 }
 
 void FieldActor::updateActor() {
@@ -15,6 +17,14 @@ void FieldActor::drawActor() const {
     mMesh->draw(getWorldTransform());
 }
 
-const std::vector<float> FieldActor::mPositionsY = {
-    9.9f
-};
+const float FieldActor::getFirstY() const {
+    return FIRST;
+}
+
+const float FieldActor::getEndY() const {
+    return END;
+}
+
+int FieldActor::getNo() const {
+    return mFieldNo;
+}

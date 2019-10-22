@@ -36,12 +36,21 @@ void Texture::drawAll(std::vector<std::shared_ptr<Sprite>> sprites) {
     //ピクセル単位で扱うために
     proj.mat[0][0] = 2.f / Game::WINDOW_WIDTH;
     proj.mat[1][1] = -2.f / Game::WINDOW_HEIGHT;
-    //シェーダー用に転置
-    proj.transpose();
 
     //使用するシェーダーの登録
     Direct3D11::mDeviceContext->VSSetShader(mShader->getVertexShader(), NULL, 0);
     Direct3D11::mDeviceContext->PSSetShader(mShader->getPixelShader(), NULL, 0);
+    //このコンスタントバッファーを使うシェーダーの登録
+    Direct3D11::mDeviceContext->VSSetConstantBuffers(0, 1, &mShader->mConstantBuffer0);
+    Direct3D11::mDeviceContext->PSSetConstantBuffers(0, 1, &mShader->mConstantBuffer0);
+    //頂点インプットレイアウトをセット
+    Direct3D11::mDeviceContext->IASetInputLayout(mShader->getVertexLayout());
+    //プリミティブ・トポロジーをセット
+    Direct3D11::mDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+    //バーテックスバッファーをセット
+    UINT stride = sizeof(TextureVertex);
+    UINT offset = 0;
+    Direct3D11::mDeviceContext->IASetVertexBuffers(0, 1, &mVertexBuffer, &stride, &offset);
 
     for (const auto& sprite : sprites) {
         if (sprite->getState() != SpriteState::Active) {
@@ -53,22 +62,14 @@ void Texture::drawAll(std::vector<std::shared_ptr<Sprite>> sprites) {
             TextureShaderConstantBuffer cb;
             //ワールド、カメラ、射影行列を渡す
             Matrix4 m = sprite->getWorld();
+            m *= proj;
             m.transpose();
-            cb.mWorld = m;
-            cb.mProj = proj;
+            cb.mWP = m;
             cb.mColor = sprite->getColor();
             cb.mRect = sprite->getUV();
             memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
             Direct3D11::mDeviceContext->Unmap(mShader->mConstantBuffer0, 0);
         }
-        //このコンスタントバッファーを使うシェーダーの登録
-        Direct3D11::mDeviceContext->VSSetConstantBuffers(0, 1, &mShader->mConstantBuffer0);
-        Direct3D11::mDeviceContext->PSSetConstantBuffers(0, 1, &mShader->mConstantBuffer0);
-
-        //頂点インプットレイアウトをセット
-        Direct3D11::mDeviceContext->IASetInputLayout(mShader->getVertexLayout());
-        //プリミティブ・トポロジーをセット
-        Direct3D11::mDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
         //テクスチャーをシェーダーに渡す
         auto s = sprite->getTexture()->getSampleLinear();
         auto t = sprite->getTexture()->getTexture();

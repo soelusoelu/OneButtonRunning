@@ -13,8 +13,7 @@ struct TextureVertex {
 };
 
 struct TextureShaderConstantBuffer {
-    Matrix4 mWorld;
-    Matrix4 mProj;
+    Matrix4 mWP;
     Color mColor;
     Rect mRect;
 };

@@ -790,7 +790,7 @@ public:
             { 2.0f / width, 0.0f, 0.0f, 0.0f },
             { 0.0f, -2.0f / height, 0.0f, 0.0f },
             { 0.0f, 0.0f, 1.0f / (_far - _near), 0.0f },
-            { 0.0f, 0.0f, _near / (_near - _far), 1.0f }
+            { -1.0f, 1.0f, _near / (_near - _far), 1.0f }
         };
         return Matrix4(temp);
     }

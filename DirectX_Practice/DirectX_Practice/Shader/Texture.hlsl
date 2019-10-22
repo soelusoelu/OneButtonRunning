@@ -4,8 +4,7 @@ SamplerState g_samLinear : register(s0); //サンプラーはレジスターs(n)
 
 cbuffer global
 {
-    matrix gWorld; //ワールドから射影までの変換行列
-    matrix gProj;
+    matrix gWP; //ワールドから射影までの変換行列
     float4 gColor;
     float4 gUV;
 };
@@ -23,8 +22,7 @@ struct VS_OUTPUT
 VS_OUTPUT VS(float4 Pos : POSITION, float2 Tex : TEXCOORD)
 {
     VS_OUTPUT output = (VS_OUTPUT) 0;
-    output.Pos = mul(Pos, gWorld);
-    output.Pos = mul(output.Pos, gProj);
+    output.Pos = mul(Pos, gWP);
     output.Tex = Tex * float2(gUV.z, gUV.w) + float2(gUV.x, gUV.y);
 
     return output;

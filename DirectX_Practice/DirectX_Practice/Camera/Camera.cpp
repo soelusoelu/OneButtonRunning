@@ -7,7 +7,9 @@ Camera::Camera() :
     mCameraPosition(Vector3::zero),
     mLookAt(Vector3::zero),
     mUp(Vector3::up),
-    mPlayerPosition(mCameraPosition) {
+    mPlayerPosition(mCameraPosition),
+    mView(Matrix4::identity),
+    mProj(Matrix4::identity) {
     mView = Matrix4::createLookAt(mCameraPosition, mLookAt, mUp);
     mProj = Matrix4::createPerspectiveFOV(45.f, Game::WINDOW_WIDTH, Game::WINDOW_HEIGHT, 0.1f, 1000.f);
 }

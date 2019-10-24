@@ -1,17 +1,17 @@
 #include "Main.h"
-#include "Scene/GamePlay.h"
+#include "Scene/SceneManager.h"
 
 Main::Main() :
-    mGamePlay(std::make_unique<GamePlay>()) {
+    mScene(std::make_unique<SceneManager>()) {
 }
 
 Main::~Main() {
 }
 
 void Main::update() {
-    mGamePlay->update();
+    mScene->update();
 }
 
 void Main::draw() const {
-    mGamePlay->draw();
+    mScene->draw();
 }

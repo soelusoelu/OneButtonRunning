@@ -16,6 +16,7 @@ class UI;
 
 class Sprite : public std::enable_shared_from_this<Sprite> {
 public:
+    Sprite(const std::string& fileName, Vector2 size, float z);
     Sprite(UI* owner, const std::string& fileName, Vector2 size, float z);
     ~Sprite();
     void update();

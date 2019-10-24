@@ -5,6 +5,10 @@
 #include "../Device/Renderer.h"
 #include <cassert>
 
+Sprite::Sprite(const std::string & fileName, Vector2 size, float z) :
+    Sprite(nullptr, fileName, size, z) {
+}
+
 Sprite::Sprite(UI* owner, const std::string& fileName, Vector2 size, float z) :
     mSize(size),
     mPosition(Vector2::zero, z),
@@ -14,7 +18,9 @@ Sprite::Sprite(UI* owner, const std::string& fileName, Vector2 size, float z) :
     mWorld(Matrix4::identity),
     mWorldUpdateFlag(true),
     mState(SpriteState::Active) {
-    owner->getSpriteManager()->add(this);
+    if (owner) {
+        owner->getSpriteManager()->add(this);
+    }
     mTexture = Singleton<Renderer>::instance().getTexture(fileName);
     mZSortFlag = true;
 }

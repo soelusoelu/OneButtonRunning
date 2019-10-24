@@ -10,6 +10,7 @@ enum class GameState {
 };
 
 class UIManager;
+class IScene;
 
 class GamePlay : public SceneBase {
 public:

@@ -2,7 +2,7 @@
 
 #include <memory>
 
-class GamePlay;
+class SceneManager;
 
 class Main {
 public:
@@ -12,6 +12,6 @@ public:
     void draw() const;
 
 private:
-    std::unique_ptr<GamePlay> mGamePlay;
+    std::unique_ptr<SceneManager> mScene;
 };
 

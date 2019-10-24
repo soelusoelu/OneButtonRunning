@@ -326,7 +326,6 @@ void Mesh::RendererMesh(Matrix4 world, float alpha) const {
     //シェーダーのコンスタントバッファーに各種データを渡す
     D3D11_MAPPED_SUBRESOURCE pData;
     if (SUCCEEDED(mDeviceContext->Map(mShader->mConstantBuffer0, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
-        //テクスチャでないの、ほぼ確定でこのif文の中
         SIMPLESHADER_CONSTANT_BUFFER0 sg;
         //ワールド行列を渡す
         sg.mW = world;
@@ -339,7 +338,7 @@ void Mesh::RendererMesh(Matrix4 world, float alpha) const {
         //視点位置を渡す
         sg.vEye = Vector4(Singleton<Camera>::instance().getPosition(), 0);
 
-        memcpy_s(pData.pData, pData.RowPitch, (void*)&sg, sizeof(SIMPLESHADER_CONSTANT_BUFFER0));
+        memcpy_s(pData.pData, pData.RowPitch, (void*)&sg, sizeof(sg));
         mDeviceContext->Unmap(mShader->mConstantBuffer0, 0);
     }
     //このコンスタントバッファーを使うシェーダーの登録
@@ -381,7 +380,7 @@ void Mesh::RendererMesh(Matrix4 world, float alpha) const {
             sg.vDiffuse = mMaterial[i].Kd;//ディフューズカラーをシェーダーに渡す
             sg.vDiffuse.w = alpha;
             sg.vSpecular = mMaterial[i].Ks;//スペキュラーをシェーダーに渡す
-            memcpy_s(pData.pData, pData.RowPitch, (void*)&sg, sizeof(SIMPLESHADER_CONSTANT_BUFFER1));
+            memcpy_s(pData.pData, pData.RowPitch, (void*)&sg, sizeof(sg));
             mDeviceContext->Unmap(mShader->mConstantBuffer1, 0);
         }
         mDeviceContext->VSSetConstantBuffers(1, 1, &mShader->mConstantBuffer1);

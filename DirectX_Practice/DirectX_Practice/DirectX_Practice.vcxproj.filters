@@ -107,6 +107,12 @@
     <ClCompile Include="Actor\FieldHeightValues.cpp">
       <Filter>Actor</Filter>
     </ClCompile>
+    <ClCompile Include="Scene\Title.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneManager.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utility\Input.h">
@@ -217,6 +223,12 @@
     </ClInclude>
     <ClInclude Include="Actor\FieldHeightValues.h">
       <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Title.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneManager.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

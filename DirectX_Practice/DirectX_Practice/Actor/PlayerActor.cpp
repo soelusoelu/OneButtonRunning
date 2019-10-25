@@ -9,7 +9,7 @@ PlayerActor::PlayerActor(const char* tag) :
     mPlayerMove(new PlayerMoveComponent(this)),
     mMesh(new MeshComponent(this, "LINK.obj")),
     mSphere(new SphereCollisionComponent(this)) {
-	getTransform()->setScale(0.4f);
+	getTransform()->setScale(0.6f);
 	getTransform()->setPosition(Vector3(0.0f, 6.0f, 0.f));
 }
 

@@ -20,7 +20,7 @@ void EnemyMoveComponent::onField() {
     Physics::CollisionInfo collInfo;
     if (Singleton<Physics>::instance().rayCastField(&ray, &collInfo)) {
         if (collInfo.mLength <= startUpPos) {
-            mOwner->getTransform()->translete(Vector3(0.f, startUpPos - collInfo.mLength, 0.f));
+            mOwner->getTransform()->setPosition(Vector3(0.f, startUpPos - collInfo.mLength, 0.f));
         }
     }
 }

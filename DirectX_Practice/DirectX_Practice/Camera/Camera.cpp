@@ -20,20 +20,14 @@ void Camera::update(std::shared_ptr<PlayerActor> player) {
         float posY = player->getTransform()->getPosition().y;
         posY = Math::Max<float>(posY, 0.f);
 
-        //mCameraPosition = Vector3(
-        //    player->getTransform()->getPosition().x + /*eyeVec.x * */7.f,
-        //    player->getTransform()->getPosition().y + 2.f,
-        //    player->getTransform()->getPosition().z - /*eyeVec.z * */5.f
-        //);
         //posYにかけた値でジャンプ時のカメラを補正する
         mCameraPosition = Vector3(
-            player->getTransform()->getPosition().x + 5.f + posY * 2.f,
-            player->getTransform()->getPosition().y + 4.f - posY * 0.5f,
-            player->getTransform()->getPosition().z - 5.f - posY * 2.5f
+            player->getTransform()->getPosition().x + 18.f + posY * 0.7f,
+            player->getTransform()->getPosition().y + 2.f + posY * 0.2f,
+            player->getTransform()->getPosition().z + 13.f
         );
         mPlayerPosition = player->getTransform()->getPosition();
-        //mLookAt = Vector3(mPlayerPosition.x, mPlayerPosition.y + 1.5f, mPlayerPosition.z + 1.5f); //注視点
-        mLookAt = Vector3(mPlayerPosition.x, mPlayerPosition.y + 1.5f, mPlayerPosition.z + 1.5f + posY * 0.5f); //注視点
+        mLookAt = Vector3(0.f, mPlayerPosition.y + 1.f - posY * 0.5f, mCameraPosition.z); //注視点
     }
 
     mView = Matrix4::createLookAt(mCameraPosition, mLookAt, mUp);

@@ -9,6 +9,7 @@
 #include "../Device/Physics.h"
 #include "../Device/Renderer.h"
 #include "../UI/Pause.h"
+#include "../UI/Score.h"
 #include "../UI/UIManager.h"
 #include "../Utility/Input.h"
 #include <string>
@@ -21,6 +22,8 @@ GamePlay::GamePlay() :
 
     auto f = new FieldActor("Road1.obj", 1);
     f->getTransform()->setPosition(Vector3(-2.f, 0.f, 12.f));
+
+	mUIManager->add(new Score());
 
     new EnemyActor();
 }

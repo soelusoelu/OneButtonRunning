@@ -27,6 +27,7 @@ public:
     ~Texture();
     void init(const std::string& fileName);
     static void drawAll(std::vector<std::shared_ptr<Sprite>> sprites);
+	void draw(const Matrix4& world, const Color& color, const Rect& uv)const ;
     ID3D11ShaderResourceView* getTexture() const {
         return mTexture;
     }

@@ -157,6 +157,7 @@
     <ClCompile Include="System\Game.cpp" />
     <ClCompile Include="System\Window.cpp" />
     <ClCompile Include="UI\Pause.cpp" />
+    <ClCompile Include="UI\Score.cpp" />
     <ClCompile Include="UI\Sprite.cpp" />
     <ClCompile Include="UI\SpriteManager.cpp" />
     <ClCompile Include="UI\Texture.cpp" />
@@ -198,6 +199,7 @@
     <ClInclude Include="System\Game.h" />
     <ClInclude Include="System\Window.h" />
     <ClInclude Include="UI\Pause.h" />
+    <ClInclude Include="UI\Score.h" />
     <ClInclude Include="UI\Sprite.h" />
     <ClInclude Include="UI\SpriteManager.h" />
     <ClInclude Include="UI\Texture.h" />

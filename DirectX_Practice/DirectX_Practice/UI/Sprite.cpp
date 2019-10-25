@@ -37,6 +37,11 @@ void Sprite::update() {
     mWorld *= Matrix4::createTranslation(mPosition);
 }
 
+void Sprite::draw() const
+{
+	mTexture->draw(mWorld, mColor, mUV);
+}
+
 void Sprite::setPosition(Vector2 pos) {
     mPosition.x = pos.x;
     mPosition.y = pos.y;

@@ -16,7 +16,9 @@ PlayerMoveComponent::PlayerMoveComponent(Actor* owner, int updateOrder) :
 	mVelocityY(0.0f),
 	mButtonDownTime(0),
 	mIsLongJumpHold(false),
-	mRotateAngle(0.0f) {
+	mRotateAngle(0.0f) ,
+    mRotateCount(0.0f),
+    mTrickCount(0.0f){
 }
 
 void PlayerMoveComponent::update() {
@@ -120,10 +122,17 @@ void PlayerMoveComponent::rotate()
 			mRotateAngle = 0.5f;
 		}
 		mOwner->getTransform()->rotate(Vector3::right, mRotateAngle);
+		mRotateCount += mRotateAngle;
+		if (mRotateCount <= -360.0f) {
+           	mTrickCount++;
+			mRotateCount = 0.0f;
+		}
 	}
 
 	if (mState == State::OnGround) {
-		mRotateAngle = 0;
+		mRotateAngle = 0.0f;
+		mRotateCount = 0.0f;
+		mTrickCount = 0;
 		mOwner->getTransform()->setRotation(Vector3::right, 0);//着地したら真っ直ぐになる
 	}
 }

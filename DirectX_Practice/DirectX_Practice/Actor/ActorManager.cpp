@@ -142,7 +142,7 @@ void ActorManager::controlField() {
         return;
     }
 
-    int no = Random::randomRange(1, 4);
+    int no = Random::randomRange(1, 5);
     auto f = new FieldActor("Road" + std::to_string(no) + ".obj", no);
 
     f->getTransform()->setPosition(Vector3(

@@ -1,13 +1,15 @@
 ﻿#include "EnemyActor.h"
+#include "../Component/EnemyMoveComponent.h"
 #include "../Component/MeshComponent.h"
 #include "../Component/SphereCollisionComponent.h"
 #include "../Component/TransformComponent.h"
 
 EnemyActor::EnemyActor(const char* tag) :
     Actor(tag),
-    mMesh(new MeshComponent(this, "RobotB.obj")),
+    mEnemyMove(new EnemyMoveComponent(this)),
+    mMesh(new MeshComponent(this, "Rock1.obj")),
     mSphere(new SphereCollisionComponent(this)) {
-    getTransform()->setScale(0.25f);
+    getTransform()->setPosition(Vector3(0.f, 15.f, 10.f));
 }
 
 void EnemyActor::updateActor() {

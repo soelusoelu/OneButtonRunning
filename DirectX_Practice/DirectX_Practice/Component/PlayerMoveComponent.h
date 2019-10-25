@@ -27,4 +27,6 @@ private:
 	int mButtonDownTime;//ボタン押した時間
 	bool mIsLongJumpHold;//ろんぐじょんぷ（大ジャンプ）判定用
 	float mRotateAngle;
+	float mRotateCount;
+	int mTrickCount;
 };

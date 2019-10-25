@@ -20,6 +20,7 @@ public:
     Sprite(UI* owner, const std::string& fileName, Vector2 size, float z);
     ~Sprite();
     void update();
+	void draw() const;
     void setPosition(Vector2 pos);
     const float getDepth() const;
     void setScale(Vector2 scale);
@@ -35,6 +36,8 @@ public:
     const SpriteState getState() const;
     const Matrix4& getWorld() const;
     const std::shared_ptr<Texture> getTexture() const;
+	const Vector2 getSize() const;
+	const Vector3 getPosition() const;
     bool getSortFlag() const;
 
 private:

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "UI.h"
+#include "Sprite.h"
 
 class Score : public UI{
 public:
@@ -11,4 +12,5 @@ public:
 
 private:
 	int mScore;
+	Sprite* mSprite;
 };

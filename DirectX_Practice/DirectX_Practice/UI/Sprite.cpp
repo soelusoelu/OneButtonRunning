@@ -129,6 +129,16 @@ const std::shared_ptr<Texture> Sprite::getTexture() const {
     return mTexture;
 }
 
+const Vector2 Sprite::getSize() const
+{
+	return mSize;
+}
+
+const Vector3 Sprite::getPosition() const
+{
+	return mPosition;
+}
+
 bool Sprite::getSortFlag() const {
     return mZSortFlag;
 }

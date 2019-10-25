@@ -32,15 +32,15 @@ void Score::update(){
 		// 数字のテクスチャが数字1つにつき幅32高さ64
 		// 文字と文字を引き算し、整数値を取得している
 		float num = (n - '0') * width;
-		 num /= mSprite->getSize().x;
+		num /= mSprite->getSize().x;
 		//(n -'0') * width, 0, width, mSprite->getSize().y)
 		mSprite->setUV(num, 0, width / mSprite->getSize().x, 1);
-			mSprite->draw();
-	}
+		mSprite->draw();
+
 		// 1文字描画したら1桁分右にずらす
-	mSprite->setPosition(Vector2(mSprite->getPosition().x + width, mSprite->getPosition().y));
-	//position.X += width;
-	
+		mSprite->setPosition(Vector2(mSprite->getPosition().x + width, mSprite->getPosition().y));
+		//position.X += width;
+	}
 }
 
 void Score::addScore(int score){

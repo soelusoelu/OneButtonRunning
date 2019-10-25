@@ -42,7 +42,7 @@ private:
     //フィールドの数と位置をコントロール
     void controlField();
 
-
+private:
     std::unordered_set<std::shared_ptr<Actor>> mActors;
     std::unordered_set<std::shared_ptr<Actor>> mPendingActors;
     std::list<std::shared_ptr<Actor>> mFieldActors;

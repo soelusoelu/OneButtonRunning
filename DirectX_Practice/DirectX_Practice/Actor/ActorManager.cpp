@@ -120,12 +120,14 @@ void ActorManager::scrollExceptPlayer(std::shared_ptr<Actor> scrollTarget) {
     if (scrollTarget->getTag() == "Player") {
         return;
     }
+    Actor::mScrollSpeed -= 0.001f;
+    Actor::mScrollSpeed = Math::Max<float>(Actor::mScrollSpeed, 0.05f);
     scrollTarget->getTransform()->translete(Vector3(0.f, 0.f, -Actor::mScrollSpeed));
 }
 
 void ActorManager::deleteScreenOut(std::shared_ptr<Actor> actor) {
     if (actor->getTag() == "Player") {
-        if (actor->getTransform()->getPosition().y < -100.f) {
+        if (mLastField->getTransform()->getPosition().y < -50.f) {
             Actor::destroy(actor);
         }
     } else {

@@ -5,7 +5,7 @@
 class Actor;
 
 class PlayerMoveComponent : public Component {
-    enum State {
+    enum class State {
 		OnGround,
 		JumpUp,
 		JumpDown,

@@ -127,7 +127,7 @@ void ActorManager::scrollExceptPlayer(std::shared_ptr<Actor> scrollTarget) {
 
 void ActorManager::deleteScreenOut(std::shared_ptr<Actor> actor) {
     if (actor->getTag() == "Player") {
-        if (mLastField->getTransform()->getPosition().y < -50.f) {
+        if (mLastField->getTransform()->getPosition().y - 50.f > actor->getTransform()->getPosition().y) {
             Actor::destroy(actor);
         }
     } else {

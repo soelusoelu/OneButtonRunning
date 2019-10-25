@@ -45,7 +45,7 @@ void PlayerMoveComponent::fall() {
 			mVelocityY = 0.0f;
 			//接地した瞬間
 			if (mState == State::JumpDown) {
-				mState = State::OnGround;
+                Actor::mScrollSpeed = 0.5f;
 			}
 			mState = State::OnGround;
 		}

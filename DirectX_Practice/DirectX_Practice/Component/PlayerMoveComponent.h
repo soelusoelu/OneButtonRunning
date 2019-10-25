@@ -18,6 +18,7 @@ private:
 	void fall();
 	void jump();
 	void rotate();
+	void slip();
 
     State mState;
 	const float FALL_SPEED;
@@ -29,4 +30,6 @@ private:
 	float mRotateAngle;
 	float mRotateCount;
 	int mTrickCount;
+	float mPreviousPosY; //直前のぽじ
+	float mCurrentPosY; //今のぽじ
 };

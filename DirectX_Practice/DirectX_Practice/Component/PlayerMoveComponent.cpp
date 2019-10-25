@@ -18,13 +18,16 @@ PlayerMoveComponent::PlayerMoveComponent(Actor* owner, int updateOrder) :
 	mIsLongJumpHold(false),
 	mRotateAngle(0.0f) ,
     mRotateCount(0.0f),
-    mTrickCount(0.0f){
+    mTrickCount(0.0f),
+    mPreviousPosY(0.0f),
+    mCurrentPosY(0.0f){
 }
 
 void PlayerMoveComponent::update() {
 	fall();
 	jump();
 	rotate();
+	slip();
 }
 
 void PlayerMoveComponent::fall() {
@@ -91,15 +94,6 @@ void PlayerMoveComponent::jump()
 	if (mIsLongJumpHold) {
 		mButtonDownTime++;
 
-		//mState = State::JumpUp;
-		////10フレ押したら最大じょんぷなので判定終わり
-		//if (mButtonDownTime >= 10) {
-		//	mButtonDownTime = 0;
-		//	mIsLongJumpHold = false;
-		//}
-		//else {
-		//	mVelocityY = (JUMP_POWER * 0.5f) + (JUMP_POWER * mButtonDownTime * 0.05f);//10フレ押したら元のじょんぷぱぅわーと同じ値になる式（汚い）
-		//}
 		mState = State::JumpUp;
 		//10フレ押したら最大じょんぷなので判定終わり
 		if (mButtonDownTime >= 10) {
@@ -135,6 +129,19 @@ void PlayerMoveComponent::rotate()
 		mRotateAngle = 0.0f;
 		mRotateCount = 0.0f;
 		mOwner->getTransform()->setRotation(Vector3::right, 0);//着地したら真っ直ぐになる
+	}
+}
+
+void PlayerMoveComponent::slip()
+{
+	if (mState == State::OnGround) {
+		if (mCurrentPosY != mOwner->getTransform()->getPosition().y) {
+			mPreviousPosY = mCurrentPosY;
+			mCurrentPosY = mOwner->getTransform()->getPosition().y;
+		}
+		if (mPreviousPosY > mCurrentPosY) {
+			Actor::mScrollSpeed += 0.015f;
+		}
 	}
 }
 

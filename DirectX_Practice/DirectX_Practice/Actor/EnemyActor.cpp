@@ -5,9 +5,10 @@
 
 EnemyActor::EnemyActor(const char* tag) :
     Actor(tag),
-    mMesh(new MeshComponent(this, "RobotB.obj")),
+    mMesh(new MeshComponent(this, "Rock1.obj")),
     mSphere(new SphereCollisionComponent(this)) {
-    getTransform()->setScale(0.25f);
+    getTransform()->setPosition(Vector3(-2.f, 15.f, 10.f));
+    getTransform()->setScale(1.f);
 }
 
 void EnemyActor::updateActor() {

@@ -3,6 +3,7 @@
 #include "../Actor/Actor.h"
 #include "../Actor/ComponentManagementOfActor.h"
 #include "../Device/Physics.h"
+#include "../UI/Score.h"
 #include "../Utility/Collision.h"
 #include "../Utility/Input.h"
 #include "../Utility/Math.h"
@@ -49,6 +50,7 @@ void PlayerMoveComponent::fall() {
 			//接地した瞬間
 			if (mState == State::JumpDown && mTrickCount >= 1) {
                 Actor::mScrollSpeed = 0.5f;
+   				Singleton<Score>::instance().addScore(100 * mTrickCount);
 				mTrickCount = 0;
 			}
 			mState = State::OnGround;
@@ -139,7 +141,7 @@ void PlayerMoveComponent::slip()
 			mPreviousPosY = mCurrentPosY;
 			mCurrentPosY = mOwner->getTransform()->getPosition().y;
 		}
-		if (mPreviousPosY > mCurrentPosY) {
+		if ((mPreviousPosY > mCurrentPosY) && (Actor::mScrollSpeed <= 0.3f)) {
 			Actor::mScrollSpeed += 0.015f;
 		}
 	}

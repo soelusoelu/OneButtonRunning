@@ -2,8 +2,10 @@
 #include "Sprite.h"
 
 Score::Score():
-	mScore(0){
-	mSprite = new Sprite(this, "number.png", Vector2(500.f, 99.f), 0.1f);
+	mScore(123),
+    mPosition(Vector2(1000.0f,0.0f)){
+	mSprite = new Sprite(this, "number.png", Vector2(500.f, 100.f), 0.1f);
+	mSprite->setPosition(mPosition);
 }
 
 Score::~Score(){
@@ -11,6 +13,11 @@ Score::~Score(){
 
 void Score::update(){
 
+	drawScore();
+}
+
+void Score::drawScore()
+{
 	// マイナスの数は0
 	if (mScore < 0) {
 		mScore = 0;
@@ -24,7 +31,8 @@ void Score::update(){
 		digit++;
 	}
 
-	mSprite->setPosition(Vector2( mSprite->getPosition().x - width * digit, mSprite->getPosition().y));
+	mSprite->setPosition(Vector2(mPosition.x - width * digit, mPosition.y));
+	//mSprite->setPosition(Vector2(mSprite->getPosition().x - width * digit, mSprite->getPosition().y));
 	//position.X -= width * digit;
 
 	// 数字を文字列化し、1文字ずつ取り出す

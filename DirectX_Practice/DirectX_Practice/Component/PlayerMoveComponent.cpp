@@ -43,6 +43,10 @@ void PlayerMoveComponent::fall() {
 		if (collInfo.mLength <= startUpPos && mState != State::JumpUp) {
 			len.y += startUpPos - collInfo.mLength;
 			mVelocityY = 0.0f;
+			//接地した瞬間
+			if (mState == State::JumpDown) {
+				mState = State::OnGround;
+			}
 			mState = State::OnGround;
 		}
 		//接地していて下に地面があるなら接地状態維持

@@ -22,7 +22,7 @@ GamePlay::GamePlay() :
     auto f = new FieldActor("Road1.obj", 1);
     f->getTransform()->setPosition(Vector3(-2.f, 0.f, 12.f));
 
-    auto e = new EnemyActor();
+    new EnemyActor();
 }
 
 GamePlay::~GamePlay() {

@@ -117,11 +117,11 @@ void ActorManager::divideActor(std::shared_ptr<Actor> actor) {
 }
 
 void ActorManager::scrollExceptPlayer(std::shared_ptr<Actor> scrollTarget) {
-    if (scrollTarget->getTag() == "Player") {
+    if (scrollTarget->getTag() == "Player" || scrollTarget->getTag() == "Enemy") {
         return;
     }
     Actor::mScrollSpeed -= 0.001f;
-    Actor::mScrollSpeed = Math::Max<float>(Actor::mScrollSpeed, 0.05f);
+    Actor::mScrollSpeed = Math::clamp(Actor::mScrollSpeed, 0.05f, 3.f);
     scrollTarget->getTransform()->translete(Vector3(0.f, 0.f, -Actor::mScrollSpeed));
 }
 

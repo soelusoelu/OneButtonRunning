@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "Actor.h"
 
+class EnemyMoveComponent;
 class MeshComponent;
 class SphereCollisionComponent;
 
@@ -12,6 +13,7 @@ public:
     virtual void drawActor() const override;
 
 private:
+    EnemyMoveComponent* mEnemyMove;
     MeshComponent* mMesh;
     SphereCollisionComponent* mSphere;
 };

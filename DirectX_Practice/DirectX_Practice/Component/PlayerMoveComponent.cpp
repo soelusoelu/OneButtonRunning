@@ -44,8 +44,9 @@ void PlayerMoveComponent::fall() {
 			len.y += startUpPos - collInfo.mLength;
 			mVelocityY = 0.0f;
 			//接地した瞬間
-			if (mState == State::JumpDown) {
+			if (mState == State::JumpDown && mTrickCount >= 1) {
                 Actor::mScrollSpeed = 0.5f;
+				mTrickCount = 0;
 			}
 			mState = State::OnGround;
 		}
@@ -122,8 +123,10 @@ void PlayerMoveComponent::rotate()
 		}
 		mOwner->getTransform()->rotate(Vector3::right, mRotateAngle);
 		mRotateCount += mRotateAngle;
-		if (mRotateCount <= -360.0f) {
+		if (mRotateCount <= -320.0f) {
            	mTrickCount++;
+		}
+		if (mRotateCount <= -360.0f) {
 			mRotateCount = 0.0f;
 		}
 	}
@@ -131,7 +134,6 @@ void PlayerMoveComponent::rotate()
 	if (mState == State::OnGround) {
 		mRotateAngle = 0.0f;
 		mRotateCount = 0.0f;
-		mTrickCount = 0;
 		mOwner->getTransform()->setRotation(Vector3::right, 0);//着地したら真っ直ぐになる
 	}
 }

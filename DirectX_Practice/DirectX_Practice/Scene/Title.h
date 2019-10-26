@@ -3,7 +3,7 @@
 #include "SceneBase.h"
 #include <memory>
 
-class SpriteManager;
+class UIManager;
 class IScene;
 
 class Title : public SceneBase {
@@ -16,6 +16,6 @@ public:
     virtual void draw() const override;
 
 private:
-    std::unique_ptr<SpriteManager> mSpriteManager;
+	std::unique_ptr<UIManager> mUIManager;
 };
 

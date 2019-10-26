@@ -2,20 +2,22 @@
 #include "SceneManager.h"
 #include "../UI/Sprite.h"
 #include "../UI/SpriteManager.h"
+#include "../UI/TitleUI.h";
+#include "../UI/UIManager.h"
 #include "../Utility/Input.h"
 
 Title::Title() :
     SceneBase(),
-    mSpriteManager(std::make_unique<SpriteManager>()) {
+	mUIManager(std::make_unique<UIManager>()) {
 	init();
 }
 
 Title::~Title() {
-    mSpriteManager->clear();
+	mUIManager->clear();
 }
 
 void Title::init(){
-	mSpriteManager->add(new Sprite("title.png", Vector2(384.f, 256.f), 0.f));
+	mUIManager->add(new TitleUI());
 }
 
 void Title::update() {
@@ -23,9 +25,9 @@ void Title::update() {
         next(Scene::GamePlay);
     }
 
-    mSpriteManager->update();
+    mUIManager->update();
 }
 
 void Title::draw() const {
-    mSpriteManager->draw();
+    mUIManager->draw();
 }

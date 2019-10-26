@@ -11,6 +11,7 @@ public:
     Title();
     ~Title();
 
+	virtual void init() override;
     virtual void update() override;
     virtual void draw() const override;
 

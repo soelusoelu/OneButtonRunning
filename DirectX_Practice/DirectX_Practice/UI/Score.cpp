@@ -52,5 +52,5 @@ void Score::drawScore()
 }
 
 void Score::addScore(int score){
-	mScore += score;
+    mScore += score;
 }

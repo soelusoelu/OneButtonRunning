@@ -13,6 +13,7 @@ class SceneBase {
 public:
     SceneBase();
     virtual ~SceneBase() = default;
+	virtual void init() = 0;
     virtual void update() = 0;
     virtual void draw() const = 0;
     void next(Scene next);

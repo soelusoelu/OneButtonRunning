@@ -7,11 +7,15 @@
 Title::Title() :
     SceneBase(),
     mSpriteManager(std::make_unique<SpriteManager>()) {
-    mSpriteManager->add(new Sprite("title.png", Vector2(384.f, 256.f), 0.f));
+	init();
 }
 
 Title::~Title() {
     mSpriteManager->clear();
+}
+
+void Title::init(){
+	mSpriteManager->add(new Sprite("title.png", Vector2(384.f, 256.f), 0.f));
 }
 
 void Title::update() {

@@ -18,20 +18,34 @@ GamePlay::GamePlay() :
     SceneBase(),
     mState(GameState::Play),
     mUIManager(std::make_unique<UIManager>()) {
-    Actor::instantiate<PlayerActor>(Vector3(0.f, 10.f, 0.f), Quaternion::identity);
+    /*Actor::instantiate<PlayerActor>(Vector3(0.f, 10.f, 0.f), Quaternion::identity);
 
     auto f = new FieldActor("Road1.obj", 1);
     f->getTransform()->setPosition(Vector3(-2.f, 0.f, 12.f));
 
 	mUIManager->add(new Score());
 
-    new EnemyActor();
+    new EnemyActor();*/
+	init();
 }
 
 GamePlay::~GamePlay() {
     Singleton<ActorManager>::instance().clear();
     mUIManager->clear();
     Singleton<Renderer>::instance().clear();
+}
+
+void GamePlay::init(){
+	Singleton<ActorManager>::instance().init();
+	mState = GameState::Play;
+	Actor::instantiate<PlayerActor>(Vector3(0.f, 10.f, 0.f), Quaternion::identity);
+
+	auto f = new FieldActor("Road1.obj", 1);
+	f->getTransform()->setPosition(Vector3(-2.f, 0.f, 12.f));
+
+	mUIManager->add(new Score());
+
+	new EnemyActor();
 }
 
 void GamePlay::update() {
@@ -44,7 +58,17 @@ void GamePlay::update() {
         if (Input::getKeyDown(KeyCode::Escape)) {
             mUIManager->add(new Pause(this));
         }
+
+		if (Singleton<ActorManager>::instance().GetPlayerDead()) {
+			mState = GameState::Result;
+		}
     }
+	if (mState == GameState::Result) {
+
+		if (Input::getKeyDown(KeyCode::Space)) {
+			next(Scene::Title);
+		}
+	}
 
     //UIは最後に必ず
     mUIManager->update();

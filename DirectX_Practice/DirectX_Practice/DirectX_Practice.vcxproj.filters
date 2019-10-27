@@ -116,6 +116,12 @@
     <ClCompile Include="Component\EnemyMoveComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
+    <ClCompile Include="UI\Score.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\TitleUI.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Utility\Input.h">
@@ -235,6 +241,12 @@
     </ClInclude>
     <ClInclude Include="Component\EnemyMoveComponent.h">
       <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Score.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\TitleUI.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -13,6 +13,7 @@ class PlayerActor;
 class ActorManager : public IManager<Actor> {
     friend class Singleton<ActorManager>;
 public:
+	virtual void init();
     virtual void update() override;
     virtual void draw() const override;
     virtual void add(Actor* add) override;
@@ -27,6 +28,7 @@ public:
     std::shared_ptr<PlayerActor> getPlayer() const;
     //最後のフィールドを取得
     std::shared_ptr<FieldActor> getLastField() const;
+	const bool GetPlayerDead() const;
 
 private:
     ActorManager();
@@ -48,5 +50,6 @@ private:
     std::list<std::shared_ptr<Actor>> mFieldActors;
     std::shared_ptr<FieldActor> mLastField;
     bool mUpdatingActors;
+	bool mIsPlayerDead;
 };
 

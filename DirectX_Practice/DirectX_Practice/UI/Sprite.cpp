@@ -37,6 +37,11 @@ void Sprite::update() {
     mWorld *= Matrix4::createTranslation(mPosition);
 }
 
+void Sprite::draw() const
+{
+	mTexture->draw(mWorld, mColor, mUV);
+}
+
 void Sprite::setPosition(Vector2 pos) {
     mPosition.x = pos.x;
     mPosition.y = pos.y;
@@ -122,6 +127,16 @@ const SpriteState Sprite::getState() const {
 
 const std::shared_ptr<Texture> Sprite::getTexture() const {
     return mTexture;
+}
+
+const Vector2 Sprite::getSize() const
+{
+	return mSize;
+}
+
+const Vector3 Sprite::getPosition() const
+{
+	return mPosition;
 }
 
 bool Sprite::getSortFlag() const {

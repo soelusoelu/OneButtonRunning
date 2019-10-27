@@ -10,10 +10,17 @@
 
 ActorManager::ActorManager() :
     mLastField(nullptr),
-    mUpdatingActors(false) {
+    mUpdatingActors(false),
+    mIsPlayerDead(false){
 }
 
 ActorManager::~ActorManager() = default;
+
+void ActorManager::init(){
+	mLastField = nullptr;
+	mUpdatingActors = false;
+	mIsPlayerDead = false;
+}
 
 void ActorManager::update() {
     mUpdatingActors = true;
@@ -106,6 +113,10 @@ std::shared_ptr<FieldActor> ActorManager::getLastField() const {
     return mLastField;
 }
 
+const bool ActorManager::GetPlayerDead() const{
+	return mIsPlayerDead;
+}
+
 void ActorManager::divideActor(std::shared_ptr<Actor> actor) {
     if (actor->getTag() == "Field") {
         mFieldActors.emplace_back(actor);
@@ -129,6 +140,7 @@ void ActorManager::deleteScreenOut(std::shared_ptr<Actor> actor) {
     if (actor->getTag() == "Player") {
         if (mLastField->getTransform()->getPosition().y - 50.f > actor->getTransform()->getPosition().y) {
             Actor::destroy(actor);
+			mIsPlayerDead = true;
         }
     } else {
         if (actor->getTransform()->getPosition().z < -20.f) {

@@ -11,7 +11,6 @@ Texture::Texture() {
 Texture::~Texture() {
     SAFE_RELEASE(mTexture);
     SAFE_RELEASE(mSampleLinear);
-    SAFE_RELEASE(mVertexBuffer);
 }
 
 void Texture::init(const std::string& fileName) {
@@ -22,6 +21,10 @@ void Texture::init(const std::string& fileName) {
     if (FAILED(createTexture(fileName))) {
         MessageBox(0, L"テクスチャ作成失敗", NULL, MB_OK);
     }
+}
+
+void Texture::end() {
+    SAFE_RELEASE(mVertexBuffer);
 }
 
 void Texture::drawAll(std::vector<std::shared_ptr<Sprite>> sprites) {

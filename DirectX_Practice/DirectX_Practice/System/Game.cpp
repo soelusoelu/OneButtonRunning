@@ -3,6 +3,7 @@
 #include "../Component/Mesh.h"
 #include "../Device/Random.h"
 #include "../Scene/GamePlay.h"
+#include "../UI/Texture.h"
 #include "../Utility/Input.h"
 #include "../Utility/Singleton.h"
 
@@ -16,6 +17,7 @@ Game::~Game() {
     SAFE_DELETE(mMain);
     SAFE_DELETE(mD3D11);
     SAFE_DELETE(mWindow);
+    Texture::end();
     Input::end();
     SingletonFinalizer::finalize();
 }

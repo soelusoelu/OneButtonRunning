@@ -8,12 +8,13 @@
 #include "../Utility/Input.h"
 #include "../Utility/Math.h"
 
-PlayerMoveComponent::PlayerMoveComponent(Actor* owner, int updateOrder) :
+PlayerMoveComponent::PlayerMoveComponent(Actor* owner, Score* score, int updateOrder) :
 	Component(owner, updateOrder),
 	mState(State::JumpDown),
+	mScore(score),
 	FALL_SPEED(0.01f),
 	MAX_FALL_SPEED(0.5f),
-	JUMP_POWER(0.5f),
+	JUMP_POWER(0.45f),
 	mVelocityY(0.0f),
 	mButtonDownTime(0),
 	mIsLongJumpHold(false),
@@ -48,10 +49,17 @@ void PlayerMoveComponent::fall() {
 			len.y += startUpPos - collInfo.mLength;
 			mVelocityY = 0.0f;
 			//接地した瞬間
-			if (mState == State::JumpDown && mTrickCount >= 1) {
-                Actor::mScrollSpeed = 0.5f;
-   				Singleton<Score>::instance().addScore(100 * mTrickCount);
-				mTrickCount = 0;
+			if (mState == State::JumpDown) {
+				if ((mRotateCount <= -40.0f && mRotateCount >= -320.0f) || (mRotateCount >= 40.0f && mRotateCount <= 320.0f)) {
+					mOwner->destroy(mOwner);
+				}
+
+
+				if (mTrickCount >= 1) {
+					Actor::mScrollSpeed = 0.5f;
+					mScore->addScore(mTrickCount * 100);
+					mTrickCount = 0;
+				}
 			}
 			mState = State::OnGround;
 		}
@@ -103,7 +111,7 @@ void PlayerMoveComponent::jump()
 			mIsLongJumpHold = false;
 		}
 		else {
-			mVelocityY = (JUMP_POWER * 0.5f) + (JUMP_POWER * mButtonDownTime * 0.05f);//10フレ押したら元のじょんぷぱぅわーと同じ値になる式（汚い）
+			mVelocityY = (JUMP_POWER * 0.5f) + (JUMP_POWER * mButtonDownTime * 0.05f) + mOwner->mScrollSpeed * 0.7f;//10フレ押したら元のじょんぷぱぅわーと同じ値になる式（汚い）
 		}
 	}
 }
@@ -120,11 +128,12 @@ void PlayerMoveComponent::rotate()
 		mOwner->getTransform()->rotate(Vector3::right, mRotateAngle);
 		mRotateCount += mRotateAngle;
 		if (mRotateCount <= -320.0f) {
-           	mTrickCount++;
+           	mTrickCount = 1;
 		}
 		if (mRotateCount <= -360.0f) {
 			mRotateCount = 0.0f;
 		}
+
 	}
 
 	if (mState == State::OnGround) {

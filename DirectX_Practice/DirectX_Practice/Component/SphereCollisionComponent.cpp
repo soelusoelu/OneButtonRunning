@@ -43,7 +43,7 @@ void SphereCollisionComponent::drawMesh(float alpha) const {
     Matrix4 w = Matrix4::createScale(mSphere.mRadius * 2);
     w *= Matrix4::createTranslation(mSphere.mCenter);
     if (mSphereMesh) {
-        mSphereMesh->draw(w, alpha);
+        //mSphereMesh->draw(w, alpha);
     }
 }
 

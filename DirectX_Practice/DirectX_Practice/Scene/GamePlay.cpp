@@ -40,12 +40,16 @@ GamePlay::~GamePlay() {
 void GamePlay::init() {
     Singleton<ActorManager>::instance().init();
     mState = GameState::Play;
-    Actor::instantiate<PlayerActor>(Vector3(0.f, 10.f, 0.f), Quaternion::identity);
+    //Actor::instantiate<PlayerActor>(Vector3(0.f, 10.f, 0.f), Quaternion::identity);
+	auto s = new Score(this);
+
+	auto p = new PlayerActor(s);
+	p->getTransform()->setPosition(Vector3(0.f, 10.f, 0.f));
 
     auto f = new FieldActor("Road1.obj", 1);
     f->getTransform()->setPosition(Vector3(-2.f, 0.f, 12.f));
 
-    mUIManager->add(new Score());
+    mUIManager->add(s);
 
     new EnemyActor();
 }

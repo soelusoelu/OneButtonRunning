@@ -43,6 +43,10 @@ void ActorManager::update() {
     }
     mPendingActors.clear();
 
+	if (getPlayer() == nullptr) {
+		mIsPlayerDead = true;
+	}
+
     remove();
 }
 
@@ -132,7 +136,7 @@ void ActorManager::scrollExceptPlayer(std::shared_ptr<Actor> scrollTarget) {
         return;
     }
     Actor::mScrollSpeed -= 0.001f;
-    Actor::mScrollSpeed = Math::clamp(Actor::mScrollSpeed, 0.05f, 3.f);
+    Actor::mScrollSpeed = Math::clamp(Actor::mScrollSpeed, 0.06f, 3.f);
     scrollTarget->getTransform()->translete(Vector3(0.f, 0.f, -Actor::mScrollSpeed));
 }
 

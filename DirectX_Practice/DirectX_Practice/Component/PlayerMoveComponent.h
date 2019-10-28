@@ -3,6 +3,7 @@
 #include "Component.h"
 
 class Actor;
+class Score;
 
 class PlayerMoveComponent : public Component {
     enum class State {
@@ -11,7 +12,7 @@ class PlayerMoveComponent : public Component {
 		JumpDown,
     };
 public:
-    PlayerMoveComponent(Actor* owner, int updateOrder = 10);
+    PlayerMoveComponent(Actor* owner, Score* score, int updateOrder = 10);
 	virtual void update() override;
 
 private:
@@ -21,6 +22,7 @@ private:
 	void slip();
 
     State mState;
+	Score* mScore;
 	const float FALL_SPEED;
 	const float MAX_FALL_SPEED;
 	const float JUMP_POWER;

@@ -1,15 +1,9 @@
 ﻿#include "Sprite.h"
-#include "SpriteManager.h"
 #include "Texture.h"
-#include "UI.h"
 #include "../Device/Renderer.h"
 #include <cassert>
 
-Sprite::Sprite(const std::string & fileName, Vector2 size, float z) :
-    Sprite(nullptr, fileName, size, z) {
-}
-
-Sprite::Sprite(UI* owner, const std::string& fileName, Vector2 size, float z) :
+Sprite::Sprite(const std::string& fileName, const Vector2& size, float z) :
     mSize(size),
     mPosition(Vector2::zero, z),
     mScale(Vector2::one),
@@ -18,9 +12,6 @@ Sprite::Sprite(UI* owner, const std::string& fileName, Vector2 size, float z) :
     mWorld(Matrix4::identity),
     mWorldUpdateFlag(true),
     mState(SpriteState::Active) {
-    if (owner) {
-        owner->getSpriteManager()->add(this);
-    }
     mTexture = Singleton<Renderer>::instance().getTexture(fileName);
     mZSortFlag = true;
 }
@@ -141,6 +132,4 @@ const Vector2& Sprite::getSize() const {
     return mSize;
 }
 
-bool Sprite::getSortFlag() const {
-    return mZSortFlag;
-}
+bool Sprite::mZSortFlag = true;

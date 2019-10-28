@@ -4,17 +4,16 @@
 #include <algorithm>
 
 SpriteManager::SpriteManager() = default;
+
 SpriteManager::~SpriteManager() {
     mSprites.clear();
 }
 
 void SpriteManager::update() {
-    bool sortFlag = false;
     for (auto&& sprite : mSprites) {
         sprite->update();
-        sortFlag = sprite->getSortFlag() ? true : sortFlag;
     }
-    sortByZ(sortFlag);
+    sortByZ();
     remove();
 }
 
@@ -41,8 +40,9 @@ void SpriteManager::clear() {
     mSprites.clear();
 }
 
-void SpriteManager::sortByZ(bool flag) {
-    if (flag) { //z値を変更したやつがいればソート
+void SpriteManager::sortByZ() {
+    if (Sprite::mZSortFlag) { //z値を変更したやつがいればソート
+        Sprite::mZSortFlag = false;
         std::sort(mSprites.begin(), mSprites.end(), [](std::shared_ptr<Sprite> a, std::shared_ptr<Sprite> b) {
             return a->getDepth() > b->getDepth();
         });

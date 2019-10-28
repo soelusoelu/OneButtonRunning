@@ -1,29 +1,31 @@
 #include "TitleUI.h"
+#include "Sprite.h"
+#include "SpriteManager.h"
+#include "../System/Game.h"
 
-
-TitleUI::TitleUI() :
-	mStartSpritePos(Vector2(156.0f, 464.0f)),
-    mIsUp(false){
-	mStartSprite = new Sprite(this, "press_space.png", Vector2(768.f, 128.f), 0.1f);
-	mStartSprite->setPosition(mStartSpritePos);
-	new Sprite(this, "title.png", Vector2(384.f, 256.f), 0.2f);
+TitleUI::TitleUI(std::shared_ptr<SpriteManager> spriteManager) :
+    UI(),
+    mStartSpritePos(Vector2(156.0f, 464.0f)),
+    mIsUp(false) {
+    mStartSprite = new Sprite("press_space.png", Vector2(768.f, 128.f), 0.f);
+    spriteManager->add(mStartSprite);
+    mStartSprite->setPosition(mStartSpritePos);
 }
 
-TitleUI::~TitleUI(){
+TitleUI::~TitleUI() {
 }
 
-void TitleUI::update(){
-	mStartSprite->setPosition(mStartSpritePos);
-	if (mIsUp) {
-		mStartSpritePos.y += 1.0f;
-		if (mStartSpritePos.y >= 480.0f) {
-			mIsUp = false;
-		}
-	}
-	else {
-		mStartSpritePos.y -= 1.0f;
-		if (mStartSpritePos.y <= 448.0f) {
-			mIsUp = true;
-		}
-	}
+void TitleUI::update() {
+    mStartSprite->setPosition(mStartSpritePos);
+    if (mIsUp) {
+        mStartSpritePos.y += 1.0f;
+        if (mStartSpritePos.y >= 480.0f) {
+            mIsUp = false;
+        }
+    } else {
+        mStartSpritePos.y -= 1.0f;
+        if (mStartSpritePos.y <= 448.0f) {
+            mIsUp = true;
+        }
+    }
 }

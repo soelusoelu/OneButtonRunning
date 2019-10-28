@@ -1,20 +1,21 @@
 #pragma once
 
 #include "UI.h"
-#include "Sprite.h"
-#include "../Utility/Singleton.h"
+#include "../Utility/Math.h"
+#include <memory>
 
-class Score : public UI{
-	friend class Singleton<Score>;
+class Sprite;
+
+class Score : public UI {
 public:
-	Score();
-	~Score();
-	virtual void update() override;
-	void drawScore();
-	void addScore(int score);
+    Score();
+    ~Score();
+    virtual void update() override;
+    void drawScore(int score);
+    void addScore(int score);
 
 private:
-	int mScore;
-	Sprite* mSprite;
-	Vector2 mPosition;
+    int mScore;
+    std::unique_ptr<Sprite> mSprite;
+    Vector2 mPosition;
 };

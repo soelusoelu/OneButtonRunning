@@ -28,13 +28,13 @@ public:
     std::shared_ptr<PlayerActor> getPlayer() const;
     //最後のフィールドを取得
     std::shared_ptr<FieldActor> getLastField() const;
-	const bool GetPlayerDead() const;
+	const bool notExistPlayer() const;
 
 private:
     ActorManager();
     ~ActorManager();
     ActorManager(const ActorManager&) = delete;
-    ActorManager operator=(const ActorManager&) = delete;
+    ActorManager& operator=(const ActorManager&) = delete;
     //アクターをフィールドと分別
     void divideActor(std::shared_ptr<Actor> actor);
     //プレイヤー以外スクロール

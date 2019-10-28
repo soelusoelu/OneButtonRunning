@@ -8,16 +8,18 @@
 
 Title::Title() :
     SceneBase(),
-	mUIManager(std::make_unique<UIManager>()) {
-	init();
+    mUIManager(std::make_unique<UIManager>()),
+    mSpriteManager(std::make_shared<SpriteManager>()) {
+    init();
 }
 
 Title::~Title() {
-	mUIManager->clear();
+    mUIManager->clear();
+    mSpriteManager->clear();
 }
 
-void Title::init(){
-	mUIManager->add(new TitleUI());
+void Title::init() {
+    mUIManager->add(new TitleUI(mSpriteManager));
 }
 
 void Title::update() {
@@ -26,8 +28,9 @@ void Title::update() {
     }
 
     mUIManager->update();
+    mSpriteManager->update();
 }
 
 void Title::draw() const {
-    mUIManager->draw();
+    mSpriteManager->draw();
 }

@@ -83,55 +83,54 @@ void Texture::drawAll(std::vector<std::shared_ptr<Sprite>> sprites) {
     }
 }
 
-void Texture::draw(const Matrix4 & world, const Color & color, const Rect & uv) const
-{
-	if (!mVertexBuffer) {
-		return;
-	}
-	//プロジェクション
-	Matrix4 proj = Matrix4::identity;
-	//原点をスクリーン左上にするために平行移動
-	proj.mat[3][0] = -1.f;
-	proj.mat[3][1] = 1.f;
-	//ピクセル単位で扱うために
-	proj.mat[0][0] = 2.f / Game::WINDOW_WIDTH;
-	proj.mat[1][1] = -2.f / Game::WINDOW_HEIGHT;
+void Texture::draw(const Matrix4 & world, const Color & color, const Rect & uv) const {
+    if (!mVertexBuffer) {
+        return;
+    }
+    //プロジェクション
+    Matrix4 proj = Matrix4::identity;
+    //原点をスクリーン左上にするために平行移動
+    proj.mat[3][0] = -1.f;
+    proj.mat[3][1] = 1.f;
+    //ピクセル単位で扱うために
+    proj.mat[0][0] = 2.f / Game::WINDOW_WIDTH;
+    proj.mat[1][1] = -2.f / Game::WINDOW_HEIGHT;
 
-	//使用するシェーダーの登録
-	Direct3D11::mDeviceContext->VSSetShader(mShader->getVertexShader(), NULL, 0);
-	Direct3D11::mDeviceContext->PSSetShader(mShader->getPixelShader(), NULL, 0);
-	//このコンスタントバッファーを使うシェーダーの登録
-	Direct3D11::mDeviceContext->VSSetConstantBuffers(0, 1, &mShader->mConstantBuffer0);
-	Direct3D11::mDeviceContext->PSSetConstantBuffers(0, 1, &mShader->mConstantBuffer0);
-	//頂点インプットレイアウトをセット
-	Direct3D11::mDeviceContext->IASetInputLayout(mShader->getVertexLayout());
-	//プリミティブ・トポロジーをセット
-	Direct3D11::mDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-	//バーテックスバッファーをセット
-	UINT stride = sizeof(TextureVertex);
-	UINT offset = 0;
-	Direct3D11::mDeviceContext->IASetVertexBuffers(0, 1, &mVertexBuffer, &stride, &offset);
+    //使用するシェーダーの登録
+    Direct3D11::mDeviceContext->VSSetShader(mShader->getVertexShader(), NULL, 0);
+    Direct3D11::mDeviceContext->PSSetShader(mShader->getPixelShader(), NULL, 0);
+    //このコンスタントバッファーを使うシェーダーの登録
+    Direct3D11::mDeviceContext->VSSetConstantBuffers(0, 1, &mShader->mConstantBuffer0);
+    Direct3D11::mDeviceContext->PSSetConstantBuffers(0, 1, &mShader->mConstantBuffer0);
+    //頂点インプットレイアウトをセット
+    Direct3D11::mDeviceContext->IASetInputLayout(mShader->getVertexLayout());
+    //プリミティブ・トポロジーをセット
+    Direct3D11::mDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+    //バーテックスバッファーをセット
+    UINT stride = sizeof(TextureVertex);
+    UINT offset = 0;
+    Direct3D11::mDeviceContext->IASetVertexBuffers(0, 1, &mVertexBuffer, &stride, &offset);
 
-		//シェーダーのコンスタントバッファーに各種データを渡す
-		D3D11_MAPPED_SUBRESOURCE pData;
-		if (SUCCEEDED(Direct3D11::mDeviceContext->Map(mShader->mConstantBuffer0, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
-			TextureShaderConstantBuffer cb;
-			//ワールド、カメラ、射影行列を渡す
-			Matrix4 m = world;
-			m *= proj;
-			m.transpose();
-			cb.mWP = m;
-			cb.mColor = color;
-			cb.mRect = uv;
-			memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
-			Direct3D11::mDeviceContext->Unmap(mShader->mConstantBuffer0, 0);
-		}
-		//テクスチャーをシェーダーに渡す
-		Direct3D11::mDeviceContext->PSSetSamplers(0, 1, &mSampleLinear);
-		Direct3D11::mDeviceContext->PSSetShaderResources(0, 1, &mTexture);
-		//プリミティブをレンダリング
-		Direct3D11::mDeviceContext->Draw(4, 0);
-	
+    //シェーダーのコンスタントバッファーに各種データを渡す
+    D3D11_MAPPED_SUBRESOURCE pData;
+    if (SUCCEEDED(Direct3D11::mDeviceContext->Map(mShader->mConstantBuffer0, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
+        TextureShaderConstantBuffer cb;
+        //ワールド、カメラ、射影行列を渡す
+        Matrix4 m = world;
+        m *= proj;
+        m.transpose();
+        cb.mWP = m;
+        cb.mColor = color;
+        cb.mRect = uv;
+        memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
+        Direct3D11::mDeviceContext->Unmap(mShader->mConstantBuffer0, 0);
+    }
+    //テクスチャーをシェーダーに渡す
+    Direct3D11::mDeviceContext->PSSetSamplers(0, 1, &mSampleLinear);
+    Direct3D11::mDeviceContext->PSSetShaderResources(0, 1, &mTexture);
+    //プリミティブをレンダリング
+    Direct3D11::mDeviceContext->Draw(4, 0);
+
 }
 
 HRESULT Texture::createTexture(const std::string & fileName) {

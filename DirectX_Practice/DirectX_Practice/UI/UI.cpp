@@ -3,8 +3,7 @@
 #include "UIManager.h"
 
 UI::UI() :
-    mState(UIState::Active),
-    mSpriteManager(std::make_shared<SpriteManager>()) {
+    mState(UIState::Active) {
 }
 
 void UI::close() {
@@ -13,8 +12,4 @@ void UI::close() {
 
 UIState UI::getState() const {
     return mState;
-}
-
-std::shared_ptr<SpriteManager> UI::getSpriteManager() const {
-    return mSpriteManager;
 }

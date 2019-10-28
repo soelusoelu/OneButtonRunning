@@ -26,5 +26,5 @@ void SceneManager::change(Scene next) {
         mCurrentScene = std::make_unique<GamePlay>();
     }
 
-	mCurrentScene->init();
+	//mCurrentScene->init();
 }

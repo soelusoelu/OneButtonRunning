@@ -10,16 +10,12 @@ void UIManager::update() {
     for (auto&& ui : mUIStack) {
         if (ui->getState() == UIState::Active) {
             ui->update();
-            ui->getSpriteManager()->update();
         }
     }
     remove();
 }
 
 void UIManager::draw() const {
-    for (const auto& ui : mUIStack) {
-        ui->getSpriteManager()->draw();
-    }
 }
 
 void UIManager::add(UI* add) {

@@ -3,7 +3,6 @@
 #include "../Utility/Math.h"
 #include <memory>
 #include <string>
-#include <vector>
 
 enum class SpriteState {
     Active,
@@ -12,12 +11,10 @@ enum class SpriteState {
 };
 
 class Texture;
-class UI;
 
 class Sprite {
 public:
-    Sprite(const std::string& fileName, Vector2 size, float z);
-    Sprite(UI* owner, const std::string& fileName, Vector2 size, float z);
+    Sprite(const std::string& fileName, const Vector2& size, float z);
     ~Sprite();
     void update();
     void draw();
@@ -39,7 +36,9 @@ public:
     const SpriteState getState() const;
     const Matrix4& getWorld() const;
     const std::shared_ptr<Texture> getTexture() const;
-    bool getSortFlag() const;
+
+public:
+    static bool mZSortFlag;
 
 private:
     Vector2 mSize;
@@ -51,6 +50,5 @@ private:
     Matrix4 mWorld;
     bool mWorldUpdateFlag;
     SpriteState mState;
-    bool mZSortFlag;
 };
 

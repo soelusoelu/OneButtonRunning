@@ -16,9 +16,7 @@ public:
     virtual void update() = 0;
     void close();
     UIState getState() const;
-    std::shared_ptr<SpriteManager> getSpriteManager() const;
 
 protected:
     UIState mState;
-    std::shared_ptr<SpriteManager> mSpriteManager;
 };

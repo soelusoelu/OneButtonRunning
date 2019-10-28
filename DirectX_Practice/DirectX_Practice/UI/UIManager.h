@@ -18,7 +18,7 @@ public:
 
 private:
     UIManager(const UIManager&) = delete;
-    UIManager operator=(const UIManager&) = delete;
+    UIManager& operator=(const UIManager&) = delete;
 
     std::list<std::unique_ptr<UI>> mUIStack;
 };

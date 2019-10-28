@@ -10,8 +10,8 @@ enum class GameState {
     Quit
 };
 
+class SpriteManager;
 class UIManager;
-class IScene;
 
 class GamePlay : public SceneBase {
 public:
@@ -28,5 +28,6 @@ public:
 private:
     GameState mState;
     std::unique_ptr<UIManager> mUIManager;
+    std::shared_ptr<SpriteManager> mSpriteManager;
 };
 

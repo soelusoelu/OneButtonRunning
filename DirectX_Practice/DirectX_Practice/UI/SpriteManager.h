@@ -18,9 +18,10 @@ public:
 
 private:
     SpriteManager(const SpriteManager&) = delete;
-    SpriteManager operator=(const SpriteManager&) = delete;
-    void sortByZ(bool flag);
+    SpriteManager& operator=(const SpriteManager&) = delete;
+    void sortByZ();
 
+private:
     std::vector<std::shared_ptr<Sprite>> mSprites;
 };
 

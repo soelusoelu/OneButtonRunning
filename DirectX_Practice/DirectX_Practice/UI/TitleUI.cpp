@@ -10,6 +10,7 @@ TitleUI::TitleUI(std::shared_ptr<SpriteManager> spriteManager) :
     mStartSprite = new Sprite("press_space.png", Vector2(768.f, 128.f), 0.f);
     spriteManager->add(mStartSprite);
     mStartSprite->setPosition(mStartSpritePos);
+	spriteManager->add( new Sprite("title.png", Vector2(1080.f, 720.f), 0.9f));
 }
 
 TitleUI::~TitleUI() {

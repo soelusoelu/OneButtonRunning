@@ -20,7 +20,7 @@ public:
     Sprite(UI* owner, const std::string& fileName, Vector2 size, float z);
     ~Sprite();
     void update();
-	void draw() const;
+	void draw();
     void setPosition(Vector2 pos);
     const float getDepth() const;
     void setScale(Vector2 scale);

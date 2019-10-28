@@ -4,7 +4,7 @@
 Score::Score():
 	mScore(123),
     mPosition(Vector2(1000.0f,0.0f)){
-	mSprite = new Sprite(this, "number.png", Vector2(500.f, 100.f), 0.1f);
+	mSprite = new Sprite("number.png", Vector2(512.f, 64.f), 0.1f);
 	mSprite->setPosition(mPosition);
 }
 
@@ -32,8 +32,6 @@ void Score::drawScore()
 	}
 
 	mSprite->setPosition(Vector2(mPosition.x - width * digit, mPosition.y));
-	//mSprite->setPosition(Vector2(mSprite->getPosition().x - width * digit, mSprite->getPosition().y));
-	//position.X -= width * digit;
 
 	// 数字を文字列化し、1文字ずつ取り出す
 	for (auto n : std::to_string(mScore)) {
@@ -41,13 +39,12 @@ void Score::drawScore()
 		// 文字と文字を引き算し、整数値を取得している
 		float num = (n - '0') * width;
 		num /= mSprite->getSize().x;
-		//(n -'0') * width, 0, width, mSprite->getSize().y)
 		mSprite->setUV(num, 0, width / mSprite->getSize().x, 1);
 		mSprite->draw();
 
+        auto pos = mSprite->getPosition();
 		// 1文字描画したら1桁分右にずらす
 		mSprite->setPosition(Vector2(mSprite->getPosition().x + width, mSprite->getPosition().y));
-		//position.X += width;
 	}
 }
 

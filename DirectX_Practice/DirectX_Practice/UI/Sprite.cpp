@@ -42,18 +42,36 @@ void Sprite::draw() {
     mTexture->draw(mWorld, mColor, mUV);
 }
 
-void Sprite::setPosition(Vector2 pos) {
+void Sprite::setPosition(const Vector2& pos) {
     mPosition.x = pos.x;
     mPosition.y = pos.y;
     mWorldUpdateFlag = true;
 }
 
-void Sprite::setScale(Vector2 scale) {
+void Sprite::setPrimary(float z) {
+    mPosition.z = z;
+    mWorldUpdateFlag = true;
+    mZSortFlag = true;
+}
+
+const Vector2& Sprite::getPosition() const {
+    return Vector2(mPosition.x, mPosition.y);
+}
+
+const float Sprite::getDepth() const {
+    return mPosition.z;
+}
+
+void Sprite::setScale(const Vector2& scale) {
     mScale = scale;
     mWorldUpdateFlag = true;
 }
 
-void Sprite::setColor(Vector3 color) {
+const Vector2 & Sprite::getScale() const {
+    return mScale;
+}
+
+void Sprite::setColor(const Vector3& color) {
     mColor.r = color.x;
     mColor.g = color.y;
     mColor.b = color.z;
@@ -72,7 +90,11 @@ void Sprite::setAlpha(float alpha) {
     mWorldUpdateFlag = true;
 }
 
-void Sprite::setUV(Rect uv) {
+const Color& Sprite::getColor() const {
+    return mColor;
+}
+
+void Sprite::setUV(const Rect& uv) {
     assert(0.f <= uv.left || uv.left <= 1.f);
     assert(0.f <= uv.top || uv.top <= 1.f);
     assert(0.f <= uv.width || uv.width <= 1.f);
@@ -95,46 +117,28 @@ void Sprite::setUV(float l, float t, float w, float h) {
     mWorldUpdateFlag = true;
 }
 
-void Sprite::setPrimary(float z) {
-    mPosition.z = z;
-    mWorldUpdateFlag = true;
-    mZSortFlag = true;
+const Rect& Sprite::getUV() const {
+    return mUV;
 }
 
 void Sprite::setState(SpriteState state) {
     mState = state;
 }
 
-const Matrix4& Sprite::getWorld() const {
-    return mWorld;
-}
-
-const float Sprite::getDepth() const {
-    return mPosition.z;
-}
-
-const Color& Sprite::getColor() const {
-    return mColor;
-}
-
-const Rect& Sprite::getUV() const {
-    return mUV;
-}
-
 const SpriteState Sprite::getState() const {
     return mState;
+}
+
+const Matrix4& Sprite::getWorld() const {
+    return mWorld;
 }
 
 const std::shared_ptr<Texture> Sprite::getTexture() const {
     return mTexture;
 }
 
-const Vector2 Sprite::getSize() const {
+const Vector2& Sprite::getSize() const {
     return mSize;
-}
-
-const Vector3 Sprite::getPosition() const {
-    return mPosition;
 }
 
 bool Sprite::getSortFlag() const {
